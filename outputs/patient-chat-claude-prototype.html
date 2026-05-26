@@ -1,0 +1,1803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resonata — Patient Onboarding (Chat experiment, Claude on Bedrock)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ========================================
+     DESIGN SYSTEM — inherits from v2 prototype
+     Clinical Green + Slate Moss palette
+     ======================================== */
+  :root {
+    --primary-600: #287a13;
+    --primary-500: #319218;
+    --primary-400: #4aa832;
+    --primary-300: #7cc56a;
+    --primary-200: #a8d49e;
+    --primary-100: #e8f5e4;
+    --primary-50:  #f2f9f0;
+
+    --neutral-900: #1C2A24;
+    --neutral-800: #2a3a32;
+    --neutral-700: #374840;
+    --neutral-600: #455A4F;
+    --neutral-500: #5e7268;
+    --neutral-400: #8a9e92;
+    --neutral-300: #D4E1D7;
+    --neutral-200: #e2ebe5;
+    --neutral-100: #eef3f0;
+    --neutral-50:  #F9FCF9;
+
+    --accent-500: #e8973f;
+    --accent-400: #f0a855;
+    --accent-100: #fdf0dd;
+
+    --partial-500: #C58A1C;
+    --partial-100: #FEF8ED;
+    --partial-300: #F8BD4F;
+
+    --possible-500: #693E8E;
+    --possible-100: #F5F1F9;
+    --possible-300: #9C71C1;
+
+    --info: #03558C;
+    --info-bg: #EBF3F9;
+
+    --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    --space-2xl: 48px;
+
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --radius-bubble: 18px;
+    --radius-full: 999px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+  body {
+    font-family: var(--font-main);
+    color: var(--neutral-800);
+    background: var(--neutral-50);
+    line-height: 1.55;
+    overflow: hidden;
+  }
+
+  /* ========================================
+     APP SHELL (chat-first, mobile-first)
+     ======================================== */
+  .app {
+    display: flex; flex-direction: column;
+    height: 100vh; height: 100dvh;
+    max-width: 720px; margin: 0 auto;
+    background: white;
+    border-left: 1px solid var(--neutral-200);
+    border-right: 1px solid var(--neutral-200);
+  }
+
+  /* HEADER */
+  .header {
+    flex: 0 0 auto;
+    padding: 14px 18px;
+    background: white;
+    border-bottom: 1px solid var(--neutral-200);
+    display: flex; align-items: center; gap: 12px;
+    position: relative;
+  }
+  .header-logo {
+    width: 36px; height: 36px;
+    background: var(--primary-50);
+    border-radius: var(--radius-md);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .header-logo img { width: 30px; height: 30px; object-fit: contain; }
+  .header-logo .fallback { font-size: 1.3rem; color: var(--primary-500); }
+  .header-title { flex: 1; min-width: 0; }
+  .header-name {
+    font-weight: 700; font-size: 1rem; color: var(--primary-600);
+    letter-spacing: -0.01em; line-height: 1.2;
+  }
+  .header-sub {
+    font-size: 0.75rem; color: var(--neutral-500);
+    letter-spacing: 0.02em; margin-top: 1px;
+  }
+  .header-sub strong { color: var(--neutral-700); font-weight: 600; }
+  .header-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 4px 9px; background: var(--primary-50);
+    color: var(--primary-600);
+    border: 1px solid var(--primary-200);
+    border-radius: var(--radius-full);
+    font-size: 0.7rem; font-weight: 600;
+    white-space: nowrap;
+  }
+  .header-badge .dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--primary-500);
+  }
+
+  /* CHAT STREAM */
+  .stream {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 20px 16px 12px 16px;
+    background: var(--neutral-50);
+    display: flex; flex-direction: column; gap: 14px;
+    scroll-behavior: smooth;
+  }
+
+  .msg-row { display: flex; gap: 10px; align-items: flex-end; }
+  .msg-row.ai { justify-content: flex-start; }
+  .msg-row.me { justify-content: flex-end; }
+
+  .avatar {
+    width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.8rem;
+    background: var(--primary-100); color: var(--primary-600);
+    overflow: hidden;
+  }
+  .avatar img { width: 24px; height: 24px; object-fit: contain; }
+  .avatar.me {
+    background: var(--neutral-200); color: var(--neutral-700);
+    font-size: 0.75rem;
+  }
+
+  .bubble {
+    max-width: 78%;
+    padding: 11px 15px;
+    border-radius: var(--radius-bubble);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    word-wrap: break-word;
+    animation: fadeIn 0.35s ease-out;
+  }
+  .bubble.ai {
+    background: white;
+    color: var(--neutral-800);
+    border: 1px solid var(--neutral-200);
+    border-bottom-left-radius: 6px;
+  }
+  .bubble.me {
+    background: var(--primary-500);
+    color: white;
+    border-bottom-right-radius: 6px;
+  }
+  .bubble.me strong { font-weight: 600; }
+  .bubble p + p { margin-top: 8px; }
+  .bubble strong { font-weight: 600; color: var(--neutral-900); }
+  .bubble.ai a { color: var(--primary-600); text-decoration: underline; text-underline-offset: 2px; }
+
+  /* Cards inside bubbles get a wider container with no padding */
+  .bubble.card {
+    background: transparent;
+    border: none;
+    padding: 0;
+    max-width: 92%;
+    box-shadow: none;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* TYPING INDICATOR */
+  .typing {
+    display: inline-flex; gap: 4px; padding: 14px 16px;
+    background: white; border: 1px solid var(--neutral-200);
+    border-radius: var(--radius-bubble); border-bottom-left-radius: 6px;
+  }
+  .typing span {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--neutral-400);
+    animation: typingBounce 1.2s infinite;
+  }
+  .typing span:nth-child(2) { animation-delay: 0.15s; }
+  .typing span:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes typingBounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+    30% { transform: translateY(-4px); opacity: 1; }
+  }
+
+  /* ========================================
+     EMBEDDED CARDS (Resonata UI inside chat)
+     ======================================== */
+  .rcard {
+    background: white;
+    border: 1px solid var(--neutral-200);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .rcard-header {
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid var(--neutral-200);
+    background: var(--neutral-50);
+  }
+  .rcard-header h4 {
+    font-size: 0.95rem; font-weight: 700; color: var(--neutral-900);
+    margin-bottom: 2px;
+  }
+  .rcard-header .sub {
+    font-size: 0.8rem; color: var(--neutral-600);
+  }
+  .rcard-body { padding: 14px 16px; }
+  .rcard-section + .rcard-section { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--neutral-100); }
+
+  /* Treatment landscape chart */
+  .landscape-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 0; cursor: pointer;
+    border-bottom: 1px solid var(--neutral-100);
+    transition: background 0.15s ease;
+  }
+  .landscape-row:last-child { border-bottom: none; }
+  .landscape-row:hover { background: var(--neutral-50); }
+  .landscape-row.active { background: var(--primary-50); border-left: 3px solid var(--primary-500); padding-left: 8px; margin-left: -8px; padding-right: 8px; margin-right: -8px; border-radius: 4px; }
+  .lr-label { flex: 0 0 90px; min-width: 0; }
+  .lr-label-name { font-weight: 600; font-size: 0.85rem; color: var(--neutral-800); line-height: 1.2; }
+  .lr-label-sub { font-size: 0.7rem; color: var(--neutral-500); margin-top: 1px; }
+  .lr-bar { flex: 1; display: flex; height: 22px; border-radius: 5px; overflow: hidden; background: var(--neutral-100); min-width: 0; }
+  .lr-seg { display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: white; font-weight: 600; padding: 0 6px; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lr-full-approved { background: #319218; }
+  .lr-full-trial { background: #4aa832; }
+  .lr-partial-approved { background: #C58A1C; }
+  .lr-partial-trial { background: #E0A93A; }
+  .lr-not-approved { background: #8a9e92; }
+  .lr-not-trial { background: #a8b4a9; }
+  .lr-count { flex: 0 0 20px; text-align: right; font-weight: 700; font-size: 0.95rem; color: var(--neutral-800); }
+
+  .chart-legend {
+    margin-top: 10px;
+    display: flex; gap: 14px; font-size: 0.7rem; color: var(--neutral-600);
+    flex-wrap: wrap;
+  }
+  .legend-item { display: flex; align-items: center; gap: 5px; }
+  .legend-swatch { width: 10px; height: 10px; border-radius: 2px; }
+
+  /* Option cards inside rcard */
+  .option-list { display: flex; flex-direction: column; gap: 8px; }
+  .option-card {
+    padding: 12px;
+    border: 1px solid var(--neutral-200);
+    border-radius: var(--radius-md);
+    background: white;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .option-card:hover { border-color: var(--primary-300); background: var(--primary-50); }
+  .option-card.full { border-left: 3px solid var(--primary-500); }
+  .option-card.maybe { border-left: 3px solid var(--partial-500); }
+  .option-card.not { border-left: 3px solid var(--neutral-400); opacity: 0.85; }
+  .option-tag {
+    display: inline-block;
+    font-size: 0.65rem; font-weight: 700;
+    padding: 2px 7px; border-radius: var(--radius-full);
+    text-transform: uppercase; letter-spacing: 0.04em;
+    margin-bottom: 5px;
+  }
+  .tag-trial { background: var(--possible-100); color: var(--possible-500); }
+  .tag-approved { background: var(--primary-100); color: var(--primary-600); }
+  .tag-grey { background: var(--neutral-200); color: var(--neutral-600); }
+  .option-title { font-size: 0.875rem; font-weight: 600; color: var(--neutral-900); line-height: 1.3; margin-bottom: 3px; }
+  .option-meta { font-size: 0.78rem; color: var(--neutral-600); line-height: 1.4; }
+  .option-why {
+    margin-top: 7px; padding-top: 7px;
+    border-top: 1px dashed var(--neutral-200);
+    font-size: 0.75rem; color: var(--neutral-500);
+    font-style: italic;
+  }
+
+  /* Consent split card */
+  .consent-pair { display: flex; flex-direction: column; gap: 10px; }
+  .consent-option {
+    padding: 14px;
+    border: 1.5px solid var(--neutral-300);
+    border-radius: var(--radius-md);
+    background: white;
+    position: relative;
+  }
+  .consent-option.recommended { border-color: var(--primary-400); background: var(--primary-50); }
+  .consent-option-tag {
+    position: absolute; top: -10px; left: 12px;
+    background: var(--primary-500); color: white;
+    font-size: 0.65rem; font-weight: 700;
+    padding: 3px 10px; border-radius: var(--radius-full);
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .consent-option h5 { font-size: 0.95rem; font-weight: 700; color: var(--neutral-900); margin-bottom: 4px; }
+  .consent-option .tagline { font-size: 0.8rem; color: var(--neutral-600); margin-bottom: 10px; font-style: italic; }
+  .consent-option ul { list-style: none; padding: 0; margin-bottom: 12px; }
+  .consent-option li {
+    font-size: 0.83rem; color: var(--neutral-700);
+    padding: 4px 0 4px 20px; position: relative; line-height: 1.4;
+  }
+  .consent-option li::before {
+    content: '✓'; position: absolute; left: 0; top: 4px;
+    color: var(--primary-500); font-weight: 700; font-size: 0.85rem;
+  }
+  .consent-option button { width: 100%; }
+
+  /* Auth blocks */
+  .auth-block {
+    background: white;
+    border: 1.5px solid var(--neutral-300);
+    border-radius: var(--radius-md);
+    padding: 14px;
+  }
+  .auth-block + .auth-block { margin-top: 10px; }
+  .auth-block.signed { border-color: var(--primary-400); background: var(--primary-50); }
+  .auth-block h5 {
+    font-size: 0.9rem; font-weight: 700;
+    color: var(--neutral-900); margin-bottom: 5px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .auth-block .auth-sub { font-size: 0.8rem; color: var(--neutral-600); line-height: 1.45; margin-bottom: 10px; }
+  .auth-check {
+    display: flex; align-items: flex-start; gap: 8px;
+    padding: 9px 11px; background: var(--neutral-50);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.82rem; color: var(--neutral-800);
+    line-height: 1.4;
+    user-select: none;
+  }
+  .auth-check input { margin-top: 2px; flex-shrink: 0; cursor: pointer; }
+  .auth-check.checked { background: var(--primary-100); }
+  .auth-expand-btn {
+    margin-top: 8px;
+    background: none; border: none;
+    color: var(--primary-600); font-weight: 600;
+    cursor: pointer; padding: 0;
+    font-size: 0.78rem; font-family: inherit;
+    text-decoration: underline; text-underline-offset: 2px;
+  }
+
+  /* Trial detail card */
+  .detail-card { padding: 0; }
+  .detail-hero { padding: 14px 16px 10px; background: var(--neutral-50); border-bottom: 1px solid var(--neutral-200); }
+  .detail-hero h4 { font-size: 1rem; font-weight: 700; line-height: 1.25; color: var(--neutral-900); margin-top: 5px; margin-bottom: 4px; }
+  .detail-hero .meta-line { font-size: 0.78rem; color: var(--neutral-600); }
+  .detail-meta-pills { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+  .meta-pill { background: white; border: 1px solid var(--neutral-200); border-radius: var(--radius-full); padding: 3px 9px; font-size: 0.7rem; color: var(--neutral-700); }
+  .detail-section { padding: 12px 16px; border-bottom: 1px solid var(--neutral-100); }
+  .detail-section:last-child { border-bottom: none; }
+  .detail-section h6 {
+    font-size: 0.78rem; font-weight: 700;
+    color: var(--neutral-500); text-transform: uppercase;
+    letter-spacing: 0.05em; margin-bottom: 8px;
+  }
+  .detail-section ul { list-style: none; padding: 0; }
+  .detail-section li {
+    font-size: 0.83rem; color: var(--neutral-800);
+    padding: 4px 0 4px 20px; position: relative; line-height: 1.4;
+  }
+  .detail-section li::before {
+    content: '✓'; position: absolute; left: 0; top: 4px;
+    color: var(--primary-500); font-weight: 700;
+  }
+  .detail-section p { font-size: 0.85rem; color: var(--neutral-700); line-height: 1.55; }
+  .detail-section .site {
+    background: white; border: 1px solid var(--neutral-200);
+    border-radius: var(--radius-sm); padding: 10px;
+    margin-bottom: 6px;
+    font-size: 0.8rem;
+  }
+  .detail-section .site strong { display: block; margin-bottom: 2px; color: var(--neutral-900); }
+  .detail-section .site .site-meta { color: var(--neutral-600); font-size: 0.75rem; }
+
+  /* Education explorer card */
+  .edu-card-mini {
+    background: var(--primary-50);
+    border: 1px solid var(--primary-200);
+    border-radius: var(--radius-md);
+    padding: 12px;
+    margin-bottom: 8px;
+  }
+  .edu-card-mini h5 { font-size: 0.9rem; font-weight: 700; color: var(--neutral-900); margin-bottom: 4px; }
+  .edu-card-mini p { font-size: 0.82rem; color: var(--neutral-700); line-height: 1.45; }
+
+  /* App-home embedded summary card (semi-converted state) */
+  .home-bucket-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px; cursor: pointer;
+    border-bottom: 1px solid var(--neutral-100);
+    transition: background 0.15s ease;
+  }
+  .home-bucket-row:last-child { border-bottom: none; }
+  .home-bucket-row:hover { background: var(--neutral-50); }
+  .home-bucket-count {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 1rem; flex-shrink: 0;
+  }
+  .home-bucket-row.full .home-bucket-count { background: var(--primary-100); color: var(--primary-600); }
+  .home-bucket-row.maybe .home-bucket-count { background: var(--partial-100); color: var(--partial-500); }
+  .home-bucket-row.not .home-bucket-count { background: var(--neutral-100); color: var(--neutral-600); }
+  .home-bucket-text { flex: 1; min-width: 0; }
+  .home-bucket-title { font-weight: 600; font-size: 0.92rem; color: var(--neutral-900); }
+  .home-bucket-sub { font-size: 0.78rem; color: var(--neutral-600); margin-top: 1px; }
+  .home-bucket-arrow { color: var(--neutral-400); flex-shrink: 0; }
+
+  /* ========================================
+     BUTTONS
+     ======================================== */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 10px 18px; border-radius: var(--radius-md);
+    font-weight: 600; font-size: 0.875rem;
+    border: none; cursor: pointer; transition: all 0.18s ease;
+    font-family: inherit; line-height: 1.35;
+  }
+  .btn-primary { background: var(--primary-500); color: white; }
+  .btn-primary:hover { background: var(--primary-600); }
+  .btn-primary:disabled { background: var(--neutral-300); color: var(--neutral-500); cursor: not-allowed; }
+  .btn-secondary { background: white; color: var(--primary-600); border: 1.5px solid var(--primary-300); }
+  .btn-secondary:hover { background: var(--primary-50); }
+  .btn-full { width: 100%; }
+  .btn-sm { padding: 8px 14px; font-size: 0.82rem; }
+
+  /* ========================================
+     COMPOSER (input area)
+     ======================================== */
+  .composer {
+    flex: 0 0 auto;
+    background: white;
+    border-top: 1px solid var(--neutral-200);
+    padding: 12px 14px 14px;
+  }
+  .chips {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    margin-bottom: 10px;
+    min-height: 0;
+  }
+  .chip {
+    padding: 8px 14px;
+    background: white;
+    border: 1.5px solid var(--primary-300);
+    color: var(--primary-600);
+    border-radius: var(--radius-full);
+    font-size: 0.84rem; font-weight: 500;
+    cursor: pointer; font-family: inherit;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+  .chip:hover { background: var(--primary-50); border-color: var(--primary-500); }
+  .chip-primary {
+    background: var(--primary-500); color: white;
+    border-color: var(--primary-500);
+  }
+  .chip-primary:hover { background: var(--primary-600); border-color: var(--primary-600); }
+  .chip-muted {
+    border-color: var(--neutral-300); color: var(--neutral-600);
+  }
+  .chip-muted:hover { background: var(--neutral-100); border-color: var(--neutral-400); }
+
+  .input-row {
+    display: flex; gap: 8px; align-items: center;
+    background: var(--neutral-50);
+    border: 1.5px solid var(--neutral-200);
+    border-radius: var(--radius-bubble);
+    padding: 4px 4px 4px 14px;
+    transition: border-color 0.15s ease;
+  }
+  .input-row:focus-within { border-color: var(--primary-400); background: white; }
+  .input-row input {
+    flex: 1; border: none; background: transparent;
+    font-family: inherit; font-size: 0.92rem;
+    padding: 9px 0; outline: none; color: var(--neutral-800);
+  }
+  .input-row input::placeholder { color: var(--neutral-400); }
+  .send-btn {
+    background: var(--primary-500); color: white;
+    border: none; cursor: pointer;
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.15s ease;
+  }
+  .send-btn:hover { background: var(--primary-600); }
+  .send-btn:disabled { background: var(--neutral-300); cursor: not-allowed; }
+
+  .disclaimer {
+    text-align: center;
+    font-size: 0.7rem;
+    color: var(--neutral-500);
+    margin-top: 8px;
+    line-height: 1.4;
+  }
+  .disclaimer a { color: var(--neutral-600); text-decoration: underline; }
+
+  /* ========================================
+     MOBILE TUNING
+     ======================================== */
+  @media (max-width: 480px) {
+    .stream { padding: 14px 10px 8px; }
+    .bubble { font-size: 0.92rem; max-width: 82%; }
+    .bubble.card { max-width: 96%; }
+    .composer { padding: 10px 10px 12px; }
+    .chip { font-size: 0.8rem; padding: 7px 12px; }
+    .header { padding: 12px 14px; }
+    .header-name { font-size: 0.95rem; }
+    .header-sub { font-size: 0.7rem; }
+    .header-badge { font-size: 0.65rem; padding: 3px 7px; }
+  }
+
+  /* Larger screens: side-by-side */
+  @media (min-width: 880px) {
+    .app {
+      max-width: 860px;
+      margin: 0 auto;
+      height: calc(100dvh - 24px);
+      margin-top: 12px;
+      margin-bottom: 12px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--neutral-200);
+      overflow: hidden;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.06);
+    }
+    body { background: var(--neutral-100); }
+  }
+
+  /* Utility */
+  .hidden { display: none !important; }
+  .text-center { text-align: center; }
+  .small { font-size: 0.8rem; color: var(--neutral-600); }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header class="header">
+    <div class="header-logo">
+      <img src="../snowflake.png" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+      <span class="fallback">❄</span>
+    </div>
+    <div class="header-title">
+      <div class="header-name">Resonata</div>
+      <div class="header-sub">AI assistant · <strong>Powered by Claude</strong> · HIPAA-protected</div>
+    </div>
+    <div class="header-badge">
+      <span class="dot"></span>Private
+    </div>
+  </header>
+
+  <main class="stream" id="stream"></main>
+
+  <footer class="composer">
+    <div class="chips" id="chips"></div>
+    <div class="input-row">
+      <input type="text" id="textInput" placeholder="Type your answer or a question..." autocomplete="off">
+      <button class="send-btn" id="sendBtn" aria-label="Send">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </button>
+    </div>
+    <div class="disclaimer">
+      Resonata is an AI assistant. It can help you find care options. It is not a doctor and does not provide medical advice.
+    </div>
+  </footer>
+</div>
+
+<script>
+/* ============================================================
+   STATE
+   ============================================================ */
+const state = {
+  step: 0,
+  email: '',
+  condition: '',
+  mgType: '',
+  antibody: '',
+  treatmentStage: '',
+  zip: '',
+  name: '',
+  pathChoice: '',   // 'A' | 'B'
+  hipaaSigned: false,
+  retrievalSigned: false,
+  filterBucket: 'full',  // for matches view
+};
+
+/* ============================================================
+   FLOW STEPS
+   Each step is a function that renders AI message + chips.
+   Patient action (chip click or text) advances to next step.
+   ============================================================ */
+const steps = {};
+
+/* ---------- STEP: INTRO ---------- */
+steps.intro = () => {
+  ai([
+    "Hi, I'm Resonata. I help you find care options — approved treatments and clinical trials — that fit your specific medical profile.",
+    "I'm an AI assistant trained on medical research and trial criteria. Your conversation is private and HIPAA-protected. I won't share it with anyone, and it won't be used to train other AI models.",
+    "To start, what's your email? It's how you'll come back to your matches later. I won't send other emails without asking first."
+  ], { next: 'awaitEmail', inputPlaceholder: 'your@email.com', chips: [] });
+};
+
+steps.awaitEmail = (val) => {
+  state.email = val.trim();
+  me(val);
+  setTimeout(() => steps.askCondition(), 600);
+};
+
+steps.askCondition = () => {
+  ai([
+    "Thanks. And what condition brings you here? Pick whichever fits best, or tell me in your own words."
+  ], {
+    next: 'gotCondition',
+    chips: [
+      { label: 'Myasthenia Gravis', value: 'mg' },
+      { label: 'Another neuromuscular condition', value: 'other-neuro' },
+      { label: 'An autoimmune condition', value: 'autoimmune' },
+      { label: 'A cancer diagnosis', value: 'cancer' },
+      { label: 'Something else', value: 'other' }
+    ]
+  });
+};
+
+steps.gotCondition = (val, label) => {
+  state.condition = val;
+  me(label || val);
+  if (val === 'mg') {
+    setTimeout(() => {
+      typing();
+      setTimeout(() => {
+        clearTyping();
+        steps.coveredIntro();
+      }, 1100);
+    }, 500);
+  } else {
+    setTimeout(() => {
+      typing();
+      setTimeout(() => {
+        clearTyping();
+        steps.uncovered();
+      }, 1200);
+    }, 500);
+  }
+};
+
+steps.coveredIntro = () => {
+  ai([
+    "Great — I have precision matching set up for Myasthenia Gravis. I'll ask you four short questions to narrow down which treatments and trials fit you specifically. About 30 seconds.",
+    "If you don't know an answer, 'I'm not sure' is always a fine choice. I'll show approximate matches and we can refine later."
+  ], {
+    next: 'q1',
+    chips: [{ label: 'Sounds good', value: 'go', primary: true }]
+  });
+};
+
+/* ---------- QUIZ Q1: MG TYPE ---------- */
+steps.q1 = () => {
+  ai([
+    "<strong>Question 1 of 4 — Which type of MG describes you?</strong>",
+    "This narrows which treatments and trials are designed for your form."
+  ], {
+    next: 'gotMgType',
+    chips: [
+      { label: 'Generalized MG', value: 'generalized' },
+      { label: 'Ocular MG', value: 'ocular' },
+      { label: 'Juvenile MG', value: 'juvenile' },
+      { label: "I'm not sure", value: 'unknown', muted: true }
+    ]
+  });
+};
+steps.gotMgType = (val, label) => {
+  state.mgType = val;
+  me(label);
+  setTimeout(() => steps.q2(), 500);
+};
+
+/* ---------- QUIZ Q2: ANTIBODY ---------- */
+steps.q2 = () => {
+  ai([
+    "<strong>Question 2 of 4 — Do you know your antibody status?</strong>",
+    "Your antibody profile changes which treatments are likely to work. If you don't know, that's fine — I'll show broader matches."
+  ], {
+    next: 'gotAntibody',
+    chips: [
+      { label: 'AChR-positive', value: 'achr' },
+      { label: 'MuSK-positive', value: 'musk' },
+      { label: 'Seronegative', value: 'seronegative' },
+      { label: "I don't know", value: 'unknown', muted: true }
+    ]
+  });
+};
+steps.gotAntibody = (val, label) => {
+  state.antibody = val;
+  me(label);
+  setTimeout(() => steps.q3(), 500);
+};
+
+/* ---------- QUIZ Q3: TIMING ---------- */
+steps.q3 = () => {
+  ai([
+    "<strong>Question 3 of 4 — Where are you in your treatment?</strong>"
+  ], {
+    next: 'gotStage',
+    chips: [
+      { label: 'Newly diagnosed', value: 'newly' },
+      { label: 'On treatment, looking for better options', value: 'on-treatment' },
+      { label: 'Tried multiple, none worked', value: 'refractory' },
+      { label: 'Stable, just exploring', value: 'stable' }
+    ]
+  });
+};
+steps.gotStage = (val, label) => {
+  state.treatmentStage = val;
+  me(label);
+  setTimeout(() => steps.q4(), 500);
+};
+
+/* ---------- QUIZ Q4: ZIP ---------- */
+steps.q4 = () => {
+  ai([
+    "<strong>Question 4 of 4 — What's your zip code?</strong>",
+    "Optional — this lets me filter for trials within driving distance. Type 'skip' to skip."
+  ], {
+    next: 'gotZip',
+    inputPlaceholder: 'e.g. 60601',
+    chips: [
+      { label: 'Skip this', value: '', muted: true }
+    ]
+  });
+};
+steps.gotZip = (val, label) => {
+  if (val) {
+    state.zip = val.trim();
+    me(state.zip);
+  } else {
+    me('Skip');
+  }
+  setTimeout(() => {
+    typing();
+    setTimeout(() => {
+      clearTyping();
+      steps.previewMatches();
+    }, 1500);
+  }, 500);
+};
+
+/* ---------- PREVIEW MATCHES (embedded card) ---------- */
+steps.previewMatches = () => {
+  // Determine match counts based on quiz answers (simplified logic)
+  const isOcular = state.mgType === 'ocular';
+  const isMusk = state.antibody === 'musk';
+  const counts = computeMatchCounts(state);
+
+  ai([
+    "Here's what fits your profile based on what you told me. These are approximate — connecting your medical records would make them precise."
+  ], { next: null, chips: [] });
+
+  renderEmbeddedCard(matchesCardHTML(counts, state.filterBucket, state), 'previewCard');
+
+  setTimeout(() => {
+    ai([
+      "Tap any option to see why I matched it. Or tap the bars at the top to filter by category — full match, possible match, or what I ruled out and why."
+    ], {
+      next: 'previewActions',
+      chips: [
+        { label: 'Make these matches precise', value: 'precise', primary: true },
+        { label: 'Email me a link to come back', value: 'magic' },
+        { label: 'I have a question first', value: 'question', muted: true }
+      ]
+    });
+  }, 600);
+};
+
+steps.previewActions = (val, label) => {
+  me(label);
+  if (val === 'precise') {
+    setTimeout(() => steps.askSignup(), 500);
+  } else if (val === 'magic') {
+    setTimeout(() => steps.magicLink(), 500);
+  } else if (val === 'question') {
+    setTimeout(() => steps.openQuestion(), 500);
+  }
+};
+
+steps.magicLink = () => {
+  ai([
+    `I'll email a private link to <strong>${escapeHTML(state.email)}</strong>. Click it any time to come back to these matches. No other emails. No signup needed.`,
+    "Want to keep going from here, or come back later?"
+  ], {
+    next: 'previewActions',
+    chips: [
+      { label: 'Keep going — make matches precise', value: 'precise', primary: true },
+      { label: "I'll come back later", value: 'later' }
+    ]
+  });
+};
+
+steps.openQuestion = () => {
+  ai([
+    "Ask me anything. Common ones: <em>What's the difference between AChR and MuSK? How does Resonata get my records? Why is something in the 'not a fit' bucket?</em>"
+  ], {
+    next: 'previewActions',
+    inputPlaceholder: 'Type your question...',
+    chips: [
+      { label: 'Back to matches', value: 'precise', primary: true }
+    ]
+  });
+};
+
+/* ---------- SIGN-UP (name + DOB collected conversationally) ---------- */
+steps.askSignup = () => {
+  ai([
+    "To save these matches and move forward, I need a couple more details. First — what's your first name?"
+  ], {
+    next: 'gotFirstName',
+    inputPlaceholder: 'First name'
+  });
+};
+steps.gotFirstName = (val) => {
+  state.name = val.trim();
+  me(val);
+  setTimeout(() => {
+    ai([
+      `Nice to meet you, ${escapeHTML(state.name)}. Last question for the record — what state are you in? Helps me show trials with sites near you.`
+    ], {
+      next: 'gotState',
+      inputPlaceholder: 'e.g. Illinois'
+    });
+  }, 500);
+};
+steps.gotState = (val) => {
+  me(val);
+  setTimeout(() => {
+    ai([
+      "And your date of birth? Some trials and treatments have age criteria."
+    ], {
+      next: 'gotDob',
+      inputPlaceholder: 'MM / DD / YYYY'
+    });
+  }, 500);
+};
+steps.gotDob = (val) => {
+  me(val);
+  setTimeout(() => {
+    typing();
+    setTimeout(() => {
+      clearTyping();
+      steps.consentSplit();
+    }, 1100);
+  }, 500);
+};
+
+/* ---------- CONSENT SPLIT (Path A vs B) ---------- */
+steps.consentSplit = () => {
+  ai([
+    `Now the most important choice, ${escapeHTML(state.name)}. There are two ways to move forward. Your matches stay saved either way — the difference is how precise they get.`
+  ], { next: null, chips: [] });
+
+  renderEmbeddedCard(consentCardHTML(), 'consentCard');
+
+  setTimeout(() => {
+    ai([
+      "Take your time. Both options are real options — there's no 'wrong' choice. Records make matches more precise; waiting keeps things flexible. Tap either."
+    ], { next: 'gotPath', chips: [] });
+  }, 500);
+};
+
+steps.gotPath = (val, label) => {
+  state.pathChoice = val;
+  me(label);
+  if (val === 'A') {
+    setTimeout(() => steps.pathA_explain(), 600);
+  } else {
+    setTimeout(() => steps.pathB_confirm(), 600);
+  }
+};
+
+/* ---------- PATH A: AUTHORIZATIONS ---------- */
+steps.pathA_explain = () => {
+  ai([
+    "Good choice. To retrieve your medical records, I need two authorizations from you. I'll explain each, and you'll see the full text before signing.",
+    "<strong>1. HIPAA Authorization</strong> — lets Resonata use your health information to find matches and contact you about them.",
+    "<strong>2. Records Retrieval Authorization (DNAvisit)</strong> — DNAvisit is the service that actually retrieves your records from your providers. They use Health Information Exchange data and are HIPAA-compliant. Usually takes about 8 hours.",
+    "Want me to explain DNAvisit more, or are you ready to review and sign?"
+  ], {
+    next: 'pathA_response',
+    chips: [
+      { label: 'Tell me more about DNAvisit', value: 'dnavisit-more' },
+      { label: 'Ready to review', value: 'ready', primary: true }
+    ]
+  });
+};
+
+steps.pathA_response = (val, label) => {
+  me(label);
+  if (val === 'dnavisit-more') {
+    setTimeout(() => {
+      ai([
+        "DNAvisit is a service Resonata works with to securely pull your medical records from your doctors and hospitals. They don't share your records with anyone except Resonata, and Resonata only uses them to refine your matches.",
+        "What happens: you sign their authorization. They contact your providers electronically. They send the records to Resonata. I use them to refine your matches. About 8 hours total.",
+        "You can withdraw your authorization any time. The data stays HIPAA-protected at every step."
+      ], {
+        next: 'pathA_response',
+        chips: [
+          { label: 'OK, I\'m ready to review', value: 'ready', primary: true },
+          { label: 'Actually, let me wait', value: 'wait', muted: true }
+        ]
+      });
+    }, 600);
+  } else if (val === 'wait') {
+    setTimeout(() => steps.pathB_confirm(), 500);
+  } else {
+    setTimeout(() => steps.pathA_authBlocks(), 500);
+  }
+};
+
+steps.pathA_authBlocks = () => {
+  ai([
+    "Here are the two authorizations. Check each box to confirm you authorize, then tap Submit. You can read the full text by tapping 'Read the full authorization.'"
+  ], { next: null, chips: [] });
+  renderEmbeddedCard(authBlocksHTML(), 'authCard');
+};
+
+steps.pathA_submitted = () => {
+  ai([
+    `Your authorizations are recorded, ${escapeHTML(state.name)}. I've started retrieving your records securely.`,
+    "Your precision matches will be ready in about 8 hours. I'll email you when they are.",
+    "In the meantime, your approximate matches are saved. Want to see them, or wait for the precise version?"
+  ], {
+    next: 'postPathA',
+    chips: [
+      { label: 'Show my current matches', value: 'matches', primary: true },
+      { label: "I'll wait for the email", value: 'wait' }
+    ]
+  });
+};
+
+steps.postPathA = (val, label) => {
+  me(label);
+  if (val === 'matches' || val === 'matches-b') {
+    setTimeout(() => steps.appHome(), 500);
+  } else {
+    setTimeout(() => {
+      ai([
+        `Got it. Talk to you in about 8 hours. ${state.email ? `Email going to <strong>${escapeHTML(state.email)}</strong>.` : ''}`
+      ], { next: null, chips: [] });
+    }, 500);
+  }
+};
+
+/* ---------- PATH B CONFIRMATION ---------- */
+steps.pathB_confirm = () => {
+  ai([
+    `You're in, ${escapeHTML(state.name)}. Your matches are saved.`,
+    "Take your time. Your approximate matches stay accessible. I'll let you know when new options fit your profile. When you're ready for precision matches, connecting records takes about 3 minutes.",
+    "Want to explore your matches now, or come back later?"
+  ], {
+    next: 'postPathA',
+    chips: [
+      { label: 'Show me my matches', value: 'matches-b', primary: true },
+      { label: "I'll come back later", value: 'wait' }
+    ]
+  });
+};
+
+/* ---------- APP HOME (semi-converted state) ---------- */
+steps.appHome = () => {
+  ai([
+    `Here you go. These are your approximate matches based on what you told me — 4 strong fits, 6 possible, and 3 I ruled out (with the reason why).`
+  ], { next: null, chips: [] });
+  renderEmbeddedCard(appHomeHTML(), 'appHomeCard');
+
+  setTimeout(() => {
+    ai([
+      "What do you want to do?"
+    ], {
+      next: 'appAction',
+      chips: state.pathChoice === 'A'
+        ? [
+            { label: 'Tell me about a specific trial', value: 'explain' },
+            { label: 'What do I do while I wait?', value: 'while-wait', muted: true }
+          ]
+        : [
+            { label: 'Tell me about a specific trial', value: 'explain' },
+            { label: 'Connect my records now', value: 'upgrade', primary: true },
+            { label: 'Bookmark for later', value: 'bookmark', muted: true }
+          ]
+    });
+  }, 700);
+};
+
+steps.appAction = (val, label) => {
+  me(label);
+  if (val === 'upgrade') {
+    setTimeout(() => steps.pathA_explain(), 500);
+  } else if (val === 'explain') {
+    setTimeout(() => steps.explainTrial(), 500);
+  } else if (val === 'bookmark') {
+    setTimeout(() => {
+      ai([
+        "Saved. I'll email you when something new fits your profile. You can come back any time to upgrade."
+      ], { next: null, chips: [] });
+    }, 500);
+  } else if (val === 'while-wait') {
+    setTimeout(() => {
+      ai([
+        "While you wait for your records, here's what's useful: prepare for your next doctor appointment. I can help you put together a list of questions about your top-matched options to bring with you. Want me to draft one?"
+      ], {
+        next: 'appAction',
+        chips: [
+          { label: 'Yes, draft questions', value: 'questions', primary: true },
+          { label: 'Tell me about a trial instead', value: 'explain' }
+        ]
+      });
+    }, 500);
+  } else if (val === 'questions') {
+    setTimeout(() => {
+      ai([
+        "Here's a starter list to bring to your specialist. You can edit it before printing.",
+        "<strong>About my MG specifically:</strong><br>• Given my AChR-positive generalized MG, are there approved treatments I haven't tried that you'd consider?<br>• How do you think about FcRn inhibitors versus complement inhibitors for someone in my situation?",
+        "<strong>About clinical trials:</strong><br>• What's your view on the Vivacity-MG3 nipocalimab trial — is that something you'd refer me to?<br>• Are there other trials near us I should know about?",
+        "<strong>About my response so far:</strong><br>• Are you satisfied with my current symptom control?<br>• What signals would tell you it's time to consider a different treatment?"
+      ], {
+        next: 'appAction',
+        chips: [
+          { label: 'Send to my email', value: 'email-questions', primary: true },
+          { label: 'Tell me about a trial', value: 'explain' }
+        ]
+      });
+    }, 800);
+  } else if (val === 'email-questions') {
+    setTimeout(() => {
+      ai([
+        `Sent to <strong>${escapeHTML(state.email)}</strong>. Anything else?`
+      ], { next: 'appAction', chips: [
+        { label: 'Tell me about a trial', value: 'explain' },
+        { label: "I'm done for now", value: 'done', muted: true }
+      ]});
+    }, 500);
+  } else if (val === 'done') {
+    setTimeout(() => {
+      ai([
+        `Talk soon, ${escapeHTML(state.name)}. I'm always here.`
+      ], { next: null, chips: [] });
+    }, 500);
+  }
+};
+
+steps.explainTrial = () => {
+  ai([
+    "Sure. Tap the trial or treatment you want to know more about."
+  ], {
+    next: 'pickedTrial',
+    chips: [
+      { label: 'Nipocalimab (Vivacity-MG3)', value: 'nipo' },
+      { label: 'Efgartigimod (Vyvgart)', value: 'efgar' },
+      { label: 'Telitacicept extension', value: 'teli' },
+      { label: 'Why was Belimumab ruled out?', value: 'beli', muted: true }
+    ]
+  });
+};
+
+steps.pickedTrial = (val, label) => {
+  me(label);
+  if (val === 'beli') {
+    setTimeout(() => {
+      ai([
+        "Belimumab has been studied in MG, but only for MuSK-positive patients. You told me you're AChR-positive, so it's outside the eligible profile.",
+        "That doesn't mean Belimumab is bad — it just isn't designed for your antibody type. I show 'not a fit' options so you can see what I considered and ruled out, not just what's left.",
+        "Anything else you want me to explain?"
+      ], {
+        next: 'appAction',
+        chips: [
+          { label: 'Tell me about another option', value: 'explain' },
+          { label: state.pathChoice === 'A' ? "I'll wait for the email" : 'Connect my records to apply', value: state.pathChoice === 'A' ? 'wait' : 'upgrade', primary: state.pathChoice !== 'A' }
+        ]
+      });
+    }, 600);
+    return;
+  }
+  // Render an embedded trial detail card
+  setTimeout(() => {
+    ai([`Here's the detail on <strong>${escapeHTML(label)}</strong>.`], { next: null, chips: [] });
+    renderEmbeddedCard(trialDetailHTML(val, label), 'trialCard_' + val);
+
+    setTimeout(() => {
+      const applyChip = state.pathChoice === 'A'
+        ? { label: "I'll wait for the email", value: 'wait', primary: true }
+        : { label: 'Connect records to apply', value: 'upgrade', primary: true };
+      ai([
+        "What next?"
+      ], {
+        next: 'appAction',
+        chips: [
+          applyChip,
+          { label: 'Tell me about another option', value: 'explain' },
+          { label: 'Bookmark this one', value: 'bookmark', muted: true }
+        ]
+      });
+    }, 600);
+  }, 500);
+};
+
+/* ---------- UNCOVERED BRANCH ---------- */
+steps.uncovered = () => {
+  ai([
+    "I'm sorry — I don't have precision matching for that condition yet. I'm expanding to new conditions every week, and I've added you to the list. The moment I can match you, I'll email.",
+    `Email going to <strong>${escapeHTML(state.email)}</strong>. No other emails.`,
+    "While you wait, I can show you what's known about your condition — treatment landscape, current trials, and how care decisions get made. Useful for your next doctor appointment."
+  ], {
+    next: 'uncoveredAction',
+    chips: [
+      { label: 'Yes, show me what\'s known', value: 'explore', primary: true },
+      { label: "I'll wait for the email", value: 'wait' }
+    ]
+  });
+};
+
+steps.uncoveredAction = (val, label) => {
+  me(label);
+  if (val === 'wait') {
+    setTimeout(() => {
+      ai([`Got it. Talk soon, when I can match you.`], { next: null, chips: [] });
+    }, 400);
+  } else {
+    setTimeout(() => steps.explorer(), 500);
+  }
+};
+
+steps.explorer = () => {
+  ai([
+    "Here's what's known about your condition. Tap any topic and I'll explain in plain language."
+  ], { next: null, chips: [] });
+  renderEmbeddedCard(explorerHTML(), 'explorerCard');
+
+  setTimeout(() => {
+    ai([
+      "Or ask me anything about your condition directly."
+    ], {
+      next: 'openQ',
+      chips: [
+        { label: 'Approved treatments', value: 'approved' },
+        { label: 'Clinical trials in progress', value: 'trials' },
+        { label: 'How decisions get made', value: 'decisions' },
+        { label: 'Insurance and access', value: 'insurance' }
+      ]
+    });
+  }, 700);
+};
+
+steps.openQ = (val, label) => {
+  me(label);
+  setTimeout(() => {
+    ai([
+      "I'd give you a real plain-language explainer here. For this experiment, the content is a placeholder — the patient-facing explainer pages are V2 on the roadmap.",
+      "Anything else?"
+    ], {
+      next: 'openQ',
+      chips: [
+        { label: "I'm done for now", value: 'done', muted: true }
+      ]
+    });
+  }, 800);
+};
+
+/* ============================================================
+   FREE-TEXT HANDLER (handles common patient questions
+   mid-flow, then returns to the current step)
+   ============================================================ */
+const FAQ = [
+  {
+    match: /(what is|what's) (mg|myasthenia)/i,
+    answer: [
+      "Myasthenia gravis is an autoimmune condition where the body's immune system blocks the signals between nerves and muscles. The result is muscle weakness, especially in the eyes, face, swallowing, and limbs. It's serious but treatable, and the treatment landscape has been changing fast — that's part of why I exist.",
+      "Want to keep going with the question above?"
+    ]
+  },
+  {
+    match: /(achr|antibody|musk|seronegative)/i,
+    answer: [
+      "AChR and MuSK are two different antibodies that can cause MG. About 85% of generalized MG cases are AChR-positive (anti-acetylcholine receptor). MuSK-positive (anti-muscle-specific kinase) is less common but responds to different treatments. Seronegative means tests for both came back negative — the MG is real, but the antibody isn't identified.",
+      "Different treatments are approved for different antibody types. That's why I'm asking.",
+      "Want to answer the question above?"
+    ]
+  },
+  {
+    match: /(dnavisit|how do you get|how does (this|resonata) get my records)/i,
+    answer: [
+      "DNAvisit is a HIPAA-compliant service Resonata works with. They electronically request your records from your healthcare providers using the standard Health Information Exchange. Only Resonata sees the records, and only to refine your matches. You can withdraw your authorization any time. About 8 hours from signing to ready.",
+      "Want to keep going?"
+    ]
+  },
+  {
+    match: /(are you a doctor|are you human|are you ai|will (this )?(give|replace) medical advice)/i,
+    answer: [
+      "I'm an AI assistant, not a doctor. I can help you find care options that fit your medical profile, and I can explain what those options involve in plain language. Treatment decisions are between you and your medical team — I'm here to make sure you walk into those conversations with all your options on the table.",
+      "Want to keep going?"
+    ]
+  },
+  {
+    match: /(privacy|hipaa|is this (private|safe)|who sees my data)/i,
+    answer: [
+      "Your conversation is HIPAA-protected and private. Resonata never shares anything that identifies you with the companies behind treatments or trials. Your data isn't used to train other AI models. You decide when and what to share if you apply to a trial.",
+      "Want to keep going?"
+    ]
+  },
+  {
+    match: /(not a fit|why ruled out|why (is|was) .* (not|ruled) (a fit|out))/i,
+    answer: [
+      "I show 'not a fit' options on purpose. It's how I show my work. You can see what I considered and why it was ruled out — usually a mismatch on antibody type, age range, or required prior treatment.",
+      "Tap any 'not a fit' option to see the specific reason.",
+      "Want to keep going?"
+    ]
+  },
+  {
+    match: /(cost|insurance|how much|expensive|afford)/i,
+    answer: [
+      "I don't have your insurance coverage in my matching yet (it's on the roadmap). Approved treatments are typically covered when they're prescribed for your specific condition. Clinical trials are usually free for participants — the sponsor covers study drug, study visits, and study labs. Your normal care costs are still yours.",
+      "Want to keep going?"
+    ]
+  }
+];
+
+function tryAnswerFAQ(text) {
+  for (const f of FAQ) {
+    if (f.match.test(text)) {
+      typing();
+      setTimeout(() => {
+        clearTyping();
+        ai(f.answer, { next: currentStep.next, chips: currentStep.chips });
+      }, 800 + Math.random() * 400);
+      return true;
+    }
+  }
+  return false;
+}
+
+/* ============================================================
+   RENDER HELPERS
+   ============================================================ */
+const $stream = document.getElementById('stream');
+const $chips = document.getElementById('chips');
+const $input = document.getElementById('textInput');
+const $send = document.getElementById('sendBtn');
+
+let currentStep = { next: null, chips: [] };
+
+function ai(messages, opts = {}) {
+  const arr = Array.isArray(messages) ? messages : [messages];
+  arr.forEach((m, i) => {
+    setTimeout(() => {
+      const row = document.createElement('div');
+      row.className = 'msg-row ai';
+      row.innerHTML = `
+        <div class="avatar"><img src="../snowflake.png" alt="" onerror="this.parentElement.innerHTML='❄'"></div>
+        <div class="bubble ai">${m}</div>`;
+      $stream.appendChild(row);
+      scrollDown();
+    }, i * 700);
+  });
+  setTimeout(() => {
+    currentStep = opts;
+    renderChips(opts.chips || []);
+    if (opts.inputPlaceholder) $input.placeholder = opts.inputPlaceholder;
+    else $input.placeholder = 'Type your answer or a question...';
+  }, arr.length * 700);
+}
+
+function me(text) {
+  const row = document.createElement('div');
+  row.className = 'msg-row me';
+  row.innerHTML = `
+    <div class="bubble me">${escapeHTML(text)}</div>
+    <div class="avatar me">${state.name ? escapeHTML(state.name[0].toUpperCase()) : 'You'}</div>`;
+  $stream.appendChild(row);
+  scrollDown();
+}
+
+function renderEmbeddedCard(html, id) {
+  const row = document.createElement('div');
+  row.className = 'msg-row ai';
+  row.innerHTML = `
+    <div class="avatar"><img src="../snowflake.png" alt="" onerror="this.parentElement.innerHTML='❄'"></div>
+    <div class="bubble card" id="${id || 'card-' + Date.now()}">${html}</div>`;
+  $stream.appendChild(row);
+  scrollDown();
+}
+
+function typing() {
+  const row = document.createElement('div');
+  row.className = 'msg-row ai';
+  row.id = 'typing-row';
+  row.innerHTML = `
+    <div class="avatar"><img src="../snowflake.png" alt="" onerror="this.parentElement.innerHTML='❄'"></div>
+    <div class="typing"><span></span><span></span><span></span></div>`;
+  $stream.appendChild(row);
+  scrollDown();
+}
+function clearTyping() {
+  const t = document.getElementById('typing-row');
+  if (t) t.remove();
+}
+
+function renderChips(chips) {
+  $chips.innerHTML = '';
+  chips.forEach(c => {
+    const b = document.createElement('button');
+    b.className = 'chip' + (c.primary ? ' chip-primary' : '') + (c.muted ? ' chip-muted' : '');
+    b.textContent = c.label;
+    b.onclick = () => {
+      const fn = steps[currentStep.next];
+      if (fn) fn(c.value, c.label);
+    };
+    $chips.appendChild(b);
+  });
+}
+
+function scrollDown() {
+  requestAnimationFrame(() => {
+    $stream.scrollTop = $stream.scrollHeight;
+  });
+}
+
+function escapeHTML(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* ============================================================
+   INPUT HANDLING
+   ============================================================ */
+function handleSend() {
+  const val = $input.value.trim();
+  if (!val) return;
+  $input.value = '';
+  // Try FAQ first (mid-flow questions)
+  if (currentStep.next && tryAnswerFAQ(val)) {
+    me(val);
+    return;
+  }
+  // Otherwise: advance current step with the text input
+  const fn = steps[currentStep.next];
+  if (fn) fn(val, val);
+}
+
+$send.onclick = handleSend;
+$input.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') handleSend();
+});
+
+/* ============================================================
+   EMBEDDED CARD: MATCHES PREVIEW (with chart + list)
+   ============================================================ */
+function computeMatchCounts(s) {
+  // V1 placeholder logic — in a real build this is server-side.
+  // We just adjust totals to reflect quiz answers loosely.
+  if (s.mgType === 'ocular') return { full: 2, maybe: 4, not: 5 };
+  if (s.antibody === 'musk') return { full: 3, maybe: 5, not: 4 };
+  return { full: 4, maybe: 6, not: 3 };
+}
+
+function matchesCardHTML(counts, activeBucket, s) {
+  const total = counts.full + counts.maybe + counts.not;
+  const fullPct = Math.max(35, (counts.full / 5) * 100);
+  const maybePct = Math.max(50, (counts.maybe / 6) * 100);
+  const notPct = Math.max(30, (counts.not / 6) * 100);
+
+  return `
+  <div class="rcard">
+    <div class="rcard-header">
+      <h4>Your view of those options</h4>
+      <div class="sub">Tap a row to filter the list below</div>
+    </div>
+    <div class="rcard-body">
+      <div class="rcard-section">
+        ${renderLandscapeRow('full', counts.full, fullPct, activeBucket)}
+        ${renderLandscapeRow('maybe', counts.maybe, maybePct, activeBucket)}
+        ${renderLandscapeRow('not', counts.not, notPct, activeBucket)}
+        <div class="chart-legend">
+          <div class="legend-item"><div class="legend-swatch" style="background: var(--primary-500);"></div>Approved drug</div>
+          <div class="legend-item"><div class="legend-swatch" style="background: var(--possible-500);"></div>Clinical trial</div>
+        </div>
+      </div>
+      <div class="rcard-section">
+        <div style="font-size: 0.78rem; color: var(--neutral-600); margin-bottom: 8px;" id="matches-helper">${matchesHelper(activeBucket)}</div>
+        <div class="option-list" id="match-options">
+          ${renderMatches(activeBucket, s)}
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderLandscapeRow(bucket, count, widthPct, active) {
+  const labels = {
+    full: { name: 'Full matches', sub: 'Strong fit' },
+    maybe: { name: 'Possible matches', sub: 'Records would clarify' },
+    not: { name: 'Not a fit', sub: 'Why we ruled out' }
+  };
+  const segClass = {
+    full: ['lr-full-approved', 'lr-full-trial'],
+    maybe: ['lr-partial-approved', 'lr-partial-trial'],
+    not: ['lr-not-approved', 'lr-not-trial']
+  };
+  const splits = {
+    full: { approved: 3, trial: 1 },
+    maybe: { approved: 3, trial: 3 },
+    not: { approved: 1, trial: 2 }
+  };
+  const sp = splits[bucket];
+  const aPct = (sp.approved / (sp.approved + sp.trial)) * 100;
+  const tPct = 100 - aPct;
+  return `
+    <div class="landscape-row ${active === bucket ? 'active' : ''}" onclick="filterMatches('${bucket}')">
+      <div class="lr-label">
+        <div class="lr-label-name">${labels[bucket].name}</div>
+        <div class="lr-label-sub">${labels[bucket].sub}</div>
+      </div>
+      <div class="lr-bar" style="width: ${widthPct}%;">
+        <div class="lr-seg ${segClass[bucket][0]}" style="width: ${aPct}%;">${sp.approved} approved</div>
+        <div class="lr-seg ${segClass[bucket][1]}" style="width: ${tPct}%;">${sp.trial} trial${sp.trial > 1 ? 's' : ''}</div>
+      </div>
+      <div class="lr-count">${count}</div>
+    </div>`;
+}
+
+function matchesHelper(bucket) {
+  return ({
+    full: 'These look like a strong fit. Tap one for the matching rationale.',
+    maybe: 'These could be a fit. Records would clarify which.',
+    not: 'These came up in your search but were ruled out. Tap one to see why.'
+  })[bucket];
+}
+
+function renderMatches(bucket, s) {
+  if (bucket === 'full') {
+    return `
+      ${optionCardHTML('full', 'trial', 'Clinical trial · Phase 3', 'Nipocalimab for generalized AChR+ MG (Vivacity-MG3)', 'Open enrollment · Sites in 14 states · Sponsored by Johnson & Johnson', 'Matches: generalized MG · AChR-positive · on treatment looking for better options', 'nipo')}
+      ${optionCardHTML('full', 'approved', 'FDA-approved · Available now', 'Efgartigimod (Vyvgart)', 'Approved for adults with generalized AChR+ MG · Weekly infusions', 'Matches: generalized MG · AChR-positive · widely covered by insurance', 'efgar')}
+      ${optionCardHTML('full', 'approved', 'FDA-approved · Available now', 'Rozanolixizumab (Rystiggo)', 'Approved for AChR+ and MuSK+ generalized MG · Weekly subcutaneous injection', 'Matches: generalized MG · AChR-positive · self-administered option', 'rozano')}
+      ${optionCardHTML('full', 'trial', 'Clinical trial · Phase 2', 'Telitacicept extension study', 'Open enrollment · 8 US sites · Sponsored by RemeGen', 'Matches: generalized MG · on treatment looking for better options', 'teli')}
+    `;
+  }
+  if (bucket === 'maybe') {
+    return `
+      ${optionCardHTML('maybe', 'approved', 'FDA-approved · Available now', 'Eculizumab (Soliris)', 'Approved for refractory generalized AChR+ MG · IV every 2 weeks', "Approved for refractory cases — eligibility depends on prior treatment history.", 'ecu')}
+      ${optionCardHTML('maybe', 'approved', 'FDA-approved · Available now', 'Ravulizumab (Ultomiris)', 'Approved for refractory generalized AChR+ MG · IV every 8 weeks', "Approved for refractory cases — eligibility depends on prior treatment history.", 'ravu')}
+      ${optionCardHTML('maybe', 'approved', 'FDA-approved · Available now', 'Zilucoplan (Zilbrysq)', 'Approved for AChR+ generalized MG · Daily self-injection', 'Daily-injection burden — records would help us check fit.', 'zilu')}
+      ${optionCardHTML('maybe', 'trial', 'Clinical trial · Phase 3', 'Rituximab in early MG (RINOMAX trial sites)', 'Recruiting · Eligibility depends on time since diagnosis', 'Time-since-diagnosis criteria are strict — records would verify.', 'ritux')}
+      ${optionCardHTML('maybe', 'trial', 'Clinical trial · Phase 2', 'Batoclimab open-label extension', 'Recruiting · 12 US sites · Eligibility based on prior FcRn exposure', 'Eligibility hinges on prior treatment history.', 'bato')}
+      ${optionCardHTML('maybe', 'trial', 'Clinical trial · Phase 2', 'Oral SYK inhibitor for refractory MG', 'Recruiting · 6 US sites · For inadequate response to current therapy', '"Inadequate response" criteria need verifying.', 'syk')}
+    `;
+  }
+  return `
+    ${optionCardHTML('not', 'grey', 'FDA-approved · Available now', 'Belimumab (off-label MuSK studies)', 'Studied for MuSK-positive MG only — not indicated for AChR-positive patients.', 'Why ruled out: designed for MuSK antibody profile, not AChR.', 'beli')}
+    ${optionCardHTML('not', 'grey', 'Clinical trial · Phase 3', 'Pediatric MG study (CLIP-MG)', 'For patients aged 12–17 only.', 'Why ruled out: outside the eligible age range.', 'peds')}
+    ${optionCardHTML('not', 'grey', 'Clinical trial · Phase 2', 'MuSK+ first-line monotherapy trial', 'For newly-diagnosed MuSK-positive patients only.', 'Why ruled out: requires MuSK-positive antibody status.', 'muskmono')}
+  `;
+}
+
+function optionCardHTML(bucket, tag, tagLabel, title, meta, why, id) {
+  const tagClass = ({trial: 'tag-trial', approved: 'tag-approved', grey: 'tag-grey'})[tag];
+  return `
+    <div class="option-card ${bucket}" onclick="window.openTrialFromCard('${id}', ${JSON.stringify(title).replace(/"/g, '&quot;')})">
+      <span class="option-tag ${tagClass}">${tagLabel}</span>
+      <div class="option-title">${title}</div>
+      <div class="option-meta">${meta}</div>
+      <div class="option-why">${why}</div>
+    </div>`;
+}
+
+function filterMatches(bucket) {
+  state.filterBucket = bucket;
+  // Update rows
+  document.querySelectorAll('.landscape-row').forEach(r => {
+    r.classList.remove('active');
+  });
+  // Reactive re-render of preview card only if it exists
+  const card = document.getElementById('previewCard');
+  if (card) {
+    card.innerHTML = matchesCardHTML(computeMatchCounts(state), bucket, state);
+  }
+  scrollDown();
+}
+window.filterMatches = filterMatches;
+
+window.openTrialFromCard = function(id, label) {
+  // Treat as picking that trial
+  const labelStr = label || id;
+  me('Tell me about ' + labelStr);
+  setTimeout(() => {
+    ai([`Here's the detail on <strong>${escapeHTML(labelStr)}</strong>.`], { next: null, chips: [] });
+    renderEmbeddedCard(trialDetailHTML(id, labelStr), 'trialCard_' + id);
+    setTimeout(() => {
+      const applyChip = state.pathChoice === 'A'
+        ? { label: "I'll wait for the email", value: 'wait', primary: true }
+        : (state.pathChoice === 'B'
+            ? { label: 'Connect records to apply', value: 'upgrade', primary: true }
+            : { label: 'Make these precise — connect records', value: 'precise', primary: true });
+      const nextStep = state.pathChoice ? 'appAction' : 'previewActions';
+      ai([
+        "What next?"
+      ], {
+        next: nextStep,
+        chips: [
+          applyChip,
+          { label: 'Show me other matches', value: state.pathChoice ? 'explain' : 'question' },
+          { label: 'Bookmark this one', value: 'bookmark', muted: true }
+        ]
+      });
+    }, 600);
+  }, 500);
+};
+
+/* ============================================================
+   EMBEDDED CARD: CONSENT SPLIT
+   ============================================================ */
+function consentCardHTML() {
+  return `
+    <div class="rcard">
+      <div class="rcard-body">
+        <div class="consent-pair">
+          <div class="consent-option recommended">
+            <div class="consent-option-tag">Most precise</div>
+            <h5>Connect your records now</h5>
+            <div class="tagline">Verified matches in about 8 hours.</div>
+            <ul>
+              <li>I retrieve your records securely from your providers</li>
+              <li>Approximate matches become precision-matched</li>
+              <li>Comprehensive report you can share with your doctor</li>
+              <li>You can apply to trials directly</li>
+              <li>You see exactly how you matched on every criterion</li>
+            </ul>
+            <button class="btn btn-primary btn-full" onclick="window.pickPath('A')">Connect records now</button>
+            <div class="small text-center" style="margin-top: 6px;">Takes about 3 minutes · Two consents to sign</div>
+          </div>
+          <div class="consent-option">
+            <h5>Connect records later</h5>
+            <div class="tagline">Keep browsing. Upgrade anytime.</div>
+            <ul>
+              <li>Your approximate matches stay accessible</li>
+              <li>Browse and bookmark care options</li>
+              <li>I'll let you know when new options fit your profile</li>
+              <li>One click to upgrade when you're ready</li>
+            </ul>
+            <button class="btn btn-secondary btn-full" onclick="window.pickPath('B')">Connect later</button>
+            <div class="small text-center" style="margin-top: 6px;">Standard HIPAA consent only · Nothing retrieved yet</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="small text-center" style="margin-top: 10px; padding: 10px; background: var(--neutral-100); border-radius: var(--radius-md);">
+      <strong>Your data stays protected either way.</strong> Resonata never shares anything that identifies you with trial sponsors. You decide when and what to share if you apply.
+    </div>
+  `;
+}
+
+window.pickPath = function(path) {
+  const label = path === 'A' ? 'Connect records now' : 'Connect later';
+  const fn = steps[currentStep.next];
+  if (fn) fn(path, label);
+  else {
+    // Default: jump straight if step not set
+    state.pathChoice = path;
+    me(label);
+    if (path === 'A') setTimeout(() => steps.pathA_explain(), 500);
+    else setTimeout(() => steps.pathB_confirm(), 500);
+  }
+};
+
+/* ============================================================
+   EMBEDDED CARD: AUTH BLOCKS
+   ============================================================ */
+function authBlocksHTML() {
+  return `
+    <div class="auth-block" id="auth-hipaa">
+      <h5>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        HIPAA Authorization
+      </h5>
+      <div class="auth-sub">Authorizes Resonata to use your health information to find matching care options and contact you about them.</div>
+      <label class="auth-check" onclick="window.toggleAuth('hipaa', this)">
+        <input type="checkbox" id="check-hipaa">
+        <span>I authorize Resonata to use my health information for care matching, per the terms of the HIPAA authorization.</span>
+      </label>
+      <button class="auth-expand-btn" onclick="alert('Full authorization text would render here as a scrollable modal.');">Read the full authorization →</button>
+    </div>
+    <div class="auth-block" id="auth-retrieval">
+      <h5>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Records Retrieval (DNAvisit)
+      </h5>
+      <div class="auth-sub">DNAvisit uses Health Information Exchange data to retrieve your records from your providers. About 8 hours.</div>
+      <label class="auth-check" onclick="window.toggleAuth('retrieval', this)">
+        <input type="checkbox" id="check-retrieval">
+        <span>I authorize DNAvisit to retrieve my medical records from my healthcare providers on my behalf.</span>
+      </label>
+      <button class="auth-expand-btn" onclick="alert('Full authorization text would render here as a scrollable modal.');">Read the full authorization →</button>
+    </div>
+    <button class="btn btn-primary btn-full" id="auth-submit" disabled style="margin-top: 12px;" onclick="window.submitAuth()">Submit authorizations</button>
+  `;
+}
+
+window.toggleAuth = function(which, labelEl) {
+  setTimeout(() => {
+    const checkbox = labelEl.querySelector('input');
+    if (which === 'hipaa') state.hipaaSigned = checkbox.checked;
+    else state.retrievalSigned = checkbox.checked;
+    const block = document.getElementById(which === 'hipaa' ? 'auth-hipaa' : 'auth-retrieval');
+    block.classList.toggle('signed', checkbox.checked);
+    labelEl.classList.toggle('checked', checkbox.checked);
+    const submit = document.getElementById('auth-submit');
+    if (submit) submit.disabled = !(state.hipaaSigned && state.retrievalSigned);
+  }, 0);
+};
+
+window.submitAuth = function() {
+  if (!(state.hipaaSigned && state.retrievalSigned)) return;
+  me('I authorize both.');
+  setTimeout(() => steps.pathA_submitted(), 500);
+};
+
+/* ============================================================
+   EMBEDDED CARD: TRIAL DETAIL
+   ============================================================ */
+function trialDetailHTML(id, title) {
+  // Static placeholder for the prototype — content tailored to nipocalimab in v2
+  const matches = [
+    'Generalized MG — matches your quiz answer',
+    'AChR-positive antibody status — matches your quiz answer',
+    'Inadequate response to prior therapy — matches your treatment-stage answer'
+  ];
+  const sites = state.pathChoice === 'A' || state.pathChoice === 'B'
+    ? `<div class="site"><strong>Northwestern Memorial Hospital</strong>Chicago, IL · 12 mi away · Enrollment closes 2026-09<div class="site-meta">Additional criteria: minimum disease duration 6 months, specific labs required</div></div>
+       <div class="site"><strong>Rush University Medical Center</strong>Chicago, IL · 18 mi away · Enrollment closes 2026-11<div class="site-meta">Additional criteria: MG-ADL score ≥ 6, no prior anti-FcRn exposure</div></div>`
+    : '<div class="site"><strong>6 trial sites</strong>across multiple states · Add your zip code to filter by distance</div>';
+
+  return `
+  <div class="rcard detail-card">
+    <div class="detail-hero">
+      <span class="option-tag tag-trial">Clinical trial · Phase 3</span>
+      <h4>${escapeHTML(title)}</h4>
+      <div class="meta-line">Vivacity-MG3 study · Sponsored by Johnson &amp; Johnson · Open enrollment</div>
+      <div class="detail-meta-pills">
+        <span class="meta-pill">Sites in 14 states</span>
+        <span class="meta-pill">52-week study</span>
+        <span class="meta-pill">Bi-weekly infusions</span>
+        <span class="meta-pill">Placebo-controlled</span>
+      </div>
+    </div>
+    <div class="detail-section">
+      <h6>Why I matched you</h6>
+      <ul>${matches.map(m => `<li>${m}</li>`).join('')}</ul>
+    </div>
+    <div class="detail-section">
+      <h6>What this trial is studying</h6>
+      <p>Nipocalimab is an investigational therapy that targets FcRn, which controls how long certain antibodies (including the ones causing MG) stay in your body. The trial is testing whether lowering those antibodies improves symptoms over 24 weeks.</p>
+    </div>
+    <div class="detail-section">
+      <h6>Sites near you</h6>
+      ${sites}
+    </div>
+    <div class="detail-section">
+      <h6>Side effects &amp; treatment burden</h6>
+      <p style="font-size: 0.8rem; color: var(--neutral-600);">Coming soon. Side-effect profiles and visit schedules are on the roadmap. For now, the trial protocol below is the source of detail.</p>
+    </div>
+    <div class="detail-section">
+      <h6>Sources</h6>
+      <p style="font-size: 0.82rem;">ClinicalTrials.gov listing · Trial protocol summary · Sponsor page (Johnson &amp; Johnson)</p>
+    </div>
+  </div>`;
+}
+
+/* ============================================================
+   EMBEDDED CARD: APP HOME (semi-converted state)
+   ============================================================ */
+function appHomeHTML() {
+  return `
+  <div class="rcard">
+    <div class="rcard-header">
+      <h4>Your matches</h4>
+      <div class="sub">${state.mgType === 'generalized' ? 'Generalized MG' : (state.mgType === 'ocular' ? 'Ocular MG' : 'MG')} · ${state.antibody === 'achr' ? 'AChR-positive' : (state.antibody === 'musk' ? 'MuSK-positive' : 'Antibody unknown')} · ${stageLabel(state.treatmentStage)}</div>
+    </div>
+    <div>
+      <div class="home-bucket-row full" onclick="window.appHomeShowBucket('full')">
+        <div class="home-bucket-count">4</div>
+        <div class="home-bucket-text">
+          <div class="home-bucket-title">Full matches</div>
+          <div class="home-bucket-sub">Strong fit based on your profile.</div>
+        </div>
+        <svg class="home-bucket-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="home-bucket-row maybe" onclick="window.appHomeShowBucket('maybe')">
+        <div class="home-bucket-count">6</div>
+        <div class="home-bucket-text">
+          <div class="home-bucket-title">Possible matches</div>
+          <div class="home-bucket-sub">Records would clarify.</div>
+        </div>
+        <svg class="home-bucket-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="home-bucket-row not" onclick="window.appHomeShowBucket('not')">
+        <div class="home-bucket-count">3</div>
+        <div class="home-bucket-text">
+          <div class="home-bucket-title">Not a fit</div>
+          <div class="home-bucket-sub">Why I ruled out.</div>
+        </div>
+        <svg class="home-bucket-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>
+  </div>`;
+}
+
+window.appHomeShowBucket = function(bucket) {
+  const labels = { full: 'Full matches', maybe: 'Possible matches', not: 'Not a fit' };
+  me('Show me ' + labels[bucket].toLowerCase());
+  setTimeout(() => {
+    state.filterBucket = bucket;
+    ai([
+      bucket === 'not'
+        ? "Here's what I ruled out and why. I show these on purpose — you should know what I considered."
+        : `Here are your ${labels[bucket].toLowerCase()}.`
+    ], { next: null, chips: [] });
+    renderEmbeddedCard(`
+      <div class="rcard">
+        <div class="rcard-body">
+          <div style="font-size: 0.78rem; color: var(--neutral-600); margin-bottom: 10px;">${matchesHelper(bucket)}</div>
+          <div class="option-list">${renderMatches(bucket, state)}</div>
+        </div>
+      </div>
+    `, 'bucketCard-' + bucket);
+    setTimeout(() => {
+      ai(["Tap one to see the detail, or pick something else."], {
+        next: 'appAction',
+        chips: [
+          { label: 'Back to overview', value: 'explain' },
+          { label: state.pathChoice === 'A' ? "I'll wait for the email" : 'Connect records to apply', value: state.pathChoice === 'A' ? 'wait' : 'upgrade', primary: state.pathChoice !== 'A' }
+        ]
+      });
+    }, 700);
+  }, 500);
+};
+
+function stageLabel(s) {
+  return ({
+    'newly': 'Newly diagnosed',
+    'on-treatment': 'On treatment, looking for better',
+    'refractory': 'Tried multiple, none worked',
+    'stable': 'Stable, exploring',
+    '': 'Treatment stage unknown'
+  })[s] || 'Treatment stage unknown';
+}
+
+/* ============================================================
+   EMBEDDED CARD: EDUCATION EXPLORER
+   ============================================================ */
+function explorerHTML() {
+  return `
+  <div class="rcard">
+    <div class="rcard-body">
+      <div class="edu-card-mini"><h5>Approved treatments</h5><p>An overview of the FDA-approved therapies most commonly used for your condition.</p></div>
+      <div class="edu-card-mini"><h5>Clinical trials in progress</h5><p>What's being studied right now. I'll explain phases and what enrollment usually involves.</p></div>
+      <div class="edu-card-mini"><h5>How care decisions get made</h5><p>How doctors typically choose between options — and what to bring to your next appointment.</p></div>
+      <div class="edu-card-mini"><h5>Insurance and access</h5><p>Common coverage patterns, patient-assistance programs, ways to reduce out-of-pocket costs.</p></div>
+    </div>
+  </div>`;
+}
+
+/* ============================================================
+   KICK OFF
+   ============================================================ */
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => steps.intro(), 400);
+});
+</script>
+
+</body>
+</html>

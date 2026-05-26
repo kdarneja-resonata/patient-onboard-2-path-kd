@@ -1,0 +1,1767 @@
+<?xml version="1.0" encoding="UTF-8"?><p:sld xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main">
+  <p:cSld name="Slide 1">
+    <p:bg>
+      <p:bgPr>
+        <a:solidFill>
+          <a:srgbClr val="0B0F1A"/>
+        </a:solidFill>
+      </p:bgPr>
+    </p:bg>
+    <p:spTree>
+      <p:nvGrpSpPr>
+        <p:cNvPr id="1" name=""/>
+        <p:cNvGrpSpPr/>
+        <p:nvPr/>
+      </p:nvGrpSpPr>
+      <p:grpSpPr>
+        <a:xfrm>
+          <a:off x="0" y="0"/>
+          <a:ext cx="0" cy="0"/>
+          <a:chOff x="0" y="0"/>
+          <a:chExt cx="0" cy="0"/>
+        </a:xfrm>
+      </p:grpSpPr>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="2" name="Shape 0"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="0" y="6492240"/>
+            <a:ext cx="12188952" cy="365760"/>
+          </a:xfrm>
+          <a:prstGeom prst="rect">
+            <a:avLst/>
+          </a:prstGeom>
+          <a:solidFill>
+            <a:srgbClr val="080C15"/>
+          </a:solidFill>
+          <a:ln/>
+        </p:spPr>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="3" name="Text 1"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="457200" y="6492240"/>
+            <a:ext cx="1828800" cy="365760"/>
+          </a:xfrm>
+          <a:prstGeom prst="rect">
+            <a:avLst/>
+          </a:prstGeom>
+          <a:noFill/>
+          <a:ln/>
+        </p:spPr>
+        <p:txBody>
+          <a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" rtlCol="0" anchor="ctr"/>
+          <a:lstStyle/>
+          <a:p>
+            <a:pPr indent="0" marL="0">
+              <a:buNone/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="900" b="1" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="6B8AFF"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>resonata</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="900" dirty="0"/>
+          </a:p>
+        </p:txBody>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="4" name="Text 2"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="8686800" y="6492240"/>
+            <a:ext cx="3200400" cy="365760"/>
+          </a:xfrm>
+          <a:prstGeom prst="rect">
+            <a:avLst/>
+          </a:prstGeom>
+          <a:noFill/>
+          <a:ln/>
+        </p:spPr>
+        <p:txBody>
+          <a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" rtlCol="0" anchor="ctr"/>
+          <a:lstStyle/>
+          <a:p>
+            <a:pPr algn="r" indent="0" marL="0">
+              <a:buNone/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="900" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="94A3B8"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>Prototype UX Review</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="900" dirty="0"/>
+          </a:p>
+        </p:txBody>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="5" name="Text 3"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="457200" y="320040"/>
+            <a:ext cx="2743200" cy="228600"/>
+          </a:xfrm>
+          <a:prstGeom prst="rect">
+            <a:avLst/>
+          </a:prstGeom>
+          <a:noFill/>
+          <a:ln/>
+        </p:spPr>
+        <p:txBody>
+          <a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" rtlCol="0" anchor="ctr"/>
+          <a:lstStyle/>
+          <a:p>
+            <a:pPr indent="0" marL="0">
+              <a:buNone/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="1000" b="1" spc="200" kern="0" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="6B8AFF"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>PROTOTYPE UX REVIEW</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="1000" dirty="0"/>
+          </a:p>
+        </p:txBody>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="6" name="Text 4"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="457200" y="594360"/>
+            <a:ext cx="3931920" cy="502920"/>
+          </a:xfrm>
+          <a:prstGeom prst="rect">
+            <a:avLst/>
+          </a:prstGeom>
+          <a:noFill/>
+          <a:ln/>
+        </p:spPr>
+        <p:txBody>
+          <a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" rtlCol="0" anchor="ctr"/>
+          <a:lstStyle/>
+          <a:p>
+            <a:pPr indent="0" marL="0">
+              <a:buNone/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="2800" b="1" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="F8FAFC"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>Sarah Chen</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="2800" dirty="0"/>
+          </a:p>
+        </p:txBody>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="7" name="Text 5"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="457200" y="1097280"/>
+            <a:ext cx="3931920" cy="274320"/>
+          </a:xfrm>
+          <a:prstGeom prst="rect">
+            <a:avLst/>
+          </a:prstGeom>
+          <a:noFill/>
+          <a:ln/>
+        </p:spPr>
+        <p:txBody>
+          <a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" rtlCol="0" anchor="ctr"/>
+          <a:lstStyle/>
+          <a:p>
+            <a:pPr indent="0" marL="0">
+              <a:buNone/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="1200" i="1" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="94A3B8"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>Mid-Stage Collaborative Decider</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="1200" dirty="0"/>
+          </a:p>
+        </p:txBody>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="8" name="Shape 6"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="457200" y="1508760"/>
+            <a:ext cx="3657600" cy="0"/>
+          </a:xfrm>
+          <a:prstGeom prst="line">
+            <a:avLst/>
+          </a:prstGeom>
+          <a:noFill/>
+          <a:ln w="12700">
+            <a:solidFill>
+              <a:srgbClr val="1E2A42"/>
+            </a:solidFill>
+            <a:prstDash val="solid"/>
+          </a:ln>
+        </p:spPr>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="9" name="Text 7"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="457200" y="1691640"/>
+            <a:ext cx="3931920" cy="256032"/>
+          </a:xfrm>
+          <a:prstGeom prst="rect">
+            <a:avLst/>
+          </a:prstGeom>
+          <a:noFill/>
+          <a:ln/>
+        </p:spPr>
+        <p:txBody>
+          <a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" rtlCol="0" anchor="ctr"/>
+          <a:lstStyle/>
+          <a:p>
+            <a:pPr indent="0" marL="0">
+              <a:buNone/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="1000" b="1" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="94A3B8"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t xml:space="preserve">Age: </a:t>
+            </a:r>
+            <a:pPr indent="0" marL="0">
+              <a:buNone/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="1000" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="F8FAFC"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>52</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="1000" dirty="0"/>
+          </a:p>
+        </p:txBody>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="10" name="Text 8"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="457200" y="1947672"/>
+            <a:ext cx="3931920" cy="256032"/>
+          </a:xfrm>
+          <a:prstGeom prst="rect">
+            <a:avLst/>
+          </a:prstGeom>
+          <a:noFill/>
+          <a:ln/>
+        </p:spPr>
+        <p:txBody>
+          <a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" rtlCol="0" anchor="ctr"/>
+          <a:lstStyle/>
+          <a:p>
+            <a:pPr indent="0" marL="0">
+              <a:buNone/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="1000" b="1" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="94A3B8"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t xml:space="preserve">Location: </a:t>
+            </a:r>
+            <a:pPr indent="0" marL="0">
+              <a:buNone/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="1000" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="F8FAFC"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>Suburban Chicago, IL</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="1000" dirty="0"/>
+          </a:p>
+        </p:txBody>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="11" name="Text 9"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="457200" y="2203704"/>
+            <a:ext cx="3931920" cy="256032"/>
+          </a:xfrm>
+          <a:prstGeom prst="rect">
+            <a:avLst/>
+          </a:prstGeom>
+          <a:noFill/>
+          <a:ln/>
+        </p:spPr>
+        <p:txBody>
+          <a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" rtlCol="0" anchor="ctr"/>
+          <a:lstStyle/>
+          <a:p>
+            <a:pPr indent="0" marL="0">
+              <a:buNone/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="1000" b="1" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="94A3B8"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t xml:space="preserve">Occupation: </a:t>
+            </a:r>
+            <a:pPr indent="0" marL="0">
+              <a:buNone/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="1000" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="F8FAFC"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>Former teacher (on disability)</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="1000" dirty="0"/>
+          </a:p>
+        </p:txBody>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="12" name="Text 10"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="457200" y="2459736"/>
+            <a:ext cx="3931920" cy="256032"/>
+          </a:xfrm>
+          <a:prstGeom prst="rect">
+            <a:avLst/>
+          </a:prstGeom>
+          <a:noFill/>
+          <a:ln/>
+        </p:spPr>
+        <p:txBody>
+          <a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" rtlCol="0" anchor="ctr"/>
+          <a:lstStyle/>
+          <a:p>
+            <a:pPr indent="0" marL="0">
+              <a:buNone/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="1000" b="1" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="94A3B8"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t xml:space="preserve">Diagnosis: </a:t>
+            </a:r>
+            <a:pPr indent="0" marL="0">
+              <a:buNone/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="1000" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="F8FAFC"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>Generalized MG (3 years)</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="1000" dirty="0"/>
+          </a:p>
+        </p:txBody>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="13" name="Text 11"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="457200" y="2715768"/>
+            <a:ext cx="3931920" cy="256032"/>
+          </a:xfrm>
+          <a:prstGeom prst="rect">
+            <a:avLst/>
+          </a:prstGeom>
+          <a:noFill/>
+          <a:ln/>
+        </p:spPr>
+        <p:txBody>
+          <a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" rtlCol="0" anchor="ctr"/>
+          <a:lstStyle/>
+          <a:p>
+            <a:pPr indent="0" marL="0">
+              <a:buNone/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="1000" b="1" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="94A3B8"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t xml:space="preserve">Severity: </a:t>
+            </a:r>
+            <a:pPr indent="0" marL="0">
+              <a:buNone/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="1000" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="F8FAFC"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>Moderate, fluctuating</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="1000" dirty="0"/>
+          </a:p>
+        </p:txBody>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="14" name="Text 12"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="457200" y="2971800"/>
+            <a:ext cx="3931920" cy="256032"/>
+          </a:xfrm>
+          <a:prstGeom prst="rect">
+            <a:avLst/>
+          </a:prstGeom>
+          <a:noFill/>
+          <a:ln/>
+        </p:spPr>
+        <p:txBody>
+          <a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" rtlCol="0" anchor="ctr"/>
+          <a:lstStyle/>
+          <a:p>
+            <a:pPr indent="0" marL="0">
+              <a:buNone/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="1000" b="1" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="94A3B8"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t xml:space="preserve">Tech comfort: </a:t>
+            </a:r>
+            <a:pPr indent="0" marL="0">
+              <a:buNone/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="1000" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="F8FAFC"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>Moderate</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="1000" dirty="0"/>
+          </a:p>
+        </p:txBody>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="15" name="Shape 13"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="457200" y="3364992"/>
+            <a:ext cx="1083564" cy="274320"/>
+          </a:xfrm>
+          <a:prstGeom prst="roundRect">
+            <a:avLst>
+              <a:gd name="adj" fmla="val 16667"/>
+            </a:avLst>
+          </a:prstGeom>
+          <a:solidFill>
+            <a:srgbClr val="0D3B2E"/>
+          </a:solidFill>
+          <a:ln/>
+        </p:spPr>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="16" name="Text 14"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="457200" y="3364992"/>
+            <a:ext cx="1083564" cy="274320"/>
+          </a:xfrm>
+          <a:prstGeom prst="rect">
+            <a:avLst/>
+          </a:prstGeom>
+          <a:noFill/>
+          <a:ln/>
+        </p:spPr>
+        <p:txBody>
+          <a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" rtlCol="0" anchor="ctr"/>
+          <a:lstStyle/>
+          <a:p>
+            <a:pPr algn="ctr" indent="0" marL="0">
+              <a:buNone/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="900" b="1" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="34D399"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>MAINTENANCE</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="900" dirty="0"/>
+          </a:p>
+        </p:txBody>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="17" name="Shape 15"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="1650492" y="3364992"/>
+            <a:ext cx="850392" cy="274320"/>
+          </a:xfrm>
+          <a:prstGeom prst="roundRect">
+            <a:avLst>
+              <a:gd name="adj" fmla="val 16667"/>
+            </a:avLst>
+          </a:prstGeom>
+          <a:solidFill>
+            <a:srgbClr val="1E2A5E"/>
+          </a:solidFill>
+          <a:ln/>
+        </p:spPr>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="18" name="Text 16"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="1650492" y="3364992"/>
+            <a:ext cx="850392" cy="274320"/>
+          </a:xfrm>
+          <a:prstGeom prst="rect">
+            <a:avLst/>
+          </a:prstGeom>
+          <a:noFill/>
+          <a:ln/>
+        </p:spPr>
+        <p:txBody>
+          <a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" rtlCol="0" anchor="ctr"/>
+          <a:lstStyle/>
+          <a:p>
+            <a:pPr algn="ctr" indent="0" marL="0">
+              <a:buNone/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="900" b="1" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="6B8AFF"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>CAUTIOUS</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="900" dirty="0"/>
+          </a:p>
+        </p:txBody>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="19" name="Shape 17"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="2610612" y="3364992"/>
+            <a:ext cx="1472184" cy="274320"/>
+          </a:xfrm>
+          <a:prstGeom prst="roundRect">
+            <a:avLst>
+              <a:gd name="adj" fmla="val 16667"/>
+            </a:avLst>
+          </a:prstGeom>
+          <a:solidFill>
+            <a:srgbClr val="2E1E5E"/>
+          </a:solidFill>
+          <a:ln/>
+        </p:spPr>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="20" name="Text 18"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="2610612" y="3364992"/>
+            <a:ext cx="1472184" cy="274320"/>
+          </a:xfrm>
+          <a:prstGeom prst="rect">
+            <a:avLst/>
+          </a:prstGeom>
+          <a:noFill/>
+          <a:ln/>
+        </p:spPr>
+        <p:txBody>
+          <a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" rtlCol="0" anchor="ctr"/>
+          <a:lstStyle/>
+          <a:p>
+            <a:pPr algn="ctr" indent="0" marL="0">
+              <a:buNone/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="900" b="1" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="A78BFA"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>SPOUSE-DEPENDENT</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="900" dirty="0"/>
+          </a:p>
+        </p:txBody>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="21" name="Shape 19"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="457200" y="3867912"/>
+            <a:ext cx="3931920" cy="1463040"/>
+          </a:xfrm>
+          <a:prstGeom prst="roundRect">
+            <a:avLst>
+              <a:gd name="adj" fmla="val 5000"/>
+            </a:avLst>
+          </a:prstGeom>
+          <a:solidFill>
+            <a:srgbClr val="141929"/>
+          </a:solidFill>
+          <a:ln w="9525">
+            <a:solidFill>
+              <a:srgbClr val="1E2A42"/>
+            </a:solidFill>
+            <a:prstDash val="solid"/>
+          </a:ln>
+        </p:spPr>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="22" name="Text 20"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="594360" y="3822192"/>
+            <a:ext cx="457200" cy="457200"/>
+          </a:xfrm>
+          <a:prstGeom prst="rect">
+            <a:avLst/>
+          </a:prstGeom>
+          <a:noFill/>
+          <a:ln/>
+        </p:spPr>
+        <p:txBody>
+          <a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" rtlCol="0" anchor="ctr"/>
+          <a:lstStyle/>
+          <a:p>
+            <a:pPr indent="0" marL="0">
+              <a:buNone/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="3600" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="6B8AFF"/>
+                </a:solidFill>
+                <a:latin typeface="Georgia" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Georgia" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Georgia" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>“</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="3600" dirty="0"/>
+          </a:p>
+        </p:txBody>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="23" name="Text 21"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="640080" y="4142232"/>
+            <a:ext cx="3566160" cy="1097280"/>
+          </a:xfrm>
+          <a:prstGeom prst="rect">
+            <a:avLst/>
+          </a:prstGeom>
+          <a:noFill/>
+          <a:ln/>
+        </p:spPr>
+        <p:txBody>
+          <a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" rtlCol="0" anchor="t"/>
+          <a:lstStyle/>
+          <a:p>
+            <a:pPr indent="0" marL="0">
+              <a:buNone/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="950" i="1" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="94A3B8"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>Letting me stop without losing my matches is the single most important design decision in this whole flow.</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="950" dirty="0"/>
+          </a:p>
+        </p:txBody>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="24" name="Shape 22"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="4663440" y="320040"/>
+            <a:ext cx="3410712" cy="2880360"/>
+          </a:xfrm>
+          <a:prstGeom prst="roundRect">
+            <a:avLst>
+              <a:gd name="adj" fmla="val 2540"/>
+            </a:avLst>
+          </a:prstGeom>
+          <a:solidFill>
+            <a:srgbClr val="141929"/>
+          </a:solidFill>
+          <a:ln w="9525">
+            <a:solidFill>
+              <a:srgbClr val="1E2A42"/>
+            </a:solidFill>
+            <a:prstDash val="solid"/>
+          </a:ln>
+        </p:spPr>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="25" name="Shape 23"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="4846320" y="502920"/>
+            <a:ext cx="109728" cy="109728"/>
+          </a:xfrm>
+          <a:prstGeom prst="ellipse">
+            <a:avLst/>
+          </a:prstGeom>
+          <a:solidFill>
+            <a:srgbClr val="34D399"/>
+          </a:solidFill>
+          <a:ln/>
+        </p:spPr>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="26" name="Text 24"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="5047488" y="429768"/>
+            <a:ext cx="2862072" cy="256032"/>
+          </a:xfrm>
+          <a:prstGeom prst="rect">
+            <a:avLst/>
+          </a:prstGeom>
+          <a:noFill/>
+          <a:ln/>
+        </p:spPr>
+        <p:txBody>
+          <a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" rtlCol="0" anchor="ctr"/>
+          <a:lstStyle/>
+          <a:p>
+            <a:pPr indent="0" marL="0">
+              <a:buNone/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="1100" b="1" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="F8FAFC"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>What Worked</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="1100" dirty="0"/>
+          </a:p>
+        </p:txBody>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="27" name="Text 25"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="4846320" y="731520"/>
+            <a:ext cx="3044952" cy="2377440"/>
+          </a:xfrm>
+          <a:prstGeom prst="rect">
+            <a:avLst/>
+          </a:prstGeom>
+          <a:noFill/>
+          <a:ln/>
+        </p:spPr>
+        <p:txBody>
+          <a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" rtlCol="0" anchor="t"/>
+          <a:lstStyle/>
+          <a:p>
+            <a:pPr marL="342900" indent="-342900">
+              <a:spcAft>
+                <a:spcPts val="400"/>
+              </a:spcAft>
+              <a:buSzPct val="100000"/>
+              <a:buChar char="•"/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="950" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="94A3B8"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>“Not a fit” bucket: the single best sentence on the site</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="950" dirty="0"/>
+          </a:p>
+          <a:p>
+            <a:pPr marL="342900" indent="-342900">
+              <a:spcAft>
+                <a:spcPts val="400"/>
+              </a:spcAft>
+              <a:buSzPct val="100000"/>
+              <a:buChar char="•"/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="950" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="94A3B8"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>Path A / Path B split kept her in the funnel</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="950" dirty="0"/>
+          </a:p>
+          <a:p>
+            <a:pPr marL="342900" indent="-342900">
+              <a:spcAft>
+                <a:spcPts val="400"/>
+              </a:spcAft>
+              <a:buSzPct val="100000"/>
+              <a:buChar char="•"/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="950" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="94A3B8"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>“Approximate matches” badge as credibility multiplier</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="950" dirty="0"/>
+          </a:p>
+          <a:p>
+            <a:pPr marL="342900" indent="-342900">
+              <a:spcAft>
+                <a:spcPts val="400"/>
+              </a:spcAft>
+              <a:buSzPct val="100000"/>
+              <a:buChar char="•"/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="950" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="94A3B8"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>“On treatment, looking for better” option felt validating</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="950" dirty="0"/>
+          </a:p>
+          <a:p>
+            <a:pPr marL="342900" indent="-342900">
+              <a:spcAft>
+                <a:spcPts val="400"/>
+              </a:spcAft>
+              <a:buSzPct val="100000"/>
+              <a:buChar char="•"/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="950" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="94A3B8"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>Per-card “Why we matched you” explainability</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="950" dirty="0"/>
+          </a:p>
+        </p:txBody>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="28" name="Shape 26"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="8257032" y="320040"/>
+            <a:ext cx="3410712" cy="2880360"/>
+          </a:xfrm>
+          <a:prstGeom prst="roundRect">
+            <a:avLst>
+              <a:gd name="adj" fmla="val 2540"/>
+            </a:avLst>
+          </a:prstGeom>
+          <a:solidFill>
+            <a:srgbClr val="141929"/>
+          </a:solidFill>
+          <a:ln w="9525">
+            <a:solidFill>
+              <a:srgbClr val="1E2A42"/>
+            </a:solidFill>
+            <a:prstDash val="solid"/>
+          </a:ln>
+        </p:spPr>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="29" name="Shape 27"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="8439912" y="502920"/>
+            <a:ext cx="109728" cy="109728"/>
+          </a:xfrm>
+          <a:prstGeom prst="ellipse">
+            <a:avLst/>
+          </a:prstGeom>
+          <a:solidFill>
+            <a:srgbClr val="FB7185"/>
+          </a:solidFill>
+          <a:ln/>
+        </p:spPr>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="30" name="Text 28"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="8641080" y="429768"/>
+            <a:ext cx="2862072" cy="256032"/>
+          </a:xfrm>
+          <a:prstGeom prst="rect">
+            <a:avLst/>
+          </a:prstGeom>
+          <a:noFill/>
+          <a:ln/>
+        </p:spPr>
+        <p:txBody>
+          <a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" rtlCol="0" anchor="ctr"/>
+          <a:lstStyle/>
+          <a:p>
+            <a:pPr indent="0" marL="0">
+              <a:buNone/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="1100" b="1" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="F8FAFC"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>Friction Points</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="1100" dirty="0"/>
+          </a:p>
+        </p:txBody>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="31" name="Text 29"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="8439912" y="731520"/>
+            <a:ext cx="3044952" cy="2377440"/>
+          </a:xfrm>
+          <a:prstGeom prst="rect">
+            <a:avLst/>
+          </a:prstGeom>
+          <a:noFill/>
+          <a:ln/>
+        </p:spPr>
+        <p:txBody>
+          <a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" rtlCol="0" anchor="t"/>
+          <a:lstStyle/>
+          <a:p>
+            <a:pPr marL="342900" indent="-342900">
+              <a:spcAft>
+                <a:spcPts val="400"/>
+              </a:spcAft>
+              <a:buSzPct val="100000"/>
+              <a:buChar char="•"/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="950" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="94A3B8"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>DNAvisit appears unannounced at consent; would freeze</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="950" dirty="0"/>
+          </a:p>
+          <a:p>
+            <a:pPr marL="342900" indent="-342900">
+              <a:spcAft>
+                <a:spcPts val="400"/>
+              </a:spcAft>
+              <a:buSzPct val="100000"/>
+              <a:buChar char="•"/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="950" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="94A3B8"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>No share-with-doctor or print-for-appointment view</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="950" dirty="0"/>
+          </a:p>
+          <a:p>
+            <a:pPr marL="342900" indent="-342900">
+              <a:spcAft>
+                <a:spcPts val="400"/>
+              </a:spcAft>
+              <a:buSzPct val="100000"/>
+              <a:buChar char="•"/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="950" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="94A3B8"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>No side-effect or treatment-burden info on cards</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="950" dirty="0"/>
+          </a:p>
+          <a:p>
+            <a:pPr marL="342900" indent="-342900">
+              <a:spcAft>
+                <a:spcPts val="400"/>
+              </a:spcAft>
+              <a:buSzPct val="100000"/>
+              <a:buChar char="•"/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="950" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="94A3B8"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>No cost or insurance information on cards</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="950" dirty="0"/>
+          </a:p>
+          <a:p>
+            <a:pPr marL="342900" indent="-342900">
+              <a:spcAft>
+                <a:spcPts val="400"/>
+              </a:spcAft>
+              <a:buSzPct val="100000"/>
+              <a:buChar char="•"/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="950" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="94A3B8"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>Visual surface “competent but a little cold”</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="950" dirty="0"/>
+          </a:p>
+          <a:p>
+            <a:pPr marL="342900" indent="-342900">
+              <a:spcAft>
+                <a:spcPts val="400"/>
+              </a:spcAft>
+              <a:buSzPct val="100000"/>
+              <a:buChar char="•"/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="950" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="94A3B8"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>Headline copy “the linguistic equivalent of beige”</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="950" dirty="0"/>
+          </a:p>
+        </p:txBody>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="32" name="Shape 30"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="4663440" y="3383280"/>
+            <a:ext cx="3410712" cy="2880360"/>
+          </a:xfrm>
+          <a:prstGeom prst="roundRect">
+            <a:avLst>
+              <a:gd name="adj" fmla="val 2540"/>
+            </a:avLst>
+          </a:prstGeom>
+          <a:solidFill>
+            <a:srgbClr val="141929"/>
+          </a:solidFill>
+          <a:ln w="9525">
+            <a:solidFill>
+              <a:srgbClr val="1E2A42"/>
+            </a:solidFill>
+            <a:prstDash val="solid"/>
+          </a:ln>
+        </p:spPr>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="33" name="Shape 31"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="4846320" y="3566160"/>
+            <a:ext cx="109728" cy="109728"/>
+          </a:xfrm>
+          <a:prstGeom prst="ellipse">
+            <a:avLst/>
+          </a:prstGeom>
+          <a:solidFill>
+            <a:srgbClr val="6B8AFF"/>
+          </a:solidFill>
+          <a:ln/>
+        </p:spPr>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="34" name="Text 32"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="5047488" y="3493008"/>
+            <a:ext cx="2862072" cy="256032"/>
+          </a:xfrm>
+          <a:prstGeom prst="rect">
+            <a:avLst/>
+          </a:prstGeom>
+          <a:noFill/>
+          <a:ln/>
+        </p:spPr>
+        <p:txBody>
+          <a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" rtlCol="0" anchor="ctr"/>
+          <a:lstStyle/>
+          <a:p>
+            <a:pPr indent="0" marL="0">
+              <a:buNone/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="1100" b="1" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="F8FAFC"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>Unique Catch</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="1100" dirty="0"/>
+          </a:p>
+        </p:txBody>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="35" name="Text 33"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="4846320" y="3794760"/>
+            <a:ext cx="3044952" cy="2377440"/>
+          </a:xfrm>
+          <a:prstGeom prst="rect">
+            <a:avLst/>
+          </a:prstGeom>
+          <a:noFill/>
+          <a:ln/>
+        </p:spPr>
+        <p:txBody>
+          <a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" rtlCol="0" anchor="t"/>
+          <a:lstStyle/>
+          <a:p>
+            <a:pPr marL="342900" indent="-342900">
+              <a:spcAft>
+                <a:spcPts val="400"/>
+              </a:spcAft>
+              <a:buSzPct val="100000"/>
+              <a:buChar char="•"/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="950" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="94A3B8"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>Doctor is missing as a third-party stakeholder</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="950" dirty="0"/>
+          </a:p>
+          <a:p>
+            <a:pPr marL="342900" indent="-342900">
+              <a:spcAft>
+                <a:spcPts val="400"/>
+              </a:spcAft>
+              <a:buSzPct val="100000"/>
+              <a:buChar char="•"/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="950" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="94A3B8"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>Brings a binder; forgets questions at appointments</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="950" dirty="0"/>
+          </a:p>
+          <a:p>
+            <a:pPr marL="342900" indent="-342900">
+              <a:spcAft>
+                <a:spcPts val="400"/>
+              </a:spcAft>
+              <a:buSzPct val="100000"/>
+              <a:buChar char="•"/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="950" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="94A3B8"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>Wants to print matches and bring them in</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="950" dirty="0"/>
+          </a:p>
+          <a:p>
+            <a:pPr marL="342900" indent="-342900">
+              <a:spcAft>
+                <a:spcPts val="400"/>
+              </a:spcAft>
+              <a:buSzPct val="100000"/>
+              <a:buChar char="•"/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="950" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="94A3B8"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>Represents the largest MG segment (mid-stage)</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="950" dirty="0"/>
+          </a:p>
+          <a:p>
+            <a:pPr marL="342900" indent="-342900">
+              <a:spcAft>
+                <a:spcPts val="400"/>
+              </a:spcAft>
+              <a:buSzPct val="100000"/>
+              <a:buChar char="•"/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="950" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="94A3B8"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>Treats MG decisions as collaborative, not unilateral</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="950" dirty="0"/>
+          </a:p>
+        </p:txBody>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="36" name="Shape 34"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="8257032" y="3383280"/>
+            <a:ext cx="3410712" cy="2880360"/>
+          </a:xfrm>
+          <a:prstGeom prst="roundRect">
+            <a:avLst>
+              <a:gd name="adj" fmla="val 2540"/>
+            </a:avLst>
+          </a:prstGeom>
+          <a:solidFill>
+            <a:srgbClr val="141929"/>
+          </a:solidFill>
+          <a:ln w="9525">
+            <a:solidFill>
+              <a:srgbClr val="1E2A42"/>
+            </a:solidFill>
+            <a:prstDash val="solid"/>
+          </a:ln>
+        </p:spPr>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="37" name="Shape 35"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="8439912" y="3566160"/>
+            <a:ext cx="109728" cy="109728"/>
+          </a:xfrm>
+          <a:prstGeom prst="ellipse">
+            <a:avLst/>
+          </a:prstGeom>
+          <a:solidFill>
+            <a:srgbClr val="FBBF24"/>
+          </a:solidFill>
+          <a:ln/>
+        </p:spPr>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="38" name="Text 36"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="8641080" y="3493008"/>
+            <a:ext cx="2862072" cy="256032"/>
+          </a:xfrm>
+          <a:prstGeom prst="rect">
+            <a:avLst/>
+          </a:prstGeom>
+          <a:noFill/>
+          <a:ln/>
+        </p:spPr>
+        <p:txBody>
+          <a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" rtlCol="0" anchor="ctr"/>
+          <a:lstStyle/>
+          <a:p>
+            <a:pPr indent="0" marL="0">
+              <a:buNone/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="1100" b="1" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="F8FAFC"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>Long-Term Churn Risk</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="1100" dirty="0"/>
+          </a:p>
+        </p:txBody>
+      </p:sp>
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="39" name="Text 37"/>
+          <p:cNvSpPr/>
+          <p:nvPr/>
+        </p:nvSpPr>
+        <p:spPr>
+          <a:xfrm>
+            <a:off x="8439912" y="3794760"/>
+            <a:ext cx="3044952" cy="2377440"/>
+          </a:xfrm>
+          <a:prstGeom prst="rect">
+            <a:avLst/>
+          </a:prstGeom>
+          <a:noFill/>
+          <a:ln/>
+        </p:spPr>
+        <p:txBody>
+          <a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" rtlCol="0" anchor="t"/>
+          <a:lstStyle/>
+          <a:p>
+            <a:pPr marL="342900" indent="-342900">
+              <a:spcAft>
+                <a:spcPts val="400"/>
+              </a:spcAft>
+              <a:buSzPct val="100000"/>
+              <a:buChar char="•"/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="950" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="94A3B8"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>Chirpy or marketing-y first follow-up email</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="950" dirty="0"/>
+          </a:p>
+          <a:p>
+            <a:pPr marL="342900" indent="-342900">
+              <a:spcAft>
+                <a:spcPts val="400"/>
+              </a:spcAft>
+              <a:buSzPct val="100000"/>
+              <a:buChar char="•"/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="950" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="94A3B8"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>“We miss you” or generic re-engagement patterns</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="950" dirty="0"/>
+          </a:p>
+          <a:p>
+            <a:pPr marL="342900" indent="-342900">
+              <a:spcAft>
+                <a:spcPts val="400"/>
+              </a:spcAft>
+              <a:buSzPct val="100000"/>
+              <a:buChar char="•"/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="950" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="94A3B8"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>Generic green-healthcare imagery and stock photos</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="950" dirty="0"/>
+          </a:p>
+          <a:p>
+            <a:pPr marL="342900" indent="-342900">
+              <a:spcAft>
+                <a:spcPts val="400"/>
+              </a:spcAft>
+              <a:buSzPct val="100000"/>
+              <a:buChar char="•"/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="950" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="94A3B8"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>Hiding the business model (who actually pays?)</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="950" dirty="0"/>
+          </a:p>
+          <a:p>
+            <a:pPr marL="342900" indent="-342900">
+              <a:spcAft>
+                <a:spcPts val="400"/>
+              </a:spcAft>
+              <a:buSzPct val="100000"/>
+              <a:buChar char="•"/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="950" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="94A3B8"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>Anonymized patient stories with no human face</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="950" dirty="0"/>
+          </a:p>
+          <a:p>
+            <a:pPr marL="342900" indent="-342900">
+              <a:spcAft>
+                <a:spcPts val="400"/>
+              </a:spcAft>
+              <a:buSzPct val="100000"/>
+              <a:buChar char="•"/>
+            </a:pPr>
+            <a:r>
+              <a:rPr lang="en-US" sz="950" dirty="0">
+                <a:solidFill>
+                  <a:srgbClr val="94A3B8"/>
+                </a:solidFill>
+                <a:latin typeface="Calibri" pitchFamily="34" charset="0"/>
+                <a:ea typeface="Calibri" pitchFamily="34" charset="-122"/>
+                <a:cs typeface="Calibri" pitchFamily="34" charset="-120"/>
+              </a:rPr>
+              <a:t>Blurred match cards that feel like withholding</a:t>
+            </a:r>
+            <a:endParaRPr lang="en-US" sz="950" dirty="0"/>
+          </a:p>
+        </p:txBody>
+      </p:sp>
+    </p:spTree>
+  </p:cSld>
+  <p:clrMapOvr>
+    <a:masterClrMapping/>
+  </p:clrMapOvr>
+</p:sld>

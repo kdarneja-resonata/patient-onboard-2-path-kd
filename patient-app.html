@@ -1,0 +1,2154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resonata Health – Patient Profile</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    /* Brand Green (Full Match) */
+    --green-dark: #002D00;      /* Green 18 */
+    --green-mid: #4AAC31;       /* Green 12 */
+    --green-btn: #4AAC31;       /* Green 12 */
+    --green-light: #F2FCEF;     /* Green 1 */
+    --green-tag: #8AE274;       /* Green 9 */
+    --green-text: #4AAC31;      /* Green 12 */
+    /* Neutrals */
+    --gray-bg: #F0F6EE;
+    --gray-border: #D4E4CE;
+    --gray-muted: #68785F;
+    --text-main: #14201A;
+    --text-sub: #354039;
+    --white: #ffffff;
+    /* Gold (Near Match + Top Choice star) */
+    --amber: #C58A1C;           /* Gold 12 */
+    --amber-light: #FEF8ED;     /* Gold 1 */
+    --partial: #C58A1C;         /* Gold 12 */
+    --partial-light: #FEF8ED;   /* Gold 1 */
+    --partial-border: #F8BD4F;  /* Gold 10 */
+    /* Violet (Maybe) */
+    --possible: #693E8E;        /* Violet 12 */
+    --possible-light: #F5F1F9;  /* Violet 1 */
+    --possible-border: #9C71C1; /* Violet 10 */
+    /* Red (Dismiss / Danger) */
+    --red: #BA1000;             /* Red 12 */
+    --red-light: #FDECE8;       /* Red 1 */
+    /* Blue (Previous) */
+    --blue: #03558C;            /* Blue 12 */
+    --blue-light: #EBF3F9;      /* Blue 1 */
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+    --font: 'DM Sans', sans-serif;
+  }
+
+  body { font-family: var(--font); background: var(--gray-bg); color: var(--text-main); min-height: 100vh; font-size: 14px; line-height: 1.5; }
+
+  /* TOPBAR */
+  .topbar { background: var(--white); border-bottom: 1px solid var(--gray-border); padding: 0 32px; height: 52px; display: flex; align-items: center; }
+  .back-link { display: flex; align-items: center; gap: 6px; color: var(--text-sub); text-decoration: none; font-size: 13px; font-weight: 500; transition: color .15s; }
+  .back-link:hover { color: var(--green-text); }
+
+  /* LAYOUT */
+  .layout { display: grid; grid-template-columns: 1fr 1fr; height: calc(100vh - 52px); overflow: hidden; }
+
+  /* LEFT */
+  .left-panel { display: flex; flex-direction: column; overflow: hidden; border-right: 1px solid var(--gray-border); background: var(--gray-bg); }
+  .left-header { padding: 18px 22px 0; flex-shrink: 0; }
+
+  /* CATEGORY TABS */
+  .tabs-title { font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--gray-muted); margin-bottom: 8px; }
+  .cat-tabs { display: flex; gap: 2px; background: var(--white); border: 1.5px solid var(--gray-border); border-radius: 10px; padding: 4px; margin-bottom: 14px; }
+  .cat-tab {
+    flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
+    padding: 6px 4px; border-radius: 7px; cursor: pointer;
+    font-size: 10.5px; font-weight: 600; color: var(--text-sub);
+    border: none; background: transparent; transition: all .15s; font-family: var(--font);
+  }
+  .cat-tab .cnt { font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 99px; transition: all .15s; }
+  .cat-tab:hover:not(.active) { background: var(--gray-bg); }
+
+  /* Counts always colored — regardless of active state */
+  .t-all .cnt, .t-full .cnt  { background: var(--green-text);  color: var(--white); }
+  .t-near .cnt                { background: var(--partial);      color: var(--white); }
+  .t-maybe .cnt               { background: var(--possible);     color: var(--white); }
+  .t-previous .cnt            { background: var(--blue);         color: var(--white); }
+  .t-mismatch .cnt            { background: var(--text-sub);     color: var(--white); }
+
+  .cat-tab.active.t-all       { background: var(--green-light); color: var(--green-text); }
+  .cat-tab.active.t-full      { background: var(--green-light); color: var(--green-text); }
+  .cat-tab.active.t-near      { background: var(--partial-light); color: var(--partial); }
+  .cat-tab.active.t-maybe     { background: var(--possible-light); color: var(--possible); }
+  .cat-tab.active.t-previous  { background: var(--blue-light); color: var(--blue); }
+  .cat-tab.active.t-mismatch  { background: #f0f0ee; color: var(--text-sub); }
+
+  /* FILTERS */
+  .filters { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; position: relative; }
+  .filter-wrap { position: relative; }
+  .filter-btn { display: flex; align-items: center; gap: 5px; padding: 5px 11px; border-radius: 7px; border: 1.5px solid var(--gray-border); background: var(--white); font-size: 12px; font-weight: 500; color: var(--text-sub); cursor: pointer; transition: border-color .15s, color .15s, background .15s; font-family: var(--font); white-space: nowrap; user-select: none; }
+  .filter-btn:hover, .filter-btn.open { border-color: var(--green-text); color: var(--green-text); }
+  .filter-btn.has-active { background: var(--green-light); border-color: var(--green-text); color: var(--green-text); }
+  .filter-btn.top-active { background: #FEF8ED; border-color: #F8BD4F; color: #C58A1C; }
+  .filter-btn .fchev { font-size: 9px; opacity: .5; transition: transform .15s; }
+  .filter-btn.open .fchev { transform: rotate(180deg); }
+  .filter-badge { display: inline-flex; align-items: center; justify-content: center; background: var(--green-text); color: var(--white); border-radius: 99px; font-size: 10px; font-weight: 700; min-width: 16px; height: 16px; padding: 0 4px; }
+  .dropdown-menu { position: absolute; top: calc(100% + 6px); left: 0; background: var(--white); border: 1.5px solid var(--gray-border); border-radius: 10px; box-shadow: var(--shadow-md); padding: 8px 0; z-index: 200; min-width: 200px; max-width: 260px; display: none; max-height: 280px; overflow-y: auto; }
+  .dropdown-menu.open { display: block; }
+  .dropdown-label { font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--gray-muted); padding: 4px 14px 6px; }
+  .dropdown-item { display: flex; align-items: center; gap: 9px; padding: 7px 14px; cursor: pointer; font-size: 12.5px; color: var(--text-sub); transition: background .1s; }
+  .dropdown-item:hover { background: var(--gray-bg); }
+  .dropdown-item input[type=checkbox] { accent-color: var(--green-btn); width: 14px; height: 14px; cursor: pointer; flex-shrink: 0; }
+  .dropdown-item label { cursor: pointer; line-height: 1.3; }
+
+  .section-label { font-size: 13px; font-weight: 600; color: var(--text-main); margin-bottom: 10px; }
+  .section-desc { font-size: 12px; color: var(--gray-muted); margin-top: -6px; margin-bottom: 12px; }
+
+  /* CARD SCROLL */
+  .card-scroll { flex: 1; overflow-y: auto; padding: 12px 22px 22px; }
+  .card-scroll::-webkit-scrollbar { width: 4px; }
+  .card-scroll::-webkit-scrollbar-thumb { background: var(--gray-border); border-radius: 99px; }
+
+  .card-list { display: flex; flex-direction: column; gap: 8px; }
+
+  .empty-list { padding: 36px 16px; text-align: center; color: var(--gray-muted); font-size: 13px; }
+  .empty-list .ei { display: flex; align-items: center; justify-content: center; margin-bottom: 8px; color: var(--gray-muted); }
+
+  /* CARD */
+  .card { background: var(--white); border-radius: 12px; border: 1px solid var(--gray-border); padding: 14px 16px; cursor: pointer; transition: border-color .15s, box-shadow .15s; position: relative; box-shadow: 0 1px 4px rgba(0,0,0,.05); }
+  .card:hover { border-color: #8AE274; box-shadow: 0 4px 16px rgba(74,172,49,.12); }
+  .card.selected { border-color: var(--green-text); box-shadow: 0 0 0 3px rgba(74,172,49,.12); }
+  .card.dimmed { opacity: .6; }
+
+  /* 3-STATE CARD ACTION BUTTON */
+  .card-action-wrap { position: absolute; top: 9px; right: 10px; display: flex; align-items: center; }
+  .cap-trigger { display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; border: none; background: transparent; border-radius: 5px; cursor: pointer; color: #c8cac4; padding: 0; transition: color .15s, background .15s; font-family: inherit; }
+  .cap-trigger:hover { background: var(--gray-bg); color: var(--gray-muted); }
+  .cap-trigger.star-on { color: #F8BD4F; }
+  .cap-trigger.restore-on { color: var(--gray-muted); }
+  .cap-popout { display: flex; gap: 2px; background: var(--white); border: 1.5px solid var(--gray-border); border-radius: 9px; padding: 3px; box-shadow: 0 3px 14px rgba(0,0,0,.13); opacity: 0; pointer-events: none; transition: opacity .12s; order: -1; margin-right: 4px; }
+  .card-action-wrap:hover .cap-popout { opacity: 1; pointer-events: auto; }
+  .cap-btn { display: flex; align-items: center; justify-content: center; width: 26px; height: 26px; border: none; background: transparent; border-radius: 6px; cursor: pointer; color: var(--gray-muted); padding: 0; transition: color .15s, background .15s; }
+  .cap-btn:hover { background: var(--gray-bg); }
+  .cap-btn.cap-star:hover { color: #F8BD4F; }
+  .cap-btn.cap-dismiss:hover { color: var(--red); }
+
+  /* DETAIL PANEL 3-STATE BUTTON */
+  .det-cap-wrap { display: inline-flex; align-items: center; }
+  .det-cap-trigger { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border: 1.5px solid var(--gray-border); background: var(--white); border-radius: 8px; cursor: pointer; color: #b5b8b0; padding: 0; transition: color .15s, background .15s, border-color .15s; font-family: inherit; }
+  .det-cap-trigger:hover { background: var(--gray-bg); border-color: #b0b3aa; color: var(--text-sub); }
+  .det-cap-trigger.star-on { color: #C58A1C; border-color: #F8BD4F; background: #FEF8ED; }
+  .det-cap-trigger.restore-on { color: var(--gray-muted); }
+  .det-cap-popout { display: flex; gap: 2px; background: var(--white); border: 1.5px solid var(--gray-border); border-radius: 9px; padding: 3px; box-shadow: 0 3px 14px rgba(0,0,0,.13); opacity: 0; pointer-events: none; transition: opacity .12s; order: -1; margin-right: 4px; }
+  .det-cap-wrap:hover .det-cap-popout { opacity: 1; pointer-events: auto; }
+  .det-cap-btn { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: none; background: transparent; border-radius: 6px; cursor: pointer; color: var(--gray-muted); padding: 0; transition: color .15s, background .15s; font-family: inherit; }
+  .det-cap-btn:hover { background: var(--gray-bg); }
+  .det-cap-btn.dcap-star:hover { color: #F8BD4F; }
+  .det-cap-btn.dcap-dismiss:hover { color: var(--red); }
+
+  .card-badges { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; padding-right: 30px; }
+  .badge { font-size: 10px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; }
+  .b-type { background: transparent; border: 1.5px solid var(--gray-border); color: var(--text-sub); }
+  .b-trial { background: #EBF3F9; color: #03558C; border: none; display: inline-flex; align-items: center; gap: 4px; }
+  .b-fda   { background: #F2FCEF; color: #4AAC31; border: none; display: inline-flex; align-items: center; gap: 4px; }
+  .b-treatments { background: #F2FCEF; color: #4AAC31; border: none; display: inline-flex; align-items: center; gap: 4px; }
+  .b-full { background: var(--green-btn); color: var(--white); }
+  .b-nonmatch { background: var(--gray-muted); color: var(--white); }
+  .b-partial { background: var(--partial); color: var(--white); }
+  .b-possible { background: transparent; border: 2px solid var(--possible); color: var(--possible); }
+  .b-none { background: var(--gray-border); color: var(--gray-muted); }
+
+  /* MATCH-TIER CARD BORDERS */
+  .card.c-full     { border-color: #8AE274; border-left: 4px solid var(--green-btn); }
+  .card.c-full.selected { border-color: var(--green-text); }
+  .card.c-partial  { border-color: var(--partial-border); border-left: 4px solid var(--partial); }
+  .card.c-partial.selected { border-color: var(--partial); }
+  .card.c-possible { border-color: var(--possible-border); border-left: 4px solid var(--possible); }
+  .card.c-possible.selected { border-color: var(--possible); }
+
+  /* SECTION GROUP HEADERS */
+  .group-hdr { display: flex; align-items: stretch; gap: 0; border-radius: 8px; overflow: hidden; margin: 10px 0 4px; }
+  .group-hdr:first-child { margin-top: 0; }
+  .group-hdr-icon { display: flex; align-items: center; justify-content: center; width: 36px; flex-shrink: 0; font-size: 14px; }
+  .group-hdr-body { display: flex; flex-direction: column; justify-content: center; flex: 1; padding: 6px 10px 7px 8px; gap: 2px; }
+  .group-hdr-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .group-hdr-label { font-size: 10.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+  .group-count { font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 99px; flex-shrink: 0; }
+  .group-hdr-desc { font-size: 11px; font-weight: 400; line-height: 1.4; }
+  .group-hdr-link { font-size: 11px; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+  .group-hdr.gh-full .group-hdr-desc  { color: var(--green-text); }
+  .group-hdr.gh-partial .group-hdr-desc  { color: #7a5200; }
+  .group-hdr.gh-partial .group-hdr-link  { color: #7a5200; }
+  .group-hdr.gh-possible .group-hdr-desc { color: #4a2768; }
+  .group-hdr.gh-possible .group-hdr-link { color: #4a2768; }
+  .group-hdr.gh-full .group-hdr-icon  { background: var(--green-btn); }
+  .group-hdr.gh-full .group-hdr-body  { background: var(--green-light); }
+  .group-hdr.gh-full .group-hdr-label { color: var(--green-dark); }
+  .group-hdr.gh-full .group-count     { background: var(--green-btn); color: var(--white); }
+  .group-hdr.gh-partial .group-hdr-icon  { background: var(--partial); }
+  .group-hdr.gh-partial .group-hdr-body  { background: var(--partial-light); }
+  .group-hdr.gh-partial .group-hdr-label { color: #7c2d12; }
+  .group-hdr.gh-partial .group-count     { background: var(--partial); color: var(--white); }
+  .group-hdr.gh-possible .group-hdr-icon  { background: var(--possible); }
+  .group-hdr.gh-possible .group-hdr-body  { background: var(--possible-light); }
+  .group-hdr.gh-possible .group-hdr-label { color: #881337; }
+  .group-hdr.gh-possible .group-count     { background: var(--possible); color: var(--white); }
+
+  /* DISMISSED SECTION HEADER */
+  .dis-section-hdr { display: flex; align-items: center; justify-content: space-between; padding: 6px 10px; background: #f0f0ee; border-radius: 8px; margin: 14px 0 4px; }
+  .dis-section-hdr > span:first-child { font-size: 10.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--gray-muted); }
+  .dis-section-hdr .group-count { background: #c8c9c5; color: var(--text-sub); }
+
+  /* MORE DROPDOWN */
+  .more-wrap { position: relative; display: inline-flex; }
+  .a-more { letter-spacing: .12em; }
+  .more-menu {
+    display: none; position: absolute; bottom: calc(100% + 6px); right: 0;
+    background: var(--white); border: 1.5px solid var(--gray-border); border-radius: 10px;
+    box-shadow: var(--shadow-md); padding: 6px 0; z-index: 200; min-width: 180px;
+  }
+  .more-menu.open { display: block; }
+  .more-item {
+    display: flex; align-items: center; gap: 7px; width: 100%; padding: 8px 14px;
+    font-family: var(--font); font-size: 12px; font-weight: 500; color: var(--text-sub);
+    background: none; border: none; cursor: pointer; text-align: left; transition: background .1s;
+  }
+  .more-item:hover { background: var(--gray-bg); }
+  .more-item.mi-dis { color: var(--red); }
+  .more-item.mi-sep { border-top: 1px solid var(--gray-border); margin-top: 4px; padding-top: 10px; }
+
+  .card-title { font-size: 12.5px; font-weight: 400; color: var(--text-main); line-height: 1.5; margin-bottom: 8px; }
+  .card-title-name { font-weight: 700; }
+  .card-meta { font-size: 11.5px; color: var(--gray-muted); margin-bottom: 12px; }
+  .card-pills { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-start; margin-bottom: 0; }
+  .pill-group { display: flex; flex-direction: column; gap: 3px; }
+  .pill-label { font-size: 9px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--gray-muted); padding-left: 1px; }
+  .card-tag { font-size: 11px; background: var(--gray-bg); color: var(--text-sub); border-radius: 4px; padding: 2px 7px; font-weight: 500; transition: background .15s, color .15s, outline .15s; }
+  .card-tag.tag-active { background: #F2FCEF; color: #4AAC31; outline: 1.5px solid #8AE274; }
+
+  /* Applied filter chips */
+  .applied-filters { display: none; flex-wrap: wrap; gap: 5px; padding: 10px 22px 2px; }
+  .applied-filters.visible { display: flex; }
+  .af-chip { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; background: #F2FCEF; color: #4AAC31; border: 1.5px solid #8AE274; border-radius: 99px; padding: 2px 8px 2px 10px; }
+  .af-chip-label { color: #6b7280; font-weight: 500; }
+  .af-chip button { background: none; border: none; cursor: pointer; color: #6b7280; font-size: 13px; line-height: 1; padding: 0; margin: 0; display: flex; align-items: center; transition: color .1s; }
+  .af-chip button:hover { color: #111; }
+  .af-clear-all { font-size: 11px; font-weight: 600; color: var(--green-text); background: none; border: none; cursor: pointer; padding: 2px 4px; text-decoration: underline; white-space: nowrap; align-self: center; }
+  .af-clear-all:hover { color: #4AAC31; }
+
+  /* CARD ACTIONS */
+  .card-actions { display: flex; gap: 5px; flex-wrap: wrap; border-top: 1px solid var(--gray-border); padding-top: 9px; }
+  .act-btn { display: flex; align-items: center; gap: 3px; font-family: var(--font); font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 6px; border: 1.5px solid transparent; cursor: pointer; transition: all .15s; white-space: nowrap; }
+  .act-btn:active { transform: scale(.97); }
+
+  .a-add      { background: var(--green-light); border-color: var(--green-tag); color: var(--green-text); }
+  .a-add:hover { background: var(--green-tag); border-color: var(--green-text); }
+  .a-add.on   { background: var(--green-btn); border-color: var(--green-btn); color: var(--white); }
+  .a-add.top  { background: #F8BD4F; border-color: #C58A1C; color: #fff; }
+  /* Tooltip */
+  .btn-wrap { position: relative; display: inline-flex; }
+  .btn-wrap .tooltip { position: absolute; bottom: calc(100% + 7px); left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; font-size: 11px; font-weight: 500; padding: 5px 9px; border-radius: 6px; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity .15s; z-index: 300; }
+  .btn-wrap .tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: #1e293b; }
+  .btn-wrap:hover .tooltip { opacity: 1; }
+
+  .a-prev      { background: var(--blue-light); border-color: #A8CCE0; color: var(--blue); }
+  .a-prev:hover { background: #D3E8F5; border-color: var(--blue); }
+  .a-prev.on   { background: var(--blue); border-color: var(--blue); color: var(--white); }
+
+  .a-dis       { background: var(--red-light); border-color: #F5BFBA; color: var(--red); }
+  .a-dis:hover { background: #FBDAD7; border-color: var(--red); }
+  .a-dis.on    { background: var(--red); border-color: var(--red); color: var(--white); }
+
+  /* TOAST */
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(70px); background: var(--text-main); color: var(--white); padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 500; box-shadow: var(--shadow-md); transition: transform .25s ease, opacity .25s ease; opacity: 0; pointer-events: none; z-index: 100; white-space: nowrap; }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+  /* RIGHT */
+  .right-panel { overflow-y: auto; background: var(--white); display: flex; flex-direction: column; }
+  .right-panel::-webkit-scrollbar { width: 4px; }
+  .right-panel::-webkit-scrollbar-thumb { background: var(--gray-border); border-radius: 99px; }
+
+  .empty-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 40px; text-align: center; }
+  .empty-state h2 { font-size: 18px; font-weight: 600; color: var(--text-main); }
+  .empty-state p { font-size: 13px; color: var(--gray-muted); }
+
+  /* DETAIL */
+  .detail-panel { padding: 24px 28px 40px; display: none; flex-direction: column; }
+  .detail-panel.visible { display: flex; }
+
+  .detail-badges { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+  .detail-title { font-size: 20px; font-weight: 700; color: var(--text-main); line-height: 1.3; margin-bottom: 5px; }
+  .detail-title-name { font-weight: 700; }
+  .detail-meta { font-size: 13px; color: var(--gray-muted); font-weight: 500; margin-bottom: 3px; }
+  .detail-admin { font-size: 12.5px; color: var(--gray-muted); margin-bottom: 10px; }
+  #dPills:not(:empty) { margin-bottom: 16px; }
+  hr.divider { border: none; border-top: 1px solid var(--gray-border); margin: 0 0 16px; }
+  .detail-desc { font-size: 13.5px; color: var(--text-sub); line-height: 1.65; margin-bottom: 20px; }
+
+  /* DETAIL ACTIONS */
+  .detail-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; align-items: center; }
+  .det-act { display: flex; align-items: center; gap: 5px; font-family: var(--font); font-size: 12.5px; font-weight: 600; padding: 8px 14px; border-radius: 8px; border: 1.5px solid transparent; cursor: pointer; transition: all .15s; }
+  .det-act:active { transform: scale(.98); }
+  .da-add      { background: var(--green-light); border-color: var(--green-tag); color: var(--green-text); }
+  .da-add:hover { background: var(--green-tag); border-color: var(--green-text); }
+  .da-add.on   { background: var(--green-btn); border-color: var(--green-btn); color: var(--white); }
+  .da-add.top  { background: #F8BD4F; border-color: #C58A1C; color: #fff; }
+  .share-btn { display: flex; align-items: center; gap: 7px; padding: 8px 16px; background: var(--white); border: 1.5px solid var(--green-text); border-radius: 8px; color: var(--green-text); font-size: 12.5px; font-weight: 600; cursor: pointer; font-family: var(--font); transition: all .15s; }
+  .share-btn:hover { background: var(--green-light); }
+
+  /* DETAIL SECTIONS */
+  .sec-block { margin-bottom: 24px; }
+  .sec-hdr { display: flex; align-items: center; gap: 10px; padding: 9px 14px; border-radius: 8px; margin-bottom: 14px; }
+  .sec-hdr-icon { display: flex; align-items: center; justify-content: center; }
+  .sec-hdr-label { font-size: 13px; font-weight: 700; }
+  .sec-hdr.sh-green  { background: var(--green-light);  color: var(--green-dark); }
+  .sec-hdr.sh-amber  { background: #FEF8ED;             color: #7a5200; }
+  .sec-hdr.sh-purple { background: #F5F1F9;             color: #4a2768; }
+  .sec-hdr.sh-gray   { background: var(--gray-bg);      color: var(--text-sub); }
+
+  /* MATCH STATUS CARD */
+  .ms-card { background: #f8faf7; border: 1px solid var(--gray-border); border-radius: 12px; padding: 20px 24px; margin-bottom: 24px; }
+  .ms-card-hdr { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .ms-card-hdr-icon { display: flex; align-items: center; }
+  .ms-card-hdr-icon.ms-hdr-full { color: var(--green-text); }
+  .ms-card-hdr-icon.ms-hdr-partial { color: var(--amber); }
+  .ms-card-hdr-icon.ms-hdr-possible { color: var(--possible); }
+  .ms-card-hdr-icon.ms-hdr-mismatch { color: var(--gray-muted); }
+  .ms-card-hdr-label { font-size: 16px; font-weight: 700; color: var(--text-main); }
+  .ms-card-hdr-label span { font-weight: 700; }
+  .ms-card-hdr-label .ms-tier-full { color: var(--green-text); }
+  .ms-card-hdr-label .ms-tier-partial { color: var(--amber); }
+  .ms-card-hdr-label .ms-tier-possible { color: var(--possible); }
+  .ms-card-hdr-label .ms-tier-mismatch { color: var(--gray-muted); }
+  .ms-card-explain { font-size: 13px; color: var(--gray-muted); line-height: 1.5; margin-bottom: 16px; }
+
+  /* MATCH STATUS GROUPS */
+  .ms-group { padding: 12px 0; border-bottom: 1px solid #e8ede5; }
+  .ms-group:last-of-type { border-bottom: none; }
+  .ms-group-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .ms-group-name { font-size: 14px; font-weight: 700; color: var(--text-main); }
+  .ms-group-count { font-size: 12px; font-weight: 600; }
+  .ms-group-count.gc-all-met { color: var(--green-text); }
+  .ms-group-count.gc-some-unmet { color: var(--amber); }
+  .ms-group-count.gc-has-mismatch { color: var(--red); }
+  .ms-group-items { display: flex; flex-direction: column; gap: 6px; padding-left: 2px; }
+  .ms-item { display: flex; align-items: center; gap: 8px; }
+  .ms-status-icon { display: flex; align-items: center; flex-shrink: 0; }
+  .ms-item-label { font-size: 13px; font-weight: 500; }
+  .ms-item-label.ms-match { color: var(--green-text); }
+  .ms-item-label.ms-mismatch { color: var(--red); }
+  .ms-item-label.ms-unknown { color: var(--amber); }
+  .ms-item-label.ms-near { color: var(--amber); }
+
+  .ms-warning { display: flex; align-items: flex-start; gap: 8px; background: #FEF9E7; border: 1.5px solid #F5D77D; border-radius: 8px; padding: 12px 16px; margin-top: 16px; font-size: 13px; color: #7a5200; line-height: 1.5; }
+  .ms-warning strong { color: #92400e; }
+
+  /* CORRECTION BANNER */
+  .correction-banner { margin-top: 16px; border-top: 1px solid #dde8d8; padding-top: 16px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .banner-text { display: flex; align-items: flex-start; gap: 10px; }
+  .banner-text svg { flex-shrink: 0; margin-top: 1px; color: #6b8f71; }
+  .banner-text p { font-size: 13px; color: #4a6650; line-height: 1.5; }
+  .banner-text p strong { font-weight: 600; color: #2d4a33; }
+  .banner-btn { flex-shrink: 0; background: white; border: 1.5px solid #b5cdb9; border-radius: 8px; padding: 9px 16px; font-family: var(--font); font-size: 13px; font-weight: 600; color: #2d4a33; cursor: pointer; white-space: nowrap; transition: background .15s, border-color .15s, box-shadow .15s; }
+  .banner-btn:hover { background: #eaf2eb; border-color: #3a7d44; box-shadow: 0 1px 4px rgba(58,125,68,.12); }
+
+  /* CORRECTION MODAL */
+  .cor-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.35); backdrop-filter: blur(2px); align-items: center; justify-content: center; z-index: 500; padding: 20px; }
+  .cor-overlay.open { display: flex; }
+  .cor-modal { background: var(--white); border-radius: 16px; padding: 32px; width: 100%; max-width: 460px; position: relative; box-shadow: 0 24px 64px rgba(0,0,0,.18); animation: corSlideUp .2s ease; }
+  @keyframes corSlideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .cor-modal-close { position: absolute; top: 16px; right: 18px; background: none; border: none; font-size: 20px; color: #aaa; cursor: pointer; line-height: 1; padding: 4px; }
+  .cor-modal-close:hover { color: #555; }
+  .cor-modal-icon { width: 44px; height: 44px; background: #f0f7f1; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+  .cor-modal h3 { font-size: 19px; font-weight: 700; color: var(--text-main); margin-bottom: 8px; }
+  .cor-modal p { font-size: 14px; color: #555; line-height: 1.6; margin-bottom: 22px; }
+  .cor-form-group { margin-bottom: 16px; }
+  .cor-form-group label { display: block; font-size: 13px; font-weight: 600; color: #2d4a33; margin-bottom: 6px; }
+  .cor-select-wrap { position: relative; }
+  .cor-select-wrap::after { content: '\25BE'; position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: #6b8f71; pointer-events: none; font-size: 13px; }
+  .cor-form-group select, .cor-form-group textarea { width: 100%; font-family: var(--font); font-size: 14px; color: var(--text-main); background: #f9faf9; border: 1.5px solid #dde8d8; border-radius: 8px; padding: 10px 12px; outline: none; transition: border-color .15s; appearance: none; }
+  .cor-form-group select:focus, .cor-form-group textarea:focus { border-color: #3a7d44; background: white; }
+  .cor-form-group textarea { resize: vertical; min-height: 90px; }
+  .cor-modal-footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 8px; }
+  .cor-btn-cancel { padding: 10px 18px; background: none; border: 1.5px solid #dde; border-radius: 8px; font-family: var(--font); font-size: 14px; font-weight: 500; color: #666; cursor: pointer; }
+  .cor-btn-cancel:hover { background: #f5f5f5; }
+  .cor-btn-submit { padding: 10px 22px; background: #3a7d44; border: none; border-radius: 8px; font-family: var(--font); font-size: 14px; font-weight: 600; color: white; cursor: pointer; transition: background .15s; }
+  .cor-btn-submit:hover { background: #2d6435; }
+  .cor-success { display: none; text-align: center; padding: 16px 0 8px; }
+  .cor-success .cor-check-circle { width: 56px; height: 56px; background: #f0f7f1; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+  .cor-success h3 { font-size: 19px; font-weight: 700; color: var(--text-main); margin-bottom: 8px; }
+  .cor-success p { font-size: 14px; color: #555; line-height: 1.6; }
+  .cor-btn-done { margin-top: 24px; padding: 11px 28px; background: #3a7d44; border: none; border-radius: 8px; font-family: var(--font); font-size: 14px; font-weight: 600; color: white; cursor: pointer; }
+  .cor-btn-done:hover { background: #2d6435; }
+
+  /* CHAT PANEL */
+  .chat-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.35); backdrop-filter: blur(2px); z-index: 500; }
+  .chat-overlay.open { display: block; }
+  .chat-panel { position: fixed; top: 0; right: -480px; width: 480px; height: 100vh; background: var(--white); box-shadow: -8px 0 32px rgba(0,0,0,.15); display: flex; flex-direction: column; z-index: 501; transition: right .3s ease; }
+  .chat-panel.open { right: 0; }
+  .chat-header { display: flex; align-items: center; gap: 12px; padding: 18px 22px; border-bottom: 1px solid var(--gray-border); flex-shrink: 0; }
+  .chat-avatar { width: 36px; height: 36px; background: linear-gradient(135deg, #4AAC31, #2d7a1e); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .chat-avatar svg { color: white; }
+  .chat-hdr-text { flex: 1; }
+  .chat-hdr-name { font-size: 14px; font-weight: 700; color: var(--text-main); }
+  .chat-hdr-sub { font-size: 11.5px; color: var(--gray-muted); }
+  .chat-close { background: none; border: none; font-size: 20px; color: var(--gray-muted); cursor: pointer; padding: 4px 8px; line-height: 1; }
+  .chat-close:hover { color: var(--text-main); }
+  .chat-messages { flex: 1; overflow-y: auto; padding: 20px 22px; display: flex; flex-direction: column; gap: 14px; }
+  .chat-messages::-webkit-scrollbar { width: 4px; }
+  .chat-messages::-webkit-scrollbar-thumb { background: var(--gray-border); border-radius: 99px; }
+
+  /* Message bubbles */
+  .chat-msg { display: flex; gap: 10px; align-items: flex-end; max-width: 92%; animation: chatFadeIn .25s ease; }
+  @keyframes chatFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .chat-msg.ai { align-self: flex-start; }
+  .chat-msg.user { align-self: flex-end; flex-direction: row-reverse; }
+  .chat-msg-avatar { width: 28px; height: 28px; background: linear-gradient(135deg, #4AAC31, #2d7a1e); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .chat-msg-avatar svg { color: white; }
+  .chat-msg.user .chat-msg-avatar { background: var(--blue); }
+  .chat-bubble { padding: 12px 16px; border-radius: 14px; font-size: 13.5px; line-height: 1.6; }
+  .chat-msg.ai .chat-bubble { background: #f4f8f2; color: var(--text-main); border-bottom-left-radius: 4px; }
+  .chat-msg.user .chat-bubble { background: var(--green-btn); color: white; border-bottom-right-radius: 4px; }
+  .chat-bubble strong { font-weight: 600; }
+
+  /* Data review cards inside chat */
+  .chat-data-card { background: white; border: 1.5px solid var(--gray-border); border-radius: 10px; padding: 12px 14px; margin-top: 8px; }
+  .chat-data-hdr { font-size: 12px; font-weight: 700; color: var(--gray-muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 8px; }
+  .chat-data-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 13px; }
+  .chat-data-row svg { flex-shrink: 0; }
+  .chat-data-row .cd-label { color: var(--text-sub); }
+  .chat-data-row .cd-match { color: var(--green-text); font-weight: 600; }
+  .chat-data-row .cd-near { color: var(--amber); font-weight: 600; }
+  .chat-data-row .cd-mismatch { color: var(--red); font-weight: 600; }
+
+  /* Quick reply buttons */
+  .chat-quick-replies { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .chat-qr { padding: 8px 14px; background: white; border: 1.5px solid var(--gray-border); border-radius: 99px; font-family: var(--font); font-size: 12.5px; font-weight: 600; color: var(--text-sub); cursor: pointer; transition: all .15s; }
+  .chat-qr:hover { border-color: var(--green-text); color: var(--green-text); background: var(--green-light); }
+  .chat-qr.selected { border-color: var(--green-text); color: white; background: var(--green-btn); pointer-events: none; }
+
+  /* Typing indicator */
+  .chat-typing { display: flex; gap: 4px; padding: 12px 16px; align-items: center; }
+  .chat-typing-dot { width: 7px; height: 7px; background: #b0b3aa; border-radius: 50%; animation: chatTyping 1.2s ease-in-out infinite; }
+  .chat-typing-dot:nth-child(2) { animation-delay: .2s; }
+  .chat-typing-dot:nth-child(3) { animation-delay: .4s; }
+  @keyframes chatTyping { 0%,80%,100% { transform: scale(.7); opacity: .4; } 40% { transform: scale(1); opacity: 1; } }
+
+  /* Chat input */
+  .chat-input-wrap { display: flex; align-items: center; gap: 10px; padding: 14px 22px; border-top: 1px solid var(--gray-border); flex-shrink: 0; background: var(--white); }
+  .chat-input { flex: 1; padding: 10px 14px; border: 1.5px solid var(--gray-border); border-radius: 10px; font-family: var(--font); font-size: 13.5px; color: var(--text-main); outline: none; transition: border-color .15s; }
+  .chat-input:focus { border-color: var(--green-text); }
+  .chat-input::placeholder { color: #b0b3aa; }
+  .chat-send { width: 38px; height: 38px; background: var(--green-btn); border: none; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background .15s; flex-shrink: 0; }
+  .chat-send:hover { background: #3d9228; }
+  .chat-send svg { color: white; }
+
+  /* ELIGIBILITY CRITERIA CARD */
+  .elig-card { background: #f8faf7; border: 1px solid var(--gray-border); border-radius: 12px; padding: 20px 24px; margin-bottom: 24px; }
+  .elig-card-hdr { font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 18px; }
+  .elig-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .elig-col-hdr { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .elig-col-hdr-label { font-size: 14px; font-weight: 700; }
+  .elig-col-hdr-label.inc { color: var(--green-text); }
+  .elig-col-hdr-label.exc { color: var(--red); }
+  .elig-list { list-style: none; padding: 0; margin: 0; }
+  .elig-list li { font-size: 12.5px; color: var(--text-sub); padding: 3px 0 3px 14px; position: relative; line-height: 1.5; }
+  .elig-list.inc-list li::before { content: '\2022'; position: absolute; left: 2px; color: var(--green-text); font-weight: 700; }
+  .elig-list.exc-list li::before { content: '\2022'; position: absolute; left: 2px; color: var(--red); font-weight: 700; }
+
+  /* OFFICIAL TRIAL INFO CARD */
+  .trial-info-card { background: #f8faf7; border: 1px solid var(--gray-border); border-radius: 12px; padding: 20px 24px; margin-bottom: 24px; }
+  .trial-info-hdr { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .trial-info-hdr-icon { color: var(--green-text); display: flex; align-items: center; }
+  .trial-info-hdr-label { font-size: 16px; font-weight: 700; color: var(--text-main); }
+  .trial-info-desc { font-size: 13px; color: var(--gray-muted); line-height: 1.5; margin-bottom: 14px; }
+  .trial-info-btn { display: inline-flex; align-items: center; gap: 7px; padding: 10px 18px; background: var(--green-btn); color: var(--white); border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--font); transition: background .15s; text-decoration: none; }
+  .trial-info-btn:hover { background: #3d9228; }
+  .trial-info-btn svg { flex-shrink: 0; }
+
+  /* EFFICACY */
+  .ef-row { margin-bottom: 13px; }
+  .ef-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--gray-muted); margin-bottom: 3px; }
+  .ef-value { font-size: 13px; color: var(--text-main); line-height: 1.5; }
+  .ef-list { list-style: none; padding: 0; margin: 4px 0 0; }
+  .ef-list li { font-size: 12.5px; color: var(--text-sub); padding: 3px 0 3px 16px; position: relative; line-height: 1.45; }
+  .ef-list li::before { content: '•'; position: absolute; left: 4px; color: var(--green-btn); font-weight: 700; }
+
+  /* SAFETY */
+  .sf-warning-box { font-size: 12.5px; color: #7a5200; background: #FEF8ED; border: 1.5px solid #F8BD4F; border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; line-height: 1.55; }
+  .sf-warning-box strong { color: #92400e; }
+  .sf-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 14px; }
+  .sf-col-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--gray-muted); margin-bottom: 6px; }
+  .sf-list { list-style: none; padding: 0; }
+  .sf-list li { font-size: 12px; color: var(--text-sub); padding: 2px 0 2px 12px; position: relative; line-height: 1.45; }
+  .sf-list li::before { content: '•'; position: absolute; left: 0; color: var(--gray-muted); }
+  .sf-list.sf-serious li { color: #BA1000; }
+  .sf-list.sf-serious li::before { color: var(--red); }
+  .sf-contra-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--gray-muted); margin-bottom: 5px; }
+  .sf-contra-text { font-size: 12.5px; color: var(--text-sub); line-height: 1.55; background: var(--gray-bg); padding: 9px 12px; border-radius: 7px; }
+
+  /* DOSING */
+  .dosing-text { font-size: 13px; color: var(--text-sub); line-height: 1.7; }
+
+  /* DOCUMENTS */
+  .doc-links { display: flex; flex-direction: column; gap: 8px; }
+  .doc-link { display: flex; align-items: center; gap: 9px; padding: 9px 14px; background: var(--white); border: 1.5px solid var(--gray-border); border-radius: 8px; font-size: 12.5px; font-weight: 600; color: var(--blue); text-decoration: none; transition: all .15s; }
+  .doc-link:hover { background: var(--blue-light); border-color: var(--blue); }
+
+  /* DOWNLOAD MODAL */
+  .dl-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.35); backdrop-filter: blur(2px); align-items: center; justify-content: center; z-index: 500; padding: 20px; }
+  .dl-overlay.open { display: flex; }
+  .dl-modal { background: var(--white); border-radius: 16px; padding: 32px; width: 100%; max-width: 480px; position: relative; box-shadow: 0 24px 64px rgba(0,0,0,.18); animation: corSlideUp .2s ease; }
+  .dl-modal-close { position: absolute; top: 16px; right: 18px; background: none; border: none; font-size: 20px; color: #aaa; cursor: pointer; line-height: 1; padding: 4px; }
+  .dl-modal-close:hover { color: #555; }
+  .dl-modal-icon { width: 44px; height: 44px; background: var(--green-light); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+  .dl-modal h3 { font-size: 19px; font-weight: 700; color: var(--text-main); margin-bottom: 6px; }
+  .dl-modal .dl-sub { font-size: 13.5px; color: var(--gray-muted); line-height: 1.5; margin-bottom: 20px; }
+  .dl-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+  .dl-option { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border: 1.5px solid var(--gray-border); border-radius: 10px; cursor: pointer; transition: all .15s; background: var(--white); }
+  .dl-option:hover { border-color: var(--green-text); background: var(--green-light); }
+  .dl-option.selected { border-color: var(--green-text); background: var(--green-light); box-shadow: 0 0 0 3px rgba(74,172,49,.12); }
+  .dl-option-radio { width: 20px; height: 20px; border: 2px solid var(--gray-border); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: border-color .15s; }
+  .dl-option.selected .dl-option-radio { border-color: var(--green-text); }
+  .dl-option.selected .dl-option-radio::after { content: ''; width: 10px; height: 10px; background: var(--green-text); border-radius: 50%; }
+  .dl-option-body { flex: 1; }
+  .dl-option-title { font-size: 14px; font-weight: 600; color: var(--text-main); display: flex; align-items: center; gap: 6px; }
+  .dl-option-title .dl-count { font-size: 11px; font-weight: 700; background: var(--gray-bg); color: var(--gray-muted); padding: 1px 7px; border-radius: 99px; }
+  .dl-option-desc { font-size: 12.5px; color: var(--gray-muted); margin-top: 2px; }
+  .dl-option-icon { color: var(--gray-muted); flex-shrink: 0; }
+  .dl-footer { display: flex; gap: 10px; justify-content: flex-end; }
+  .dl-btn-cancel { padding: 10px 18px; background: none; border: 1.5px solid var(--gray-border); border-radius: 8px; font-family: var(--font); font-size: 14px; font-weight: 500; color: var(--gray-muted); cursor: pointer; transition: background .15s; }
+  .dl-btn-cancel:hover { background: var(--gray-bg); }
+  .dl-btn-download { padding: 10px 22px; background: var(--green-btn); border: none; border-radius: 8px; font-family: var(--font); font-size: 14px; font-weight: 600; color: white; cursor: pointer; transition: background .15s; display: flex; align-items: center; gap: 7px; }
+  .dl-btn-download:hover { background: #3d9228; }
+  .dl-btn-download:disabled { background: var(--gray-border); cursor: not-allowed; }
+
+  /* ── Sponsored "Learn More" zone (in Care Option Detail) ───────────────── */
+  .sponsored-lm-zone {
+    background: #fff;
+    border: 1.5px solid var(--green-btn);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+  .slm-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #68785f;
+    background: #edf6ea;
+    border-radius: 20px;
+    padding: 3px 10px;
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+  .sponsored-lm-zone h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1a2e1a;
+    margin: 0 0 6px;
+  }
+  .sponsored-lm-zone p {
+    font-size: 13px;
+    color: #68785f;
+    margin: 0 0 14px;
+  }
+  .slm-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--green-btn);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 11px 20px;
+    font-family: var(--font);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    justify-content: center;
+    transition: background .15s;
+  }
+  .slm-btn:hover { background: #3d9228; }
+
+  /* ── Daughter page overlay & slide-in panel ──────────────────────────────── */
+  .dp-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 300;
+    display: none;
+  }
+  .dp-overlay.open { display: block; }
+  .dp-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    max-width: 700px;
+    height: 100%;
+    background: #fff;
+    overflow-y: auto;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    z-index: 301;
+  }
+  .dp-panel.open { transform: translateX(0); }
+
+  /* ── Daughter page nav ────────────────────────────────────────────────────── */
+  .dp-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    background: #fff;
+    border-bottom: 1px solid #e8ede6;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .dp-nav-logo { display: flex; align-items: center; gap: 8px; }
+  .dp-nav-logo-mark svg { width: 28px; height: 28px; }
+  .dp-nav-logo-text { font-size: 16px; font-weight: 700; color: #1a2e1a; letter-spacing: -0.02em; }
+  .dp-nav-sponsored {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #68785f;
+    background: #edf6ea;
+    border-radius: 4px;
+    padding: 3px 9px;
+  }
+
+  /* ── Back bar ─────────────────────────────────────────────────────────────── */
+  .dp-back-bar {
+    background: #f4f7f3;
+    padding: 10px 20px;
+    border-bottom: 1px solid #e2e9e0;
+  }
+  .dp-back-bar a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #3d5c3a;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .dp-back-bar a:hover { color: var(--green-btn); }
+
+  /* ── Hero ─────────────────────────────────────────────────────────────────── */
+  .dp-hero {
+    background: linear-gradient(135deg, #1a3a2e 0%, #0e1c2f 100%);
+    padding: 36px 24px 44px;
+    color: #fff;
+  }
+  .dp-hero-inner { max-width: 660px; margin: 0 auto; }
+  .dp-sponsor-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.6);
+    background: rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 3px 10px;
+    margin-bottom: 10px;
+    letter-spacing: 0.04em;
+  }
+  .dp-hero-eyebrow {
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.55);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+  .dp-hero h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #fff;
+    margin: 0 0 4px;
+    letter-spacing: -0.03em;
+  }
+  .dp-hero .dp-generic {
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 18px;
+  }
+  .dp-match-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(74,172,49,0.2);
+    border: 1px solid rgba(74,172,49,0.4);
+    color: #8de87a;
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  /* ── Body ─────────────────────────────────────────────────────────────────── */
+  .dp-body { max-width: 660px; margin: 0 auto; padding: 0 24px 48px; }
+  .dp-section {
+    border-top: 1px solid #e8ede6;
+    padding: 28px 0;
+  }
+  .dp-section h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a2e1a;
+    margin: 0 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .dp-section p { font-size: 14px; color: #3d5c3a; margin: 0 0 10px; line-height: 1.55; }
+  .dp-section ul { margin: 0 0 10px 18px; padding: 0; }
+  .dp-section ul li { font-size: 14px; color: #3d5c3a; margin-bottom: 6px; line-height: 1.5; }
+
+  /* Stats row */
+  .dp-stat-row { display: flex; gap: 16px; margin: 20px 0 8px; flex-wrap: wrap; }
+  .dp-stat {
+    flex: 1;
+    min-width: 120px;
+    background: #f4f7f3;
+    border-radius: 10px;
+    padding: 14px 16px;
+    text-align: center;
+  }
+  .dp-stat .dp-num { font-size: 1.5rem; font-weight: 800; color: #287a13; margin-bottom: 4px; }
+  .dp-stat .dp-lbl { font-size: 12px; color: #68785f; line-height: 1.4; }
+
+  /* ── Sponsor CTA zone ─────────────────────────────────────────────────────── */
+  .dp-cta-zone {
+    background: linear-gradient(135deg, #edf6ea 0%, #e4f0e1 100%);
+    border: 1px solid #c5dec0;
+    border-radius: 14px;
+    padding: 28px 24px;
+    margin: 28px 0;
+    text-align: center;
+  }
+  .dp-cta-zone .dp-cta-sponsor-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #68785f;
+    margin-bottom: 10px;
+  }
+  .dp-cta-zone h2 { font-size: 18px; font-weight: 700; color: #1a2e1a; margin: 0 0 6px; }
+  .dp-cta-zone p { font-size: 13px; color: #4a6644; margin: 0 0 20px; }
+  .dp-cta-btns { display: flex; flex-direction: column; gap: 10px; }
+  .dp-cta-btn-primary {
+    display: block;
+    background: var(--green-btn);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 13px 20px;
+    font-family: var(--font);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    transition: background .15s;
+  }
+  .dp-cta-btn-primary:hover { background: #3d9228; }
+  .dp-cta-btn-secondary {
+    display: block;
+    background: #fff;
+    color: #287a13;
+    border: 1.5px solid #4aac31;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-family: var(--font);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    transition: background .15s;
+  }
+  .dp-cta-btn-secondary:hover { background: #f4f7f3; }
+  .dp-exit-link {
+    display: block;
+    margin-top: 16px;
+    font-size: 13px;
+    color: #68785f;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  /* ── ISI block ────────────────────────────────────────────────────────────── */
+  .dp-isi {
+    background: #f8faf7;
+    border: 1px solid #dde8da;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .dp-isi .dp-isi-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #68785f;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #dde8da;
+    padding-bottom: 10px;
+  }
+  .dp-isi h3 { font-size: 14px; font-weight: 700; color: #1a2e1a; margin: 0 0 10px; }
+  .dp-isi p { font-size: 12px; color: #4a6644; line-height: 1.55; margin-bottom: 12px; }
+  .dp-isi ul { margin: 0 0 12px 16px; }
+  .dp-isi ul li { font-size: 12px; color: #4a6644; margin-bottom: 5px; line-height: 1.5; }
+  .dp-isi a { color: var(--green-btn); text-decoration: underline; }
+
+  /* ── FDA note ─────────────────────────────────────────────────────────────── */
+  .dp-fda-note {
+    font-size: 11px;
+    color: #9aaa96;
+    line-height: 1.6;
+    padding: 0 4px 32px;
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="#" class="back-link">← Back to Sample Profiles</a>
+</div>
+
+<div class="layout">
+  <div class="left-panel">
+    <div class="left-header">
+      <div class="tabs-title">Your precision matches</div>
+      <div class="cat-tabs" id="catTabs">
+        <button class="cat-tab t-full active" data-cat="full">Full<span class="cnt" id="c-full">0</span></button>
+        <button class="cat-tab t-near" data-cat="near">Near<span class="cnt" id="c-near">0</span></button>
+        <button class="cat-tab t-maybe" data-cat="maybe">Maybe<span class="cnt" id="c-maybe">0</span></button>
+        <button class="cat-tab t-previous" data-cat="previous">Previous<span class="cnt" id="c-previous">0</span></button>
+        <button class="cat-tab t-mismatch" data-cat="mismatch">Mismatch<span class="cnt" id="c-mismatch">0</span></button>
+        <button class="cat-tab t-all" data-cat="all">All<span class="cnt" id="c-all">0</span></button>
+      </div>
+      <div class="filters" id="filters">
+        <div class="filter-wrap">
+          <button class="filter-btn" data-filter="optionType">Option type <span class="fchev">▼</span></button>
+          <div class="dropdown-menu" data-filter="optionType">
+            <div class="dropdown-label">Option type</div>
+            <div class="dropdown-item"><input type="checkbox" id="f-opt-treatment" value="Approved Treatment"><label for="f-opt-treatment">Approved Treatment</label></div>
+            <div class="dropdown-item"><input type="checkbox" id="f-opt-trial" value="Clinical Trial"><label for="f-opt-trial">Clinical Trial</label></div>
+          </div>
+        </div>
+        <div class="filter-wrap">
+          <button class="filter-btn" data-filter="therapyCategory">Therapy category <span class="fchev">▼</span></button>
+          <div class="dropdown-menu" data-filter="therapyCategory">
+            <div class="dropdown-label">Therapy category</div>
+            <div class="dropdown-item"><input type="checkbox" id="f-cat-cell" value="Cell Therapy"><label for="f-cat-cell">Cell Therapy</label></div>
+            <div class="dropdown-item"><input type="checkbox" id="f-cat-med" value="Medication"><label for="f-cat-med">Medication</label></div>
+          </div>
+        </div>
+        <div class="filter-wrap">
+          <button class="filter-btn" data-filter="therapyType">Therapy type <span class="fchev">▼</span></button>
+          <div class="dropdown-menu" data-filter="therapyType">
+            <div class="dropdown-label">Therapy type</div>
+            <div class="dropdown-item"><input type="checkbox" id="f-tt-fcrn" value="FcRn blocker"><label for="f-tt-fcrn">FcRn blocker</label></div>
+            <div class="dropdown-item"><input type="checkbox" id="f-tt-ache" value="Acetylcholinesterase inhibitor"><label for="f-tt-ache">Acetylcholinesterase inhibitor</label></div>
+            <div class="dropdown-item"><input type="checkbox" id="f-tt-achr" value="AChR antigen-presenting nanoparticle"><label for="f-tt-achr">AChR antigen-presenting nanoparticle</label></div>
+            <div class="dropdown-item"><input type="checkbox" id="f-tt-cd19" value="CD19 CAR T-cell therapy"><label for="f-tt-cd19">CD19 CAR T-cell therapy</label></div>
+            <div class="dropdown-item"><input type="checkbox" id="f-tt-cic1" value="CIC-1 inhibitor"><label for="f-tt-cic1">CIC-1 inhibitor</label></div>
+            <div class="dropdown-item"><input type="checkbox" id="f-tt-imm" value="Immunomodulating fusion protein"><label for="f-tt-imm">Immunomodulating fusion protein</label></div>
+            <div class="dropdown-item"><input type="checkbox" id="f-tt-anti" value="Antimetabolite"><label for="f-tt-anti">Antimetabolite</label></div>
+            <div class="dropdown-item"><input type="checkbox" id="f-tt-cart" value="CAR-T cell therapy (BCMA)"><label for="f-tt-cart">CAR-T cell therapy (BCMA)</label></div>
+            <div class="dropdown-item"><input type="checkbox" id="f-tt-btk" value="BTK inhibitor"><label for="f-tt-btk">BTK inhibitor</label></div>
+            <div class="dropdown-item"><input type="checkbox" id="f-tt-c5" value="C5 complement inhibitor"><label for="f-tt-c5">C5 complement inhibitor</label></div>
+          </div>
+        </div>
+        <div class="filter-wrap">
+          <button class="filter-btn" data-filter="phase">Phase <span class="fchev">▼</span></button>
+          <div class="dropdown-menu" data-filter="phase">
+            <div class="dropdown-label">Phase</div>
+            <div class="dropdown-item"><input type="checkbox" id="f-ph-3" value="3"><label for="f-ph-3">Phase 3</label></div>
+            <div class="dropdown-item"><input type="checkbox" id="f-ph-2" value="2"><label for="f-ph-2">Phase 2</label></div>
+            <div class="dropdown-item"><input type="checkbox" id="f-ph-12" value="1/2"><label for="f-ph-12">Phase 1/2</label></div>
+            <div class="dropdown-item"><input type="checkbox" id="f-ph-1" value="1"><label for="f-ph-1">Phase 1</label></div>
+          </div>
+        </div>
+        <div class="filter-wrap">
+          <button class="filter-btn" data-filter="sponsor">Sponsor <span class="fchev">▼</span></button>
+          <div class="dropdown-menu" data-filter="sponsor">
+            <div class="dropdown-label">Sponsor</div>
+            <div class="dropdown-item"><input type="checkbox" id="f-sp-janssen" value="Janssen"><label for="f-sp-janssen">Janssen</label></div>
+            <div class="dropdown-item"><input type="checkbox" id="f-sp-ucb" value="UCB"><label for="f-sp-ucb">UCB</label></div>
+            <div class="dropdown-item"><input type="checkbox" id="f-sp-remegen" value="RemeGen"><label for="f-sp-remegen">RemeGen</label></div>
+            <div class="dropdown-item"><input type="checkbox" id="f-sp-novartis" value="Novartis Pharmaceuticals"><label for="f-sp-novartis">Novartis Pharmaceuticals</label></div>
+            <div class="dropdown-item"><input type="checkbox" id="f-sp-immunovant" value="Immunovant Sciences GmbH"><label for="f-sp-immunovant">Immunovant Sciences GmbH</label></div>
+            <div class="dropdown-item"><input type="checkbox" id="f-sp-bausch" value="Bausch Health"><label for="f-sp-bausch">Bausch Health</label></div>
+            <div class="dropdown-item"><input type="checkbox" id="f-sp-alexion" value="Alexion Pharmaceuticals"><label for="f-sp-alexion">Alexion Pharmaceuticals</label></div>
+            <div class="dropdown-item"><input type="checkbox" id="f-sp-argenx" value="argenx"><label for="f-sp-argenx">argenx</label></div>
+            <div class="dropdown-item"><input type="checkbox" id="f-sp-merck" value="Merck KGaA"><label for="f-sp-merck">Merck KGaA</label></div>
+            <div class="dropdown-item"><input type="checkbox" id="f-sp-arcellx" value="Arcellx"><label for="f-sp-arcellx">Arcellx</label></div>
+            <div class="dropdown-item"><input type="checkbox" id="f-sp-cour" value="COUR Pharmaceutical"><label for="f-sp-cour">COUR Pharmaceutical</label></div>
+            <div class="dropdown-item"><input type="checkbox" id="f-sp-kyverna" value="Kyverna Therapeutics"><label for="f-sp-kyverna">Kyverna Therapeutics</label></div>
+          </div>
+        </div>
+        <button class="filter-btn" id="topFilterBtn" style="display:inline-flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Top choice only</button>
+      </div>
+      <div class="section-label" id="secLabel">Full Matches</div>
+      <div class="section-desc" id="secDesc"></div>
+    </div>
+    <div class="applied-filters" id="appliedFilters"></div>
+    <div class="card-scroll"><div class="card-list" id="cardList"></div></div>
+  </div>
+
+  <div class="right-panel" id="rightPanel">
+    <div class="empty-state" id="emptyState">
+      <svg width="150" height="165" viewBox="0 0 200 220" fill="none">
+        <rect x="40" y="30" width="120" height="155" rx="12" fill="#d4edbd"/>
+        <rect x="70" y="16" width="60" height="28" rx="8" fill="#b5dda0"/>
+        <circle cx="100" cy="30" r="6" fill="#3d7a22"/>
+        <rect x="60" y="70" width="80" height="8" rx="4" fill="#a8d490"/>
+        <rect x="60" y="90" width="65" height="8" rx="4" fill="#a8d490"/>
+        <rect x="60" y="110" width="72" height="8" rx="4" fill="#a8d490"/>
+        <circle cx="55" cy="74" r="5" fill="#4a9028"/>
+        <circle cx="55" cy="94" r="5" fill="#4a9028"/>
+        <circle cx="55" cy="114" r="5" fill="#4a9028"/>
+        <rect x="30" y="150" width="38" height="48" rx="8" fill="#b5dda0"/>
+        <rect x="34" y="143" width="30" height="12" rx="5" fill="#3d7a22"/>
+        <text x="49" y="178" text-anchor="middle" fill="#3d7a22" font-size="16" font-weight="bold" font-family="sans-serif">+</text>
+        <rect x="138" y="148" width="32" height="54" rx="8" fill="#b5dda0" transform="rotate(-15 138 148)"/>
+        <circle cx="151" cy="160" r="7" fill="#3d7a22" opacity=".6"/>
+        <circle cx="155" cy="178" r="7" fill="#3d7a22" opacity=".6"/>
+        <circle cx="159" cy="196" r="7" fill="#3d7a22" opacity=".6"/>
+        <ellipse cx="35" cy="155" rx="16" ry="8" fill="#a8d490" transform="rotate(-30 35 155)"/>
+        <ellipse cx="165" cy="155" rx="16" ry="8" fill="#a8d490" transform="rotate(30 165 155)"/>
+      </svg>
+      <h2>You have multiple care options</h2>
+      <p>Select one on the left to see details</p>
+    </div>
+    <div class="detail-panel" id="detailPanel">
+      <div class="detail-badges" id="dBadges"></div>
+      <div class="detail-title" id="dTitle"></div>
+      <div class="detail-meta" id="dMeta"></div>
+      <div class="detail-admin" id="dAdmin"></div>
+      <div id="dPills"></div>
+      <hr class="divider">
+      <div class="detail-desc" id="dDesc"></div>
+      <div class="detail-actions" id="dActions"></div>
+      <div id="dSections"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Download Modal -->
+<div class="dl-overlay" id="dlOverlay" onclick="if(event.target===this)closeDlModal()">
+  <div class="dl-modal">
+    <button class="dl-modal-close" onclick="closeDlModal()">&#x2715;</button>
+    <div class="dl-modal-icon">
+      <svg width="22" height="22" fill="none" stroke="#4AAC31" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    </div>
+    <h3>Download Care Options</h3>
+    <p class="dl-sub">Choose what to include in your PDF. You can share this with your physician.</p>
+    <div class="dl-options" id="dlOptions"></div>
+    <div class="dl-footer">
+      <button class="dl-btn-cancel" onclick="closeDlModal()">Cancel</button>
+      <button class="dl-btn-download" id="dlBtn" disabled onclick="handleDownload()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download PDF
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Chat Panel -->
+<div class="chat-overlay" id="chatOverlay" onclick="closeChatPanel()"></div>
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-header">
+    <div class="chat-avatar"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+    <div class="chat-hdr-text">
+      <div class="chat-hdr-name">Resonata Assistant</div>
+      <div class="chat-hdr-sub">Helping you review your match data</div>
+    </div>
+    <button class="chat-close" onclick="closeChatPanel()">&#x2715;</button>
+  </div>
+  <div class="chat-messages" id="chatMessages"></div>
+  <div class="chat-input-wrap">
+    <input class="chat-input" id="chatInput" type="text" placeholder="Type a message..." onkeydown="if(event.key==='Enter')sendChatMsg()">
+    <button class="chat-send" onclick="sendChatMsg()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+  </div>
+</div>
+
+<!-- Correction Modal -->
+<div class="cor-overlay" id="corOverlay" onclick="if(event.target===this)closeCorModal()">
+  <div class="cor-modal">
+    <button class="cor-modal-close" onclick="closeCorModal()">&#x2715;</button>
+    <div id="corFormState">
+      <div class="cor-modal-icon">
+        <svg width="22" height="22" fill="none" stroke="#3a7d44" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      </div>
+      <h3>Report a Data Issue</h3>
+      <p>Tell us what doesn't look right. Resonata will review your record and follow up with any updates.</p>
+      <div class="cor-form-group">
+        <label>Which section has an issue?</label>
+        <div class="cor-select-wrap">
+          <select id="corSectionSelect">
+            <option value="">Select a section...</option>
+          </select>
+        </div>
+      </div>
+      <div class="cor-form-group">
+        <label>What's incorrect? <span style="font-weight:400;color:#888">(optional)</span></label>
+        <textarea id="corDescription" placeholder="e.g. My MG-ADL score should be 4, not 2."></textarea>
+      </div>
+      <div class="cor-modal-footer">
+        <button class="cor-btn-cancel" onclick="closeCorModal()">Cancel</button>
+        <button class="cor-btn-submit" onclick="submitCorForm()">Submit</button>
+      </div>
+    </div>
+    <div class="cor-success" id="corSuccess">
+      <div class="cor-check-circle">
+        <svg width="26" height="26" fill="none" stroke="#3a7d44" stroke-width="2.5" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <h3>Thanks for letting us know</h3>
+      <p>We've received your report and will review your record. If a correction is needed, we'll update your information and notify you.</p>
+      <button class="cor-btn-done" onclick="closeCorModal()">Done</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const items = [
+  // ACTIVE MATCHES (mylist)
+  { id:1, cat:'mylist', ml:'full', type:'TREATMENTS', sponsored:true, sponsorName:'Janssen', sponsorDisplayName:'Janssen (Johnson & Johnson)', title:'Imaavy: Designed to reduce harmful IgG antibodies, including anti-AChR and anti-MuSK, by binding and blocking FcRn receptors.', sponsor:'Janssen', product:'Imaavy', drug:'nipocalimab-aahu', cls:'FcRn blocker', form:'MEDICATION', desc:'Nipocalimab (Imaavy) is a high-affinity humanized monoclonal antibody FcRn blocker administered intravenously. It reduces circulating IgG levels including pathogenic autoantibodies by blocking the neonatal Fc receptor. FDA approved for generalized myasthenia gravis in adults and pediatric patients 12 years and older who are AChR or MuSK antibody positive.', qf:['Diagnoses','Biomarkers','Demographics'], crit:['[I] Myasthenia gravis, generalized','[I] AChR antibodies present','[I] Age (years) ≥12'],
+    admin:'Intravenous (IV) infusion',
+    matchGroups:[{type:'Diagnosis',items:[{label:'gMG Confirmed',status:'match'}]},{type:'Biomarkers',items:[{label:'AChR-Ab Positive',status:'match'}]},{type:'Demographics',items:[{label:'Age ≥12 years',status:'match'}]}],
+    efficacy:{study:'ADAPT-NXT (Phase 3, randomized, double-blind, placebo-controlled)',population:'Adults and adolescents ≥12 years with gMG (AChR or MuSK antibody positive)',primaryEndpoint:'MG-ADL total score change from baseline at Week 24',keyResults:['MG-ADL improved by 4.7 pts vs 1.3 pts placebo (p<0.0001)','58% achieved ≥3 pt MG-ADL improvement vs 26% placebo','Sustained IgG reductions maintained over 24 weeks'],secondaryEndpoints:['QMG total score improvement at Week 24','Proportion achieving minimal symptom expression (MSE)','MG-QoL15r quality of life improvement']},
+    safety:{warnings:'Serious infections may occur. Ensure vaccinations are up to date prior to treatment. Monitor for signs of meningococcal infection.',commonSideEffects:['Headache','Upper respiratory infection','Nausea','Fatigue','Injection site reactions'],seriousSideEffects:['Serious infections','Hypersensitivity reactions','Thromboembolic events'],contraindications:'History of serious hypersensitivity to nipocalimab or any excipients. Unresolved serious infection.'},
+    dosing:'Loading dose: 30 mg/kg IV over 60 minutes on Day 1. Maintenance: 15 mg/kg IV every 2 weeks starting at Week 2. Dose adjustment may be required based on IgG response.',
+    documents:[{label:'Full Prescribing Information',url:'#'},{label:'Medication Guide for Patients',url:'#'}],
+    eligibility:{inclusion:['Generalized myasthenia gravis','AChR or MuSK antibody positive','Age ≥12 years'],exclusion:['Known hypersensitivity to nipocalimab','Unresolved serious infection']} },
+  { id:2, cat:'mylist', ml:'full', type:'TREATMENTS', title:'RYSTIGGO: For adults with gMG who are anti-AChR or anti-MuSK antibody positive', sponsor:'UCB', product:'RYSTIGGO', drug:'rozanolixizumab-noli', cls:'FcRn blocker', form:'MEDICATION', desc:'Rozanolixizumab (Rystiggo) is a humanized monoclonal IgG4 antibody that binds to the neonatal Fc receptor (FcRn), reducing the recycling of IgG antibodies. Administered as a weekly subcutaneous infusion, offering a flexible home-infusible option.', qf:['Diagnoses','Biomarkers'], crit:['[I] Generalized myasthenia gravis','[I] Anti-AChR or anti-MuSK antibody positive','[I] Age ≥18'],
+    admin:'Subcutaneous (SC) infusion, self-administered at home',
+    matchGroups:[{type:'Diagnosis',items:[{label:'gMG Confirmed',status:'match'}]},{type:'Biomarkers',items:[{label:'AChR-Ab Positive',status:'match'}]},{type:'Demographics',items:[{label:'Age ≥18 years',status:'match'}]}],
+    efficacy:{study:'MycarinG (Phase 3, randomized, double-blind, placebo-controlled)',population:'Adults with gMG who are AChR or MuSK antibody positive',primaryEndpoint:'Change in MG-ADL total score at Day 43',keyResults:['Significant MG-ADL improvement vs placebo at Day 43 (p=0.0004)','30% achieved minimal symptom expression vs 11% placebo','Rapid onset of effect observed within first 2 weeks'],secondaryEndpoints:['QMG total score change from baseline','MGC composite score improvement','MG-QoL15r quality of life at Day 43']},
+    safety:{warnings:'Increased risk of infections. Patients should be current on meningococcal vaccination. Headache is common and usually mild-to-moderate.',commonSideEffects:['Headache','Pyrexia','Nausea','Fatigue','Diarrhea'],seriousSideEffects:['Serious infections','Hypersensitivity / anaphylaxis','Encephalitis (rare)'],contraindications:'Known hypersensitivity to rozanolixizumab-noli or any excipients.'},
+    dosing:'600 mg or 840 mg (weight-based) subcutaneous infusion once weekly for 6 weeks, followed by a 4-week treatment-free period. Cycles repeat as clinically indicated.',
+    documents:[{label:'Full Prescribing Information',url:'#'},{label:'Patient Instructions for Use',url:'#'}],
+    eligibility:{inclusion:['Generalized myasthenia gravis','Anti-AChR or anti-MuSK antibody positive','Age ≥18 years'],exclusion:['Known hypersensitivity to rozanolixizumab-noli','Active serious infection']} },
+  { id:3, cat:'mylist', ml:'partial', type:'CLINICAL TRIAL', title:'A Study of Telitacicept for the Treatment of Generalized Myasthenia Gravis (RemeMG)', sponsor:'RemeGen', product:'NCT06456580 • Phase 3', drug:'RC18', cls:'Immunomodulating fusion protein', form:'MEDICATION', desc:'This Phase 3 study evaluates telitacicept (RC18), a recombinant fusion protein targeting BLyS and APRIL signaling pathways, in patients with generalized myasthenia gravis.', qf:['Diagnoses','Biomarkers'], crit:['[I] Generalized myasthenia gravis','[I] AChR or MuSK antibody positive','[I] MGFA Class II–IV'],
+    nctId:'NCT06456580',
+    matchGroups:[{type:'Diagnosis',items:[{label:'gMG Confirmed',status:'match'}]},{type:'Biomarkers',items:[{label:'AChR-Ab Positive',status:'match'}]},{type:'Medications',items:[{label:'Stable immunosuppressive therapy for ≥30 days',status:'match'}]},{type:'Clinical Scores',items:[{label:'MG-ADL score: 2 (requires ≥3)',status:'near'}]},{type:'Screening',items:[{label:'No MG crisis within 30 days',status:'match'},{label:'No thymectomy within 12 months',status:'match'},{label:'No active infection requiring treatment',status:'match'},{label:'No pregnancy or breastfeeding',status:'match'}]}],
+    eligibility:{inclusion:['Confirmed diagnosis of generalized MG','AChR or MuSK antibody positive','MGFA Class II-IV at screening','Age 18-75 years','MG-ADL score ≥3','Stable immunosuppressive therapy for ≥30 days'],exclusion:['MG crisis within 30 days','Thymectomy within 12 months','Active infection requiring treatment','Pregnancy or breastfeeding']} },
+  { id:4, cat:'mylist', ml:'full', type:'TREATMENTS', title:'ZILBRYSQ: Once-daily subcutaneous (SC), targeted C5 complement inhibitor for gMG', sponsor:'UCB', product:'ZILBRYSQ', drug:'zilucoplan', cls:'C5 complement inhibitor', form:'MEDICATION', desc:'Zilucoplan (Zilbrysq) is a self-administered, once-daily subcutaneous peptide inhibitor of complement component 5 (C5). The first and only self-administered complement inhibitor approved for gMG.', qf:['Diagnoses','Biomarkers'], crit:['[I] Generalized myasthenia gravis','[I] Anti-AChR antibody positive','[I] Adult ≥18 years'],
+    admin:'Once-daily subcutaneous (SC) self-injection',
+    matchGroups:[{type:'Diagnosis',items:[{label:'gMG Confirmed',status:'match'}]},{type:'Biomarkers',items:[{label:'AChR-Ab Positive',status:'match'}]},{type:'Demographics',items:[{label:'Age ≥18 years',status:'match'}]}],
+    efficacy:{study:'RAISE (Phase 3, randomized, double-blind, placebo-controlled)',population:'Adults with AChR antibody positive generalized MG',primaryEndpoint:'Change in MG-ADL score from baseline at Week 12',keyResults:['MG-ADL improved by 4.39 pts vs 2.30 pts placebo (p=0.0004)','43% achieved minimal symptom expression vs 29% placebo','Rapid improvement observed as early as Week 1'],secondaryEndpoints:['QMG score change from baseline at Week 12','MGC composite score at Week 12','MG-QoL15r at Week 12']},
+    safety:{warnings:'C5 inhibitors increase susceptibility to infections by encapsulated bacteria, especially Neisseria meningitidis. Vaccinate at least 2 weeks prior to treatment.',commonSideEffects:['Injection site reactions','Headache','Upper respiratory infections','Diarrhea'],seriousSideEffects:['Meningococcal infections','Serious infections','Hypersensitivity reactions'],contraindications:'Patients with unresolved Neisseria meningitidis infection. Unvaccinated patients (unless benefits outweigh risks).'},
+    dosing:'0.3 mg/kg subcutaneous injection administered once daily. Self-administration by patient or caregiver after training. Rotate injection sites: abdomen, thigh, or upper arm.',
+    documents:[{label:'Full Prescribing Information',url:'#'},{label:'Instructions for Use',url:'#'}],
+    eligibility:{inclusion:['Generalized myasthenia gravis','Anti-AChR antibody positive','Age ≥18 years'],exclusion:['Unresolved Neisseria meningitidis infection','Unvaccinated patients (unless benefits outweigh risks)']} },
+  { id:5, cat:'mylist', ml:'full', type:'TREATMENTS', title:'Vyvgart-hytrulo: Self-injectable subcutaneous (SC) option for the treatment of gMG and CIDP', sponsor:'argenx', product:'vyvgart-hytrulo', drug:'efgartigimod alfa, hyaluronidase', cls:'FcRn blocker', form:'MEDICATION', desc:'Efgartigimod alfa and hyaluronidase (Vyvgart Hytrulo) is a subcutaneous formulation combining efgartigimod with hyaluronidase for rapid delivery. Can be self-administered at home after training.', qf:['Diagnoses','Biomarkers','Demographics'], crit:['[I] Generalized myasthenia gravis','[I] AChR antibody positive','[I] ≥18 years'],
+    admin:'Subcutaneous (SC) injection, self-administered at home',
+    matchGroups:[{type:'Diagnosis',items:[{label:'gMG Confirmed',status:'match'}]},{type:'Biomarkers',items:[{label:'AChR-Ab Positive',status:'match'}]},{type:'Demographics',items:[{label:'Age ≥18 years',status:'match'}]}],
+    efficacy:{study:'ADAPT-SC+ (Phase 3, open-label bridging study)',population:'Adults with AChR antibody positive generalized MG',primaryEndpoint:'PK bridging to IV efgartigimod; MG-ADL and QMG improvement',keyResults:['Comparable FcRn target engagement and IgG reduction to IV formulation','61% achieved ≥3 pt MG-ADL improvement at Week 4','Sustained efficacy through 4-week treatment cycle'],secondaryEndpoints:['QMG score improvement at Week 4','MG-ADL responder rate','IgG level reduction vs baseline']},
+    safety:{warnings:'May increase risk of infections due to IgG reduction. Monitor for signs of infection. Not recommended in patients with pre-existing severe infections.',commonSideEffects:['Headache','Injection site reactions','Upper respiratory infections','Nausea'],seriousSideEffects:['Serious infections','Hypersensitivity reactions'],contraindications:'Known hypersensitivity to efgartigimod alfa or hyaluronidase. Active, uncontrolled serious infection.'},
+    dosing:'1008 mg efgartigimod alfa / 11,200 units hyaluronidase SC injection once weekly for 4 weeks. Repeat cycles based on clinical evaluation. Administered via prefilled auto-injector.',
+    documents:[{label:'Full Prescribing Information',url:'#'},{label:'Patient Guide',url:'#'},{label:'Instructions for Use',url:'#'}],
+    eligibility:{inclusion:['Generalized myasthenia gravis','AChR antibody positive','Age ≥18 years'],exclusion:['Known hypersensitivity to efgartigimod alfa or hyaluronidase','Active uncontrolled serious infection']} },
+  { id:6, cat:'mylist', ml:'partial', type:'CLINICAL TRIAL', title:'A Study to Investigate the Efficacy, Safety and Tolerability of Remibrutinib Versus Placebo in Adult Patients With Generalized Myasthenia Gravis (RELIEVE)', sponsor:'Novartis Pharmaceuticals', product:'NCT06744920 • Phase 3', drug:'Remibrutinib', cls:'BTK inhibitor', form:'MEDICATION', desc:'The RELIEVE trial investigates remibrutinib, an oral, highly selective covalent BTK inhibitor, compared to placebo in patients with generalized myasthenia gravis.', qf:['Diagnoses','Biomarkers'], crit:['[I] gMG diagnosis confirmed','[I] Anti-AChR or anti-MuSK positive','[I] MG-ADL score ≥6'],
+    nctId:'NCT06744920',
+    matchGroups:[{type:'Diagnosis',items:[{label:'gMG Confirmed',status:'match'}]},{type:'Biomarkers',items:[{label:'AChR-Ab Positive',status:'match'}]},{type:'Medications',items:[{label:'Stable immunosuppressive therapy for ≥30 days',status:'match'}]},{type:'Clinical Scores',items:[{label:'MG-ADL score: 2 (requires ≥3)',status:'near'}]},{type:'Screening',items:[{label:'No MG crisis within 30 days',status:'match'},{label:'No thymectomy within 12 months',status:'match'},{label:'No active infection requiring treatment',status:'match'},{label:'No pregnancy or breastfeeding',status:'match'}]}],
+    eligibility:{inclusion:['Confirmed gMG diagnosis','Anti-AChR or anti-MuSK antibody positive','MG-ADL score ≥3','Age 18-80 years','On stable standard of care therapy'],exclusion:['MG crisis within 4 weeks','Prior B-cell depleting therapy within 6 months','Active or latent tuberculosis','Severe hepatic impairment']} },
+  { id:7, cat:'mylist', ml:'full', type:'CLINICAL TRIAL', title:'Study to Access the Efficacy and Safety of IMVT-1402 in Participants With Mild to Severe Generalized Myasthenia Gravis', sponsor:'Immunovant Sciences GmbH', product:'NCT07039916 • Phase 3', drug:'IMVT-1402', cls:'FcRn blocker', form:'MEDICATION', desc:'IMVT-1402 is a next-generation anti-FcRn monoclonal antibody. This Phase 3 study assesses its efficacy and safety in participants with mild to severe generalized myasthenia gravis.', qf:['Diagnoses','Biomarkers','Demographics'], crit:['[I] Mild to severe gMG','[I] AChR or MuSK positive','[I] ≥18 years'],
+    nctId:'NCT07039916',
+    matchGroups:[{type:'Diagnosis',items:[{label:'gMG Confirmed',status:'match'}]},{type:'Biomarkers',items:[{label:'AChR-Ab Positive',status:'match'}]},{type:'Medications',items:[{label:'Stable immunosuppressive therapy',status:'match'}]},{type:'Lab Values',items:[{label:'Labs within range',status:'match'}]},{type:'Class',items:[{label:'Class II-IV',status:'match'}]},{type:'Demographics',items:[{label:'Age ≥18 years',status:'match'}]},{type:'Screening',items:[{label:'No MG crisis within 30 days',status:'match'},{label:'No thymectomy within 6 months',status:'match'},{label:'No active serious infection',status:'match'}]}],
+    eligibility:{inclusion:['Mild to severe generalized MG','AChR or MuSK antibody positive','Age ≥18 years','MG-ADL score ≥3','Stable immunosuppressive therapy'],exclusion:['MG crisis within 30 days','Thymectomy within 6 months','Active serious infection','Prior CAR-T or stem cell therapy']} },
+  { id:8, cat:'mylist', ml:'full', type:'CLINICAL TRIAL', title:'Proof-of-concept, dose range finding study of NMD670 in adult patients with AChR or MuSK antibody positive MG', sponsor:'Janssen', product:'NCT06414954 • Phase 3', drug:'Nipocalimab', cls:'CIC-1 inhibitor', form:'MEDICATION', desc:'This proof-of-concept study evaluates NMD670, a CIC-1 chloride channel inhibitor, in AChR or MuSK antibody-positive myasthenia gravis. CIC-1 inhibition aims to restore neuromuscular transmission.', qf:['Diagnoses','Biomarkers'], crit:['[I] AChR or MuSK positive gMG','[I] Adult patients','[I] Stable immunosuppression'],
+    nctId:'NCT06414954',
+    matchGroups:[{type:'Diagnosis',items:[{label:'gMG Confirmed',status:'match'}]},{type:'Biomarkers',items:[{label:'AChR-Ab Positive',status:'match'}]},{type:'Medications',items:[{label:'Stable immunosuppressive regimen for ≥30 days',status:'match'}]},{type:'Class',items:[{label:'MGFA Class II-IVa',status:'match'}]},{type:'Demographics',items:[{label:'Adult patients ≥18 years',status:'match'}]},{type:'Screening',items:[{label:'No MG crisis within 30 days',status:'match'},{label:'No recent plasma exchange or IVIg within 4 weeks',status:'match'},{label:'No active malignancy',status:'match'},{label:'No pregnancy or breastfeeding',status:'match'}]}],
+    eligibility:{inclusion:['AChR or MuSK antibody positive gMG','Adult patients ≥18 years','Stable immunosuppressive regimen for ≥30 days','MGFA Class II-IVa'],exclusion:['MG crisis within 30 days','Recent plasma exchange or IVIg within 4 weeks','Active malignancy','Pregnancy or breastfeeding']} },
+
+  // PREVIOUS
+  { id:9, cat:'previous', ml:'full', type:'TREATMENTS', title:'MESTINON: A cholinesterase inhibitor commonly used for treating muscle weakness due to myasthenia gravis in adults', sponsor:'Bausch Health', product:'MESTINON', drug:'pyridostigmine', cls:'Acetylcholinesterase inhibitor', form:'MEDICATION', desc:'Pyridostigmine (Mestinon) is a cholinesterase inhibitor that increases cholinergic activity at neuromuscular junctions. Commonly used as symptomatic treatment for myasthenia gravis to improve muscle strength.', qf:['Diagnoses','Demographics'], crit:['[I] Myasthenia gravis diagnosis','[I] Adult patient (≥18 years)'],
+    admin:'Oral tablet or syrup',
+    matchGroups:[{type:'Diagnosis',items:[{label:'Myasthenia gravis confirmed',status:'match'}]},{type:'Demographics',items:[{label:'Age ≥18 years',status:'match'}]}],
+    efficacy:{study:'Long-standing clinical use; no single pivotal Phase 3 RCT',population:'Adults and pediatric patients with myasthenia gravis',primaryEndpoint:'Symptomatic improvement in muscle strength and function',keyResults:['Well-established symptomatic benefit in muscle weakness','Standard first-line symptomatic treatment for MG worldwide','Typically used adjunctively alongside immunosuppression'],secondaryEndpoints:['Reduction in ptosis and diplopia','Improvement in bulbar and limb muscle strength']},
+    safety:{warnings:'Cholinergic crisis may occur with overdose — symptoms include excessive secretions, bradycardia, and GI distress. Use with caution in patients with asthma or cardiac arrhythmia.',commonSideEffects:['Nausea','Vomiting','Diarrhea','Abdominal cramps','Increased salivation','Sweating'],seriousSideEffects:['Cholinergic crisis (overdose)','Bradycardia','Bronchospasm'],contraindications:'Mechanical intestinal or urinary obstruction. Use with caution with beta-blockers and other cholinergic agents.'},
+    dosing:'Typical starting dose: 60 mg orally 3–4 times daily. Titrate based on response. Extended-release (Timespan): 180 mg 1–2 times daily. Maximum: 1500 mg/day in divided doses.',
+    documents:[{label:'Full Prescribing Information',url:'#'},{label:'Medication Guide',url:'#'}],
+    eligibility:{inclusion:['Myasthenia gravis diagnosis','Adult patient ≥18 years'],exclusion:['Mechanical intestinal or urinary obstruction']} },
+  { id:10, cat:'previous', ml:'full', type:'TREATMENTS', title:'SOLIRIS: C5 complement inhibitor for targeted treatment of rare, life-threatening diseases', sponsor:'Alexion Pharmaceuticals', product:'SOLIRIS', drug:'eculizumab', cls:'C5 complement inhibitor', form:'MEDICATION', desc:'Eculizumab (Soliris) binds to complement protein C5 and inhibits terminal complement activation. FDA approved for anti-AChR antibody positive generalized myasthenia gravis in adults.', qf:['Diagnoses','Biomarkers'], crit:['[I] Generalized myasthenia gravis','[I] Anti-AChR antibody positive','[I] Inadequate response to prior therapy'],
+    admin:'Intravenous (IV) infusion (over 35 minutes)',
+    matchGroups:[{type:'Diagnosis',items:[{label:'gMG Confirmed',status:'match'}]},{type:'Biomarkers',items:[{label:'AChR-Ab Positive',status:'match'}]},{type:'Medications',items:[{label:'Prior immunotherapy',status:'match'}]}],
+    efficacy:{study:'REGAIN (Phase 3, randomized, double-blind, placebo-controlled)',population:'Adults with anti-AChR antibody positive refractory generalized MG',primaryEndpoint:'Change from baseline in MG-ADL total score at Week 26',keyResults:['Numerically superior MG-ADL improvement vs placebo across sensitivity analyses','Significant improvements in QMG, MGC, and MG-QoL15 scores','Durable benefit in open-label extension with reduced rescue therapy use'],secondaryEndpoints:['QMG total score change at Week 26','MGC composite score at Week 26','MG-QoL15r at Week 26','Rate of MG exacerbations']},
+    safety:{warnings:'⚠️ BLACK BOX WARNING: Life-threatening meningococcal infections. Vaccinate at least 2 weeks before first dose. REMS program required.',commonSideEffects:['Headache','Upper respiratory infections','Nausea','Fatigue','Back pain'],seriousSideEffects:['Meningococcal infections (BBW)','Other serious infections','Infusion reactions'],contraindications:'Unresolved Neisseria meningitidis infection. Unvaccinated patients (unless benefits outweigh risks). REMS enrollment required.'},
+    dosing:'Induction: 900 mg IV once weekly for 4 weeks. Maintenance: 1200 mg IV every 2 weeks thereafter. Administer over 35 minutes by IV infusion.',
+    documents:[{label:'Full Prescribing Information (REMS)',url:'#'},{label:'Medication Guide',url:'#'}],
+    eligibility:{inclusion:['Generalized myasthenia gravis','Anti-AChR antibody positive','Inadequate response to prior therapy'],exclusion:['Unresolved Neisseria meningitidis infection','Unvaccinated patients (unless benefits outweigh risks)']} },
+
+  // MISMATCH (was nonmatch)
+  { id:11, cat:'mismatch', ml:'full', type:'CLINICAL TRIAL', title:'Efficacy and safety of oral cladribine compared with placebo in generalized myasthenia gravis (MyClad)', sponsor:'Merck KGaA', product:'NCT06463587 • Phase 3', drug:'Cladribine', cls:'Antimetabolite', form:'MEDICATION', desc:'The MyClad study evaluates oral cladribine, a purine nucleoside analogue, in generalized myasthenia gravis. Cladribine selectively depletes lymphocytes and has demonstrated efficacy in multiple sclerosis; this study explores its potential in gMG.', qf:['Diagnoses','Biomarkers'], crit:['[I] Confirmed gMG diagnosis','[I] Seropositive (AChR or MuSK)','[I] Adults ≥18 years'],
+    nctId:'NCT06463587',
+    matchGroups:[{type:'Diagnosis',items:[{label:'gMG Confirmed',status:'match'}]},{type:'Biomarkers',items:[{label:'Seropositive (AChR or MuSK)',status:'match'}]},{type:'Medications',items:[{label:'Failed immunosuppressive therapy required',status:'mismatch'}]},{type:'Demographics',items:[{label:'Adults ≥18 years',status:'match'}]}],
+    eligibility:{inclusion:['Confirmed gMG diagnosis','Seropositive (AChR or MuSK)','Adults ≥18 years','MGFA Class II-IV'],exclusion:['Active serious infection','Prior lymphocyte-depleting therapy within 12 months','Immunocompromised state']} },
+  { id:12, cat:'mismatch', ml:'full', type:'CLINICAL TRIAL', title:'A Phase 1 Study of Anitocabtagene Autoleucel for the Treatment of Subjects With Non-oncology Plasma Cell-related Diseases', sponsor:'Arcellx', product:'NCT06626919 • Phase 1', drug:'Anito-cel (Anitocabtagene autoleucel)', cls:'CAR-T cell therapy (BCMA)', form:'CELL THERAPY', desc:'Anitocabtagene autoleucel (anito-cel) is a BCMA-targeting CAR-T cell therapy being investigated for non-oncology autoimmune plasma cell-related diseases including myasthenia gravis. This first-in-human Phase 1 study assesses its safety, tolerability, and early efficacy.', qf:['Diagnoses','Biomarkers'], crit:['[I] Non-oncology plasma cell disease','[I] Refractory to standard therapy','[I] Performance status ECOG ≤2'],
+    nctId:'NCT06626919',
+    matchGroups:[{type:'Diagnosis',items:[{label:'gMG Confirmed',status:'match'}]},{type:'Biomarkers',items:[{label:'AChR-Ab Positive',status:'match'}]},{type:'Medications',items:[{label:'Refractory to standard therapy required',status:'mismatch'}]},{type:'Demographics',items:[{label:'Age ≥18 years',status:'match'}]}],
+    eligibility:{inclusion:['Non-oncology plasma cell disease','Refractory to standard therapy','Performance status ECOG ≤2','Age ≥18 years'],exclusion:['Active CNS involvement','Prior CAR-T therapy','Uncontrolled infection','Pregnancy or breastfeeding']} },
+  { id:13, cat:'mismatch', ml:'full', type:'CLINICAL TRIAL', title:'Evaluate the Safety, Tolerability, Pharmacodynamics and Efficacy of CNP-106 in Subjects With Myasthenia Gravis', sponsor:'COUR Pharmaceutical', product:'NCT06106672 • Phase 2', drug:'CNP-106', cls:'AChR antigen-presenting nanoparticle', form:'MEDICATION', desc:'CNP-106 is an investigational tolerogenic nanoparticle platform delivering acetylcholine receptor (AChR) antigens to induce immune tolerance specifically against the pathogenic autoimmune response in myasthenia gravis. This Phase 2 study evaluates safety, pharmacodynamics, and early efficacy.', qf:['Diagnoses','Biomarkers'], crit:['[I] AChR antibody positive gMG','[I] Confirmed diagnosis','[I] Stable disease'],
+    nctId:'NCT06106672',
+    matchGroups:[{type:'Diagnosis',items:[{label:'gMG Confirmed',status:'match'}]},{type:'Biomarkers',items:[{label:'AChR-Ab Positive',status:'match'}]},{type:'Medications',items:[{label:'Stable disease on current therapy required',status:'mismatch'}]},{type:'Demographics',items:[{label:'Age 18-70 years',status:'match'}]}],
+    eligibility:{inclusion:['AChR antibody positive gMG','Confirmed diagnosis','Stable disease on current therapy','Age 18-70 years'],exclusion:['MG crisis within 60 days','Thymectomy within 6 months','Other autoimmune diseases requiring therapy']} },
+
+  // DISMISSED
+  { id:14, cat:'dismissed', ml:'full', type:'TREATMENTS', title:'Ultomiris: Long-acting C5 complement inhibitor', sponsor:'Alexion Pharmaceuticals', product:'Ultomiris', drug:'ravulizumab-cwvz', cls:'C5 complement inhibitor', form:'MEDICATION', desc:'Ravulizumab (Ultomiris) is a long-acting C5 inhibitor with every 8-week IV dosing. Patient indicated preference to avoid IV infusion therapies.', qf:['Diagnoses','Biomarkers'], crit:['[I] Anti-AChR antibody positive gMG','[I] Adult patient ≥18 years'],
+    admin:'Intravenous (IV) infusion',
+    matchGroups:[{type:'Diagnosis',items:[{label:'gMG Confirmed',status:'match'}]},{type:'Biomarkers',items:[{label:'AChR-Ab Positive',status:'match'}]},{type:'Demographics',items:[{label:'Age ≥18 years',status:'match'}]}],
+    efficacy:{study:'CHAMPION MG (Phase 3, randomized, double-blind, placebo-controlled)',population:'Adults with anti-AChR antibody positive generalized MG',primaryEndpoint:'Change from baseline in MG-ADL total score at Week 26',keyResults:['MG-ADL improved by 3.1 pts vs 1.4 pts placebo (p<0.0001)','QMG improved by 4.0 pts vs 1.2 pts placebo','30% achieved minimal symptom expression vs 11% placebo'],secondaryEndpoints:['QMG score change at Week 26','MGC composite score improvement','MG-QoL15r quality of life','Rate of MG exacerbations']},
+    safety:{warnings:'⚠️ BLACK BOX WARNING: Life-threatening meningococcal infections. Vaccinate at least 2 weeks before first dose. REMS program required.',commonSideEffects:['Headache','Upper respiratory infection','Diarrhea','Nausea','Fatigue'],seriousSideEffects:['Meningococcal infections (BBW)','Other encapsulated bacterial infections','Infusion reactions'],contraindications:'Unresolved Neisseria meningitidis infection. Unvaccinated patients (unless benefits outweigh risks). REMS enrollment required.'},
+    dosing:'Weight-based dosing. Example (40–60 kg): 2400 mg loading at Week 0, 3000 mg at Week 2, then 3000 mg every 8 weeks. For ≥100 kg: 3000 mg loading, 3600 mg maintenance every 8 weeks.',
+    documents:[{label:'Full Prescribing Information (REMS)',url:'#'},{label:'Medication Guide',url:'#'}],
+    eligibility:{inclusion:['Anti-AChR antibody positive gMG','Adult patient ≥18 years'],exclusion:['Unresolved Neisseria meningitidis infection','Unvaccinated patients (unless benefits outweigh risks)']} },
+  { id:15, cat:'dismissed', ml:'full', type:'CLINICAL TRIAL', title:'Clinical trial for generalized myasthenia gravis', sponsor:'Kyverna Therapeutics', product:'NCT06193889 • Phase 1/2', drug:'KYV-101', cls:'CD19 CAR T-cell therapy', form:'CELL THERAPY', desc:'KYV-101 is an autologous CD19-targeting CAR-T cell therapy. Patient dismissed this option due to travel distance to the trial site.', qf:['Diagnoses','Biomarkers'], crit:['[I] Generalized myasthenia gravis','[I] Seropositive for AChR or MuSK'],
+    nctId:'NCT06193889',
+    matchGroups:[{type:'Diagnosis',items:[{label:'gMG Confirmed',status:'match'}]},{type:'Biomarkers',items:[{label:'AChR-Ab Positive',status:'match'}]}],
+    eligibility:{inclusion:['Generalized myasthenia gravis','Seropositive for AChR or MuSK','Age ≥18 years','Failed ≥2 prior therapies'],exclusion:['Prior CAR-T therapy','Active CNS disease','Uncontrolled infection']} },
+  { id:16, cat:'mylist', ml:'possible', type:'CLINICAL TRIAL', title:'VIVACITY-MG3: Rozanolixizumab in Generalized MG', sponsor:'UCB Pharma', product:'Phase 3', drug:'rozanolixizumab', cls:'FcRn inhibitor', form:'MEDICATION', desc:'Evaluating the efficacy, safety, and tolerability of rozanolixizumab in participants with generalized myasthenia gravis.', qf:['Diagnoses','Biomarkers','History'], crit:['[I] gMG Confirmed','[I] AChR-Ab Positive','[I] Prior Immunotherapy'],
+    matchGroups:[{type:'Diagnosis',items:[{label:'gMG Confirmed',status:'match'}]},{type:'Biomarkers',items:[{label:'AChR-Ab Positive',status:'match'}]},{type:'Medications',items:[{label:'Prior standard therapy',status:'match'}]},{type:'Screening',items:[{label:'Meningococcal vaccine status unknown',status:'unknown'}]}],
+    eligibility:{inclusion:['gMG Confirmed','AChR-Ab Positive','Prior Immunotherapy','Age ≥18 years'],exclusion:['MG crisis within 30 days','Active serious infection','Pregnancy']} },
+  { id:17, cat:'mylist', ml:'possible', type:'FDA-APPROVED', title:'ULTOMIRIS® (ravulizumab-cwvz)', sponsor:'Alexion/AstraZeneca', product:'Ultomiris', drug:'ravulizumab-cwvz', cls:'Complement inhibitor', form:'MEDICATION', desc:'FDA-approved complement inhibitor for adults with generalized myasthenia gravis who are anti-acetylcholine receptor (AChR) antibody-positive.', qf:['Diagnoses','Biomarkers','History'], crit:['[I] gMG Confirmed','[I] AChR-Ab Positive','[I] Prior Standard Therapy'],
+    matchGroups:[{type:'Diagnosis',items:[{label:'gMG Confirmed',status:'match'}]},{type:'Biomarkers',items:[{label:'AChR-Ab Positive',status:'match'}]},{type:'Medications',items:[{label:'Prior standard therapy',status:'match'}]},{type:'Screening',items:[{label:'Meningococcal vaccine status unknown',status:'unknown'}]}],
+    eligibility:{inclusion:['Generalized myasthenia gravis','Anti-AChR antibody positive','Prior standard therapy','Age ≥18 years'],exclusion:['Unresolved Neisseria meningitidis infection','Unvaccinated patients (unless benefits outweigh risks)']} }
+];
+
+const CAT_LABELS = {
+  all: 'All', full: 'Full Matches', near: 'Near Matches',
+  maybe: 'Maybe', previous: 'Previous', mismatch: 'Mismatch'
+};
+const CAT_DESCS = {
+  all: 'All care options matched to your profile — full matches, near matches, and maybes. Dismissed items appear at the bottom.',
+  full: 'Options where you meet all the key criteria.',
+  near: 'Options where you meet the main criteria but are close on others.',
+  maybe: 'Options where some matching data is incomplete or pending.',
+  previous: 'Treatments or trials you have previously tried.',
+  mismatch: 'Options where you do not currently meet the eligibility criteria.',
+};
+// Empty-state icons (32px flat SVGs)
+const ICON_EMPTY_ALL      = `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>`;
+const ICON_EMPTY_FULL     = `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+const ICON_EMPTY_NEAR     = `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+const ICON_EMPTY_MAYBE    = `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`;
+const ICON_EMPTY_PREVIOUS = `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`;
+const ICON_EMPTY_MISMATCH = `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`;
+const CAT_ICONS = { all: ICON_EMPTY_ALL, full: ICON_EMPTY_FULL, near: ICON_EMPTY_NEAR, maybe: ICON_EMPTY_MAYBE, previous: ICON_EMPTY_PREVIOUS, mismatch: ICON_EMPTY_MISMATCH };
+
+let cats = {}; // id → current category
+items.forEach(d => { cats[d.id] = d.cat; });
+
+let activeCat = 'full';
+let selId = null;
+const topChoices = new Set();
+let showTopOnly = false;
+
+// ── Filter state ──────────────────────────────────────────
+const activeFilters = { optionType: new Set(), therapyCategory: new Set(), therapyType: new Set(), phase: new Set(), sponsor: new Set() };
+
+const FILTER_FIELDS = {
+  optionType:      it => it.type === 'TREATMENTS' ? 'Approved Treatment' : 'Clinical Trial',
+  therapyCategory: it => (it.cls || '').toLowerCase().includes('car') || (it.cls || '').toLowerCase().includes('cell') ? 'Cell Therapy' : 'Medication',
+  therapyType:     it => it.cls,
+  phase:           it => { const m = (it.product || '').match(/Phase\s*(\d+(?:\/\d+)?)/i); return m ? m[1] : null; },
+  sponsor:         it => it.sponsor,
+};
+
+function filterMatches(it) {
+  for (const [key, set] of Object.entries(activeFilters)) {
+    if (set.size === 0) continue;
+    const fn = FILTER_FIELDS[key];
+    const val = fn ? fn(it) : null;
+    if (val == null) return false;
+    const norm = String(val).replace(/^Phase\s*/i, '');
+    if (!set.has(val) && !set.has(norm)) return false;
+  }
+  return true;
+}
+
+function updateFilterBtns() {
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    const key = btn.dataset.filter;
+    const set = activeFilters[key];
+    const hasActive = set && set.size > 0;
+    btn.classList.toggle('has-active', hasActive);
+    let badge = btn.querySelector('.filter-badge');
+    if (hasActive) {
+      if (!badge) { badge = document.createElement('span'); badge.className = 'filter-badge'; btn.insertBefore(badge, btn.querySelector('.fchev')); }
+      badge.textContent = set.size;
+    } else if (badge) badge.remove();
+  });
+}
+
+document.addEventListener('click', e => {
+  const btn = e.target.closest('.filter-btn');
+  if (btn) {
+    const menu = btn.closest('.filter-wrap').querySelector('.dropdown-menu');
+    const isOpen = menu.classList.contains('open');
+    document.querySelectorAll('.dropdown-menu.open').forEach(m => m.classList.remove('open'));
+    document.querySelectorAll('.filter-btn.open').forEach(b => b.classList.remove('open'));
+    if (!isOpen) { menu.classList.add('open'); btn.classList.add('open'); }
+    return;
+  }
+  if (!e.target.closest('.dropdown-menu')) {
+    document.querySelectorAll('.dropdown-menu.open').forEach(m => m.classList.remove('open'));
+    document.querySelectorAll('.filter-btn.open').forEach(b => b.classList.remove('open'));
+  }
+});
+
+document.querySelectorAll('.dropdown-menu input[type=checkbox]').forEach(cb => {
+  const key = cb.closest('.dropdown-menu').dataset.filter;
+  cb.addEventListener('change', () => {
+    if (cb.checked) activeFilters[key].add(cb.value);
+    else activeFilters[key].delete(cb.value);
+    updateFilterBtns();
+    renderAppliedFilters();
+    renderCards();
+  });
+});
+
+const ML_RANK = { full: 0, partial: 1, possible: 2 };
+
+function compareItems(a, b) {
+  // 1. Top choice first
+  const aTop = topChoices.has(a.id) ? 0 : 1;
+  const bTop = topChoices.has(b.id) ? 0 : 1;
+  if (aTop !== bTop) return aTop - bTop;
+  // 2. Match quality (full → near → maybe)
+  const aML = ML_RANK[a.ml] ?? 9;
+  const bML = ML_RANK[b.ml] ?? 9;
+  if (aML !== bML) return aML - bML;
+  // 3. Alphabetical by drug name
+  return (a.drug || '').localeCompare(b.drug || '');
+}
+
+function bycat(c) {
+  const topFilter = d => !showTopOnly || topChoices.has(d.id);
+  const active = items.filter(d => cats[d.id] === 'mylist' && filterMatches(d) && topFilter(d))
+                      .sort(compareItems);
+  if (c === 'all')      return { active, dismissed: showTopOnly ? [] : items.filter(d => cats[d.id] === 'dismissed' && filterMatches(d)) };
+  if (c === 'full')     return active.filter(d => d.ml === 'full');
+  if (c === 'near')     return active.filter(d => d.ml === 'partial');
+  if (c === 'maybe')    return active.filter(d => d.ml === 'possible');
+  if (c === 'previous') return showTopOnly ? [] : items.filter(d => cats[d.id] === 'previous' && filterMatches(d));
+  if (c === 'mismatch') return showTopOnly ? [] : items.filter(d => cats[d.id] === 'mismatch' && filterMatches(d));
+  return [];
+}
+
+function mbadge(ml, cat) {
+  if (cat === 'mismatch') return '<span class="badge b-nonmatch">MISMATCH</span>';
+  if (ml === 'full')      return '<span class="badge b-full">FULL MATCH</span>';
+  if (ml === 'partial')   return '<span class="badge b-partial">NEAR MATCH</span>';
+  if (ml === 'possible')  return '<span class="badge b-possible">MAYBE</span>';
+  return '<span class="badge b-none">NO MATCH</span>';
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+function updateCounts() {
+  const { active, dismissed } = bycat('all');
+  document.getElementById('c-all').textContent      = active.length + dismissed.length;
+  document.getElementById('c-full').textContent     = bycat('full').length;
+  document.getElementById('c-near').textContent     = bycat('near').length;
+  document.getElementById('c-maybe').textContent    = bycat('maybe').length;
+  document.getElementById('c-previous').textContent = bycat('previous').length;
+  document.getElementById('c-mismatch').textContent = bycat('mismatch').length;
+}
+
+function move(id, tgt) {
+  cats[id] = tgt;
+  updateCounts();
+  if (selId === id) refreshDetailActions(id);
+  renderCards();
+  if (tgt === 'dismissed') toast('Dismissed');
+  else if (tgt === 'mylist') toast('Restored to matches');
+  else toast('Moved to "' + (CAT_LABELS[tgt] || tgt) + '"');
+}
+
+function formatTitle(title) {
+  const colon = title.indexOf(':');
+  if (colon > 0 && colon <= 40 && /^[A-Z0-9]/.test(title)) {
+    const name = title.slice(0, colon);
+    const desc = title.slice(colon + 1).trim();
+    return `<span class="card-title-name">${name}:</span> ${desc}`;
+  }
+  return title;
+}
+
+function typeBadge(type) {
+  const FLASK = '<svg width="11" height="13" viewBox="0 0 11 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 1V5.5L1.5 10C1 11 1.5 12 3 12H8C9.5 12 10 11 9.5 10L7 5.5V1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M3.5 1H7.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M2 9.5H9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/></svg>';
+  const TAG   = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 1.5H5.5L10.5 6.5L6.5 10.5L1.5 5.5V1.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><circle cx="3.5" cy="3.5" r="0.8" fill="currentColor"/></svg>';
+  if (type === 'CLINICAL TRIAL') return '<span class="badge b-trial">' + FLASK + ' Clinical Trial</span>';
+  if (type === 'TREATMENTS' || type === 'FDA-APPROVED') return '<span class="badge b-fda">' + TAG + ' FDA-Approved</span>';
+  return '<span class="badge b-type">' + type + '</span>';
+}
+
+// ── Filter label display names ─────────────────────────────
+const FILTER_LABELS = {
+  optionType:      'Option type',
+  therapyCategory: 'Therapy category',
+  therapyType:     'Therapy type',
+  phase:           'Phase',
+  sponsor:         'Sponsor'
+};
+
+function pillData(it) {
+  const catVal   = (it.cls || '').toLowerCase().includes('car') || (it.cls || '').toLowerCase().includes('cell') ? 'Cell Therapy' : 'Medication';
+  const typeVal  = it.cls;
+  const phaseMatch = (it.product || '').match(/Phase\s*(\d+(?:\/\d+)?)/i);
+  const phaseVal = phaseMatch ? phaseMatch[1] : null;
+  const drugVal  = it.drug;
+  return { catVal, typeVal, phaseVal, drugVal };
+}
+
+function pill(text, activeClass) {
+  return `<span class="card-tag${activeClass ? ' tag-active' : ''}">${text}</span>`;
+}
+
+function cardPills(it) {
+  const { catVal, typeVal, phaseVal, drugVal } = pillData(it);
+  const af = activeFilters;
+
+  const catActive  = af.therapyCategory.size > 0 && af.therapyCategory.has(catVal);
+  const typeActive = af.therapyType.size > 0 && af.therapyType.has(typeVal);
+  const phaseActive = phaseVal && af.phase.size > 0 && af.phase.has(phaseVal);
+
+  let html = '<div class="card-pills">';
+  html += `<div class="pill-group"><span class="pill-label">Therapy category</span>${pill(catVal, catActive)}</div>`;
+  if (typeVal) {
+    html += `<div class="pill-group"><span class="pill-label">Therapy type</span>${pill(typeVal, typeActive)}</div>`;
+  }
+  if (phaseVal) {
+    html += `<div class="pill-group"><span class="pill-label">Phase</span>${pill('Phase ' + phaseVal, phaseActive)}</div>`;
+  }
+  if (drugVal) {
+    html += `<div class="pill-group"><span class="pill-label">Drug</span>${pill(drugVal, false)}</div>`;
+  }
+  html += '</div>';
+  return html;
+}
+
+function renderAppliedFilters() {
+  const bar = document.getElementById('appliedFilters');
+  const chips = [];
+
+  for (const [key, set] of Object.entries(activeFilters)) {
+    if (!set.size) continue;
+    set.forEach(val => {
+      const display = key === 'phase' ? 'Phase ' + val : val;
+      chips.push({ key, val, display, label: FILTER_LABELS[key] });
+    });
+  }
+
+  if (!chips.length) {
+    bar.innerHTML = '';
+    bar.classList.remove('visible');
+    return;
+  }
+
+  bar.classList.add('visible');
+  let html = chips.map(({ key, val, display, label }) =>
+    `<span class="af-chip">
+       <span class="af-chip-label">${label}:</span> ${display}
+       <button title="Remove filter" data-key="${key}" data-val="${val}">×</button>
+     </span>`
+  ).join('');
+  html += `<button class="af-clear-all" id="afClearAll">Clear all</button>`;
+  bar.innerHTML = html;
+
+  bar.querySelectorAll('.af-chip button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeFilters[btn.dataset.key].delete(btn.dataset.val);
+      const cb = document.querySelector(`.dropdown-menu[data-filter="${btn.dataset.key}"] input[value="${CSS.escape(btn.dataset.val)}"]`);
+      if (cb) cb.checked = false;
+      updateFilterBtns();
+      renderAppliedFilters();
+      renderCards();
+    });
+  });
+
+  document.getElementById('afClearAll')?.addEventListener('click', () => {
+    for (const set of Object.values(activeFilters)) set.clear();
+    document.querySelectorAll('.dropdown-menu input[type=checkbox]').forEach(cb => cb.checked = false);
+    updateFilterBtns();
+    renderAppliedFilters();
+    renderCards();
+  });
+}
+
+const STAR_HOLLOW   = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+const STAR_SOLID    = `<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+const CIRCLE_SLASH  = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><line x1="5" y1="5" x2="19" y2="19"/></svg>`;
+
+// Large variants (17px) for detail panel 3-state button
+const STAR_HOLLOW_LG  = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+const STAR_SOLID_LG   = `<svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+const CIRCLE_SLASH_LG = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><line x1="5" y1="5" x2="19" y2="19"/></svg>`;
+
+// Detail section icons (16px flat SVGs)
+const ICON_SHIELD    = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`;
+const ICON_TROPHY    = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 9a6 6 0 0 0 12 0"/><line x1="12" y1="15" x2="12" y2="22"/><polyline points="9 22 15 22"/><rect x="4" y="7" width="4" height="7"/><rect x="16" y="7" width="4" height="7"/></svg>`;
+const ICON_WARN      = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`;
+const ICON_PILL      = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 20.5l10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7z"/><line x1="8.5" y1="8.5" x2="15.5" y2="15.5"/></svg>`;
+const ICON_FOLDER    = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>`;
+const ICON_CLIPBOARD = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>`;
+const ICON_DOC       = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:3px;vertical-align:-2px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`;
+const ICON_CHECK_SM  = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4AAC31" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+
+// Match status row icons (circled)
+const MS_ICON_MATCH    = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4AAC31" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="16 9 10.5 15 8 12.5"/></svg>`;
+const MS_ICON_MISMATCH = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#BA1000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`;
+const MS_ICON_NEAR     = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C58A1C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="0.5" fill="#C58A1C"/></svg>`;
+const MS_ICON_UNKNOWN  = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C58A1C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><circle cx="12" cy="17" r="0.5" fill="#C58A1C"/></svg>`;
+const MS_SHIELD_OUTLINE = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`;
+const MS_TIER_CONFIG = {
+  full:     { label: 'Full Match', cls: 'ms-hdr-full', tierCls: 'ms-tier-full', explain: 'You meet all the eligibility criteria for this care option.' },
+  partial:  { label: 'Near Match', cls: 'ms-hdr-partial', tierCls: 'ms-tier-partial', explain: 'You are close to matching on one or more of the eligibility criteria.' },
+  possible: { label: 'Maybe',      cls: 'ms-hdr-possible', tierCls: 'ms-tier-possible', explain: "We're missing your data for one or more of the eligibility criteria." },
+  mismatch: { label: 'Mismatch',   cls: 'ms-hdr-mismatch', tierCls: 'ms-tier-mismatch', explain: 'There are one or more unmet eligibility criteria.' },
+};
+const ICON_LINK_EXT = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`;
+
+const ML_HDR = {
+  full:     { cls: 'gh-full',     label: 'Full Matches', icon: '✅', desc: 'You meet all the criteria.' },
+  partial:  { cls: 'gh-partial',  label: 'Near Matches', icon: '🟠', desc: "You meet the main criteria and are close on a few others.", learnMore: '#' },
+  possible: { cls: 'gh-possible', label: 'Maybe',        icon: '🔴', desc: 'Some matching data is incomplete or pending.', learnMore: '#' },
+};
+const ML_CARD_CLS = { full: 'c-full', partial: 'c-partial', possible: 'c-possible' };
+
+function closeAllMoreMenus() {
+  document.querySelectorAll('.more-menu.open').forEach(m => m.classList.remove('open'));
+}
+
+function renderCards() {
+  const list = document.getElementById('cardList');
+  document.getElementById('secLabel').textContent = CAT_LABELS[activeCat];
+  document.getElementById('secDesc').textContent = CAT_DESCS[activeCat];
+
+  const raw = bycat(activeCat);
+
+  // 'all' returns {active, dismissed}; all other tabs return arrays
+  let data, dismissed;
+  if (activeCat === 'all') {
+    data = raw.active;
+    dismissed = raw.dismissed;
+  } else {
+    data = raw;
+    dismissed = [];
+  }
+
+  if (!data.length && !dismissed.length) {
+    list.innerHTML = `<div class="empty-list"><div class="ei">${CAT_ICONS[activeCat]}</div><div>No items here yet</div></div>`;
+    return;
+  }
+
+  list.innerHTML = '';
+  let lastMl = null;
+
+  function appendCard(it, isDismissedItem) {
+    const c = cats[it.id];
+    const isTop = topChoices.has(it.id);
+    const tierCls = c === 'mylist' ? (ML_CARD_CLS[it.ml] || '') : '';
+
+
+    // Build 3-state action button
+    let iconsHtml = '';
+    if (c === 'mylist') {
+      iconsHtml = `
+        <div class="cap-popout">
+          <button class="cap-btn cap-dismiss" data-id="${it.id}" title="Dismiss">${CIRCLE_SLASH}</button>
+          <button class="cap-btn cap-star" data-id="${it.id}" title="${isTop ? 'Remove top choice' : 'Mark as top choice'}">${isTop ? STAR_SOLID : STAR_HOLLOW}</button>
+        </div>
+        <button class="cap-trigger ${isTop ? 'star-on' : ''}" data-id="${it.id}" title="${isTop ? 'Top choice — click to remove' : 'Options'}">${isTop ? STAR_SOLID : STAR_HOLLOW}</button>`;
+    } else if (c === 'dismissed') {
+      iconsHtml = `
+        <button class="cap-trigger restore-on ci-restore" data-id="${it.id}" title="Restore to matches">${CIRCLE_SLASH}</button>`;
+    }
+
+    const card = document.createElement('div');
+    card.className = ['card', tierCls, isDismissedItem ? 'dimmed' : '', selId === it.id ? 'selected' : ''].filter(Boolean).join(' ');
+
+    card.innerHTML = `
+      ${iconsHtml ? `<div class="card-action-wrap" onclick="event.stopPropagation()">${iconsHtml}</div>` : ''}
+      <div class="card-badges">
+        ${typeBadge(it.type)}
+        ${mbadge(it.ml, cats[it.id])}
+      </div>
+      <div class="card-title">${formatTitle(it.title)}</div>
+      <div class="card-meta">${it.sponsor} • ${it.product}</div>
+      ${cardPills(it)}`;
+
+    card.addEventListener('click', () => selectCard(it.id));
+
+    // Star in popout: toggle top choice
+    const capStar = card.querySelector('.cap-star');
+    if (capStar) capStar.addEventListener('click', e => {
+      e.stopPropagation();
+      toggleTop(parseInt(e.currentTarget.dataset.id), e);
+    });
+
+    // Dismiss in popout
+    const capDismiss = card.querySelector('.cap-dismiss');
+    if (capDismiss) capDismiss.addEventListener('click', e => {
+      e.stopPropagation();
+      move(parseInt(e.currentTarget.dataset.id), 'dismissed');
+    });
+
+    // Trigger: if star-on, clicking toggles off; otherwise no-op (hover reveals popout)
+    const capTrigger = card.querySelector('.cap-trigger:not(.restore-on)');
+    if (capTrigger) capTrigger.addEventListener('click', e => {
+      e.stopPropagation();
+      if (capTrigger.classList.contains('star-on')) {
+        toggleTop(parseInt(e.currentTarget.dataset.id), e);
+      }
+    });
+
+    // Restore (dismissed items)
+    const ciRestore = card.querySelector('.ci-restore');
+    if (ciRestore) ciRestore.addEventListener('click', e => {
+      e.stopPropagation();
+      move(parseInt(e.currentTarget.dataset.id), 'mylist');
+    });
+
+    list.appendChild(card);
+  }
+
+  // Render active items
+  data.forEach(it => appendCard(it, false));
+
+  // Render dismissed section at bottom of All tab
+  if (dismissed.length > 0) {
+    const sectionHdr = document.createElement('div');
+    sectionHdr.className = 'dis-section-hdr';
+    sectionHdr.innerHTML = `<span>Dismissed</span><span class="group-count">${dismissed.length}</span>`;
+    list.appendChild(sectionHdr);
+    dismissed.forEach(it => appendCard(it, true));
+  }
+}
+
+function selectCard(id) {
+  selId = id;
+  renderCards();
+  renderDetail(id);
+  document.getElementById('rightPanel').scrollTop = 0;
+}
+
+function renderDetail(id) {
+  const it = items.find(d => d.id === id);
+  if (!it) return;
+
+  const isTreatment = it.type === 'TREATMENTS' || it.type === 'FDA-APPROVED';
+
+  document.getElementById('dBadges').innerHTML = `${typeBadge(it.type)}${mbadge(it.ml, cats[it.id])}`;
+  document.getElementById('dTitle').innerHTML = formatTitle(it.title).replace('card-title-name', 'detail-title-name');
+  document.getElementById('dMeta').textContent = `${it.sponsor} • ${it.cls.toUpperCase()}`;
+
+  const adminEl = document.getElementById('dAdmin');
+  adminEl.textContent = it.admin || '';
+  adminEl.style.display = it.admin ? '' : 'none';
+
+  document.getElementById('dPills').innerHTML = cardPills(it);
+
+  document.getElementById('dDesc').textContent = it.desc;
+
+  const sec = document.getElementById('dSections');
+  sec.innerHTML = '';
+
+  // Match Status card (all item types that have matchGroups)
+  if (it.matchGroups) {
+    const allItems = it.matchGroups.flatMap(g => g.items);
+    const hasUnknown = allItems.some(i => i.status === 'unknown');
+
+    function msIcon(status) {
+      if (status === 'match') return MS_ICON_MATCH;
+      if (status === 'mismatch') return MS_ICON_MISMATCH;
+      if (status === 'near') return MS_ICON_NEAR;
+      return MS_ICON_UNKNOWN;
+    }
+    function msCls(status) {
+      if (status === 'match') return 'ms-match';
+      if (status === 'mismatch') return 'ms-mismatch';
+      if (status === 'near') return 'ms-near';
+      return 'ms-unknown';
+    }
+
+    const groups = it.matchGroups.map(g => {
+      const met = g.items.filter(i => i.status === 'match').length;
+      const total = g.items.length;
+      const hasMismatch = g.items.some(i => i.status === 'mismatch');
+      const hasNearOrUnknown = g.items.some(i => i.status === 'near' || i.status === 'unknown');
+      const countCls = met === total ? 'gc-all-met' : hasMismatch ? 'gc-has-mismatch' : 'gc-some-unmet';
+      const countText = `${met} of ${total} met`;
+      const items = g.items.map(i =>
+        `<div class="ms-item"><span class="ms-status-icon">${msIcon(i.status)}</span><span class="ms-item-label ${msCls(i.status)}">${i.label}</span></div>`
+      ).join('');
+      return `<div class="ms-group"><div class="ms-group-hdr"><span class="ms-group-name">${g.type}</span><span class="ms-group-count ${countCls}">${countText}</span></div><div class="ms-group-items">${items}</div></div>`;
+    }).join('');
+
+    const warning = '';
+    const banner = `<div class="correction-banner"><div class="banner-text"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><p><strong>Does this data look correct?</strong> If something seems off, let us know and Resonata will get it corrected.</p></div><button class="banner-btn" onclick="openChatPanel(${it.id})">Let's fix this</button></div>`;
+    const tierKey = cats[it.id] === 'mismatch' ? 'mismatch' : it.ml;
+    const tier = MS_TIER_CONFIG[tierKey] || MS_TIER_CONFIG.full;
+    sec.innerHTML += `<div class="ms-card"><div class="ms-card-hdr"><span class="ms-card-hdr-icon ${tier.cls}">${MS_SHIELD_OUTLINE}</span><span class="ms-card-hdr-label">Your Match Status: <span class="${tier.tierCls}">${tier.label}</span></span></div><div class="ms-card-explain">${tier.explain}</div>${groups}${warning}${banner}</div>`;
+  }
+
+  // NOTE: Efficacy, Safety, Dosing, and Documents sections removed for this version.
+  // Data and CSS are preserved — these will be re-enabled in a future version.
+
+  // Eligibility Criteria card (all care options with eligibility data)
+  if (it.eligibility) {
+    const incItems = it.eligibility.inclusion.map(c => `<li>${c}</li>`).join('');
+    const excItems = it.eligibility.exclusion.map(c => `<li>${c}</li>`).join('');
+    sec.innerHTML += `<div class="elig-card"><div class="elig-card-hdr">Eligibility Criteria</div><div class="elig-cols"><div><div class="elig-col-hdr"><span class="ms-status-icon">${MS_ICON_MATCH}</span><span class="elig-col-hdr-label inc">Inclusion Criteria</span></div><ul class="elig-list inc-list">${incItems}</ul></div><div><div class="elig-col-hdr"><span class="ms-status-icon">${MS_ICON_MISMATCH}</span><span class="elig-col-hdr-label exc">Exclusion Criteria</span></div><ul class="elig-list exc-list">${excItems}</ul></div></div></div>`;
+  }
+
+  // Bottom info card: "Official Trial Information" for trials, "Learn More" for FDA-approved/treatments
+  if (it.type === 'CLINICAL TRIAL' && it.nctId) {
+    sec.innerHTML += `<div class="trial-info-card"><div class="trial-info-hdr"><span class="trial-info-hdr-icon">${ICON_SHIELD}</span><span class="trial-info-hdr-label">Official Trial Information</span></div><div class="trial-info-desc">View the complete trial protocol, eligibility criteria, and contact information on ClinicalTrials.gov.</div><a class="trial-info-btn" href="https://clinicaltrials.gov/study/${it.nctId}" target="_blank">${ICON_LINK_EXT} View on ClinicalTrials.gov</a></div>`;
+  } else if (isTreatment) {
+    if (it.sponsored) {
+      // Sponsored treatment: show customizable "Learn more about [Drug]" zone
+      sec.innerHTML += `<div class="sponsored-lm-zone">
+        <div class="slm-eyebrow">Sponsored &middot; ${it.sponsorName}</div>
+        <h3>Want to learn more about ${it.product}?</h3>
+        <p>Cost support options, how it works, and what to expect — all in one place.</p>
+        <button class="slm-btn" onclick="openDaughterPage(${it.id})">
+          Learn More About ${it.product}
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </div>`;
+    } else {
+      // Non-sponsored treatment: generic card with Google search link
+      const searchQuery = encodeURIComponent(`${it.product} ${it.drug || ''} treatment myasthenia gravis`);
+      sec.innerHTML += `<div class="trial-info-card"><div class="trial-info-hdr"><span class="trial-info-hdr-icon">${ICON_SHIELD}</span><span class="trial-info-hdr-label">Learn More</span></div><div class="trial-info-desc">Talk to your healthcare provider to find out if this treatment option is right for you.</div><a class="trial-info-btn" href="https://www.google.com/search?q=${searchQuery}" target="_blank">${ICON_LINK_EXT} Search for ${it.product}</a></div>`;
+    }
+  }
+
+  refreshDetailActions(id);
+
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('detailPanel').classList.add('visible');
+}
+
+function refreshDetailActions(id) {
+  if (selId !== id) return;
+  const c = cats[id];
+  const isTop = topChoices.has(id);
+  const da = document.getElementById('dActions');
+
+  if (c === 'mylist') {
+    da.innerHTML = `
+      <div class="det-cap-wrap" onclick="event.stopPropagation()">
+        <div class="det-cap-popout">
+          <button class="det-cap-btn dcap-dismiss" data-id="${id}" title="Dismiss">${CIRCLE_SLASH_LG}</button>
+          <button class="det-cap-btn dcap-star" data-id="${id}" title="${isTop ? 'Remove top choice' : 'Mark as top choice'}">${isTop ? STAR_SOLID_LG : STAR_HOLLOW_LG}</button>
+        </div>
+        <button class="det-cap-trigger ${isTop ? 'star-on' : ''}" data-id="${id}" title="${isTop ? 'Top choice — click to remove' : 'Options'}">${isTop ? STAR_SOLID_LG : STAR_HOLLOW_LG}</button>
+      </div>
+      <button class="share-btn" id="det-share-btn">↗ Share with Physician</button>`;
+  } else if (c === 'dismissed') {
+    da.innerHTML = `
+      <div class="det-cap-wrap" onclick="event.stopPropagation()">
+        <button class="det-cap-trigger restore-on ci-restore" data-id="${id}" title="Restore to matches">${CIRCLE_SLASH_LG}</button>
+      </div>
+      <button class="share-btn" id="det-share-btn">↗ Share with Physician</button>`;
+  } else {
+    da.innerHTML = `<button class="share-btn" id="det-share-btn">↗ Share with Physician</button>`;
+  }
+
+  const dcapStar = da.querySelector('.dcap-star');
+  if (dcapStar) dcapStar.addEventListener('click', e => {
+    e.stopPropagation();
+    toggleTop(parseInt(e.currentTarget.dataset.id), e);
+  });
+
+  const dcapDismiss = da.querySelector('.dcap-dismiss');
+  if (dcapDismiss) dcapDismiss.addEventListener('click', e => {
+    e.stopPropagation();
+    move(parseInt(e.currentTarget.dataset.id), 'dismissed');
+  });
+
+  const detTrigger = da.querySelector('.det-cap-trigger:not(.restore-on)');
+  if (detTrigger) detTrigger.addEventListener('click', e => {
+    e.stopPropagation();
+    if (detTrigger.classList.contains('star-on')) {
+      toggleTop(parseInt(e.currentTarget.dataset.id), e);
+    }
+  });
+
+  const ciRestore = da.querySelector('.ci-restore');
+  if (ciRestore) ciRestore.addEventListener('click', e => {
+    e.stopPropagation();
+    move(parseInt(e.currentTarget.dataset.id), 'mylist');
+  });
+
+  const shareBtn = da.querySelector('#det-share-btn');
+  if (shareBtn) shareBtn.addEventListener('click', () => {
+    openDlModal('detail');
+  });
+}
+
+// ── Download modal ──
+let dlSource = 'detail'; // 'detail' or 'profile'
+let dlSelected = null;
+
+function openDlModal(source) {
+  dlSource = source;
+  dlSelected = null;
+  const opts = document.getElementById('dlOptions');
+  const topCount = topChoices.size;
+  const allCount = items.filter(d => cats[d.id] === 'mylist').length;
+
+  let html = '';
+
+  // "This care option" only from detail panel
+  if (source === 'detail' && selId) {
+    const it = items.find(d => d.id === selId);
+    const name = it ? (it.product || it.drug || 'this care option') : 'this care option';
+    html += `<div class="dl-option" data-val="single" onclick="selectDlOption(this)"><div class="dl-option-radio"></div><div class="dl-option-body"><div class="dl-option-title"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> This Care Option</div><div class="dl-option-desc">Download a PDF summary of ${name}</div></div></div>`;
+  }
+
+  // Top choices
+  html += `<div class="dl-option${topCount === 0 ? ' disabled' : ''}" data-val="top" onclick="${topCount > 0 ? 'selectDlOption(this)' : ''}"><div class="dl-option-radio"></div><div class="dl-option-body"><div class="dl-option-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="#F8BD4F" stroke="#C58A1C" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Top Choices <span class="dl-count">${topCount}</span></div><div class="dl-option-desc">${topCount > 0 ? 'Download all care options you\'ve starred as top choices' : 'No top choices selected yet'}</div></div></div>`;
+
+  // All care options
+  html += `<div class="dl-option" data-val="all" onclick="selectDlOption(this)"><div class="dl-option-radio"></div><div class="dl-option-body"><div class="dl-option-title"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg> All Care Options <span class="dl-count">${allCount}</span></div><div class="dl-option-desc">Download all ${allCount} matched care options</div></div></div>`;
+
+  opts.innerHTML = html;
+  document.getElementById('dlBtn').disabled = true;
+  document.getElementById('dlOverlay').classList.add('open');
+}
+
+function closeDlModal() {
+  document.getElementById('dlOverlay').classList.remove('open');
+}
+
+function selectDlOption(el) {
+  if (el.classList.contains('disabled')) return;
+  document.querySelectorAll('.dl-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  dlSelected = el.dataset.val;
+  document.getElementById('dlBtn').disabled = false;
+}
+
+function handleDownload() {
+  const labels = { single: 'This Care Option', top: 'Top Choices', all: 'All Care Options' };
+  toast(`Downloading ${labels[dlSelected] || 'PDF'}...`);
+  closeDlModal();
+
+  // Open the corresponding PDF mockup in a new tab
+  const basePath = window.location.href.replace(/[^/]*$/, '');
+  const pdfFiles = {
+    single: 'resonata-pdf-single.html',
+    top: 'resonata-pdf-top-choices.html',
+    all: 'resonata-pdf-all.html'
+  };
+  setTimeout(() => window.open(basePath + pdfFiles[dlSelected], '_blank'), 400);
+}
+
+function toggleTop(id, e) {
+  e.stopPropagation();
+  if (cats[id] !== 'mylist') return;
+  if (topChoices.has(id)) {
+    topChoices.delete(id);
+    toast('Removed from Top Choices');
+  } else {
+    topChoices.add(id);
+    toast('Added to Top Choices ⭐');
+  }
+  renderCards();
+  if (selId === id) refreshDetailActions(id);
+}
+
+// Top choice filter toggle
+document.getElementById('topFilterBtn').addEventListener('click', () => {
+  showTopOnly = !showTopOnly;
+  document.getElementById('topFilterBtn').classList.toggle('top-active', showTopOnly);
+  updateCounts();
+  renderCards();
+});
+
+// Category tab clicks
+document.getElementById('catTabs').addEventListener('click', e => {
+  const tab = e.target.closest('.cat-tab');
+  if (!tab) return;
+  document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+  activeCat = tab.dataset.cat;
+  selId = null;
+  document.getElementById('emptyState').style.display = '';
+  document.getElementById('detailPanel').classList.remove('visible');
+  renderCards();
+});
+
+// Close any open more-menus when clicking outside
+document.addEventListener('click', e => {
+  if (!e.target.closest('.more-btn') && !e.target.closest('.more-menu')) {
+    closeAllMoreMenus();
+  }
+});
+
+updateCounts();
+renderCards();
+
+// ── Correction modal ──
+function openCorModal(itemId) {
+  const it = items.find(d => d.id === itemId);
+  const sel = document.getElementById('corSectionSelect');
+  sel.innerHTML = '<option value="">Select a section...</option>';
+  if (it && it.matchGroups) {
+    it.matchGroups.forEach(g => {
+      sel.innerHTML += `<option>${g.type}</option>`;
+    });
+  }
+  sel.innerHTML += '<option>Something else</option>';
+  document.getElementById('corFormState').style.display = 'block';
+  document.getElementById('corSuccess').style.display = 'none';
+  document.getElementById('corOverlay').classList.add('open');
+}
+function closeCorModal() {
+  document.getElementById('corOverlay').classList.remove('open');
+  document.getElementById('corSectionSelect').value = '';
+  document.getElementById('corDescription').value = '';
+}
+function submitCorForm() {
+  document.getElementById('corFormState').style.display = 'none';
+  document.getElementById('corSuccess').style.display = 'block';
+}
+
+// ── Chat panel (conversational correction) ──
+let chatItemId = null;
+let chatStep = 0;
+let chatCorrections = [];
+
+const CHAT_CHECK = `<svg width="15" height="15" fill="none" stroke="#4AAC31" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`;
+const CHAT_WARN  = `<svg width="15" height="15" fill="none" stroke="#C58A1C" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`;
+const CHAT_X     = `<svg width="15" height="15" fill="none" stroke="#BA1000" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`;
+
+function addAiMsg(html, delay) {
+  return new Promise(resolve => {
+    const msgs = document.getElementById('chatMessages');
+    // Show typing indicator
+    const typing = document.createElement('div');
+    typing.className = 'chat-msg ai';
+    typing.innerHTML = `<div class="chat-msg-avatar"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="chat-bubble"><div class="chat-typing"><div class="chat-typing-dot"></div><div class="chat-typing-dot"></div><div class="chat-typing-dot"></div></div></div>`;
+    msgs.appendChild(typing);
+    msgs.scrollTop = msgs.scrollHeight;
+
+    setTimeout(() => {
+      typing.remove();
+      const msg = document.createElement('div');
+      msg.className = 'chat-msg ai';
+      msg.innerHTML = `<div class="chat-msg-avatar"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="chat-bubble">${html}</div>`;
+      msgs.appendChild(msg);
+      msgs.scrollTop = msgs.scrollHeight;
+      resolve();
+    }, delay || 800);
+  });
+}
+
+function addUserMsg(text) {
+  const msgs = document.getElementById('chatMessages');
+  const msg = document.createElement('div');
+  msg.className = 'chat-msg user';
+  msg.innerHTML = `<div class="chat-bubble">${text}</div>`;
+  msgs.appendChild(msg);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function buildDataCard(matchGroups) {
+  let rows = '';
+  matchGroups.forEach(g => {
+    g.items.forEach(i => {
+      const icon = i.status === 'match' ? CHAT_CHECK : i.status === 'mismatch' ? CHAT_X : CHAT_WARN;
+      const cls = i.status === 'match' ? 'cd-match' : i.status === 'mismatch' ? 'cd-mismatch' : 'cd-near';
+      rows += `<div class="chat-data-row">${icon}<span class="cd-label">${g.type}:</span><span class="${cls}">${i.label}</span></div>`;
+    });
+  });
+  return `<div class="chat-data-card"><div class="chat-data-hdr">Your current match data</div>${rows}</div>`;
+}
+
+function buildGroupButtons(matchGroups) {
+  const btns = matchGroups.map(g =>
+    `<button class="chat-qr" onclick="selectGroup(this, '${g.type}')">${g.type}</button>`
+  ).join('');
+  return `<div class="chat-quick-replies">${btns}<button class="chat-qr" onclick="selectGroup(this, '__done__')">Everything else looks right</button></div>`;
+}
+
+async function openChatPanel(itemId) {
+  chatItemId = itemId;
+  chatStep = 0;
+  chatCorrections = [];
+  const it = items.find(d => d.id === itemId);
+  if (!it || !it.matchGroups) return;
+
+  document.getElementById('chatMessages').innerHTML = '';
+  document.getElementById('chatInput').value = '';
+  document.getElementById('chatOverlay').classList.add('open');
+  document.getElementById('chatPanel').classList.add('open');
+
+  const name = it.product || it.drug || 'this care option';
+
+  await addAiMsg(`Hi there! I'm here to help you review and correct your match data for <strong>${name}</strong>.`, 600);
+  await addAiMsg(`Here's what we currently have on file for you:${buildDataCard(it.matchGroups)}`, 1000);
+  await addAiMsg(`Take a look at each item. If anything seems wrong, tap the category below and I'll walk you through it.${buildGroupButtons(it.matchGroups)}`, 800);
+  chatStep = 1;
+}
+
+function closeChatPanel() {
+  document.getElementById('chatOverlay').classList.remove('open');
+  document.getElementById('chatPanel').classList.remove('open');
+}
+
+async function selectGroup(btn, groupType) {
+  // Mark button as selected
+  btn.classList.add('selected');
+  // Disable all sibling buttons
+  btn.parentElement.querySelectorAll('.chat-qr').forEach(b => { if (b !== btn) b.style.opacity = '.4'; b.style.pointerEvents = 'none'; });
+
+  if (groupType === '__done__') {
+    addUserMsg("Everything else looks right");
+    if (chatCorrections.length > 0) {
+      await addAiMsg(`Great, thanks for confirming! Here's a summary of what we'll correct:<div class="chat-data-card"><div class="chat-data-hdr">Corrections to submit</div>${chatCorrections.map(c => `<div class="chat-data-row">${CHAT_WARN}<span class="cd-label">${c.group}:</span><span class="cd-near">${c.detail}</span></div>`).join('')}</div>`, 800);
+      await addAiMsg(`I've submitted these corrections to the Resonata team. They'll review your records and update your match data. You'll get a notification when it's done. Is there anything else I can help with?<div class="chat-quick-replies"><button class="chat-qr" onclick="closeChatPanel()">That's all, thanks!</button></div>`, 1000);
+    } else {
+      await addAiMsg("Good to hear! If you ever notice something that doesn't look right, you can always come back here. Take care! 👋<div class=\"chat-quick-replies\"><button class=\"chat-qr\" onclick=\"closeChatPanel()\">Close</button></div>", 800);
+    }
+    return;
+  }
+
+  addUserMsg(`I think <strong>${groupType}</strong> might be wrong`);
+
+  const it = items.find(d => d.id === chatItemId);
+  const group = it.matchGroups.find(g => g.type === groupType);
+  const currentValues = group.items.map(i => i.label).join(', ');
+
+  await addAiMsg(`Got it. For <strong>${groupType}</strong>, we currently show: <strong>${currentValues}</strong>.<br><br>What should the correct value be? You can type it below, or describe what's different.`, 900);
+  chatStep = 2;
+  window._pendingCorrectionGroup = groupType;
+}
+
+async function sendChatMsg() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+
+  addUserMsg(text);
+
+  if (chatStep === 2 && window._pendingCorrectionGroup) {
+    chatCorrections.push({ group: window._pendingCorrectionGroup, detail: text });
+    window._pendingCorrectionGroup = null;
+
+    await addAiMsg(`Thanks, I've noted that. I'll flag <strong>${chatCorrections[chatCorrections.length-1].group}</strong> for correction.<br><br>Is there anything else that needs fixing?`, 900);
+
+    const it = items.find(d => d.id === chatItemId);
+    const remaining = it.matchGroups.filter(g => !chatCorrections.some(c => c.group === g.type));
+    if (remaining.length > 0) {
+      const btns = remaining.map(g =>
+        `<button class="chat-qr" onclick="selectGroup(this, '${g.type}')">${g.type}</button>`
+      ).join('');
+      await addAiMsg(`<div class="chat-quick-replies">${btns}<button class="chat-qr" onclick="selectGroup(this, '__done__')">No, that's everything</button></div>`, 400);
+    } else {
+      await addAiMsg(`That covers all the categories. Let me submit these corrections for you.`, 600);
+      await addAiMsg(`I've submitted ${chatCorrections.length} correction${chatCorrections.length > 1 ? 's' : ''} to the Resonata team. They'll review and get back to you. Take care!<div class="chat-quick-replies"><button class="chat-qr" onclick="closeChatPanel()">Thanks!</button></div>`, 1000);
+    }
+    chatStep = 1;
+  } else {
+    await addAiMsg("I hear you. Could you tap one of the categories above to help me understand which specific data point needs fixing? That way I can make sure we correct the right thing.", 800);
+  }
+}
+
+/* ── Daughter page ────────────────────────────────────────────────────────── */
+function openDaughterPage(id) {
+  document.getElementById('dpOverlay').classList.add('open');
+  document.getElementById('dpPanel').classList.add('open');
+  document.getElementById('dpPanel').scrollTop = 0;
+}
+
+function closeDaughterPage() {
+  document.getElementById('dpOverlay').classList.remove('open');
+  document.getElementById('dpPanel').classList.remove('open');
+}
+</script>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     DAUGHTER PAGE — Resonata-hosted sponsored landing page: Imaavy® (Janssen)
+     Opens as a slide-in panel from the Care Option Detail "Learn More" button.
+     Content is strictly on-label (Imaavy Prescribing Information, 2024).
+     Sponsor files this page with FDA before launch per promotional review reqs.
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<div class="dp-overlay" id="dpOverlay" onclick="if(event.target===this)closeDaughterPage()"></div>
+
+<div class="dp-panel" id="dpPanel">
+
+  <!-- Nav -->
+  <div class="dp-nav">
+    <div class="dp-nav-logo">
+      <div class="dp-nav-logo-mark">
+        <svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="#319218" opacity="0.15"/><path d="M10 16.5l4 4 8-8" stroke="#319218" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="dp-nav-logo-text">Resonata</div>
+    </div>
+    <span class="dp-nav-sponsored">Sponsored</span>
+  </div>
+
+  <!-- Back bar -->
+  <div class="dp-back-bar">
+    <a onclick="closeDaughterPage(); return false;" href="#">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Back to your results
+    </a>
+  </div>
+
+  <!-- Hero -->
+  <div class="dp-hero">
+    <div class="dp-hero-inner">
+      <div class="dp-sponsor-badge">Janssen (Johnson &amp; Johnson) · Sponsored</div>
+      <div class="dp-hero-eyebrow">FDA Approved · Generalized Myasthenia Gravis</div>
+      <h1>Imaavy®</h1>
+      <div class="dp-generic">nipocalimab-aahu</div>
+      <div class="dp-match-pill">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+        You may be eligible
+      </div>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="dp-body">
+
+    <!-- How it works -->
+    <div class="dp-section">
+      <h2><span>💊</span> How Imaavy works</h2>
+      <p>Imaavy (nipocalimab-aahu) is a high-affinity humanized monoclonal antibody that works by blocking the neonatal Fc receptor (FcRn). By binding FcRn, Imaavy reduces the recycling of IgG antibodies — including the harmful autoantibodies (anti-AChR and anti-MuSK) that attack the neuromuscular junction and cause myasthenia gravis symptoms.</p>
+      <p>It is FDA approved for adults and pediatric patients 12 years and older with generalized myasthenia gravis who are AChR or MuSK antibody positive.</p>
+
+      <div class="dp-stat-row">
+        <div class="dp-stat">
+          <div class="dp-num">4.7 pts</div>
+          <div class="dp-lbl">MG-ADL improvement vs 1.3 pts placebo (ADAPT-NXT)</div>
+        </div>
+        <div class="dp-stat">
+          <div class="dp-num">58%</div>
+          <div class="dp-lbl">achieved ≥3 pt MG-ADL improvement vs 26% placebo</div>
+        </div>
+        <div class="dp-stat">
+          <div class="dp-num">Age 12+</div>
+          <div class="dp-lbl">approved for adults and adolescents ≥12 years</div>
+        </div>
+      </div>
+      <p style="font-size:0.78rem;color:#9aaa96;margin-top:6px;">Data from the ADAPT-NXT Phase 3 trial (randomized, double-blind, placebo-controlled). Individual results may vary. Source: Imaavy Prescribing Information, 2024.</p>
+    </div>
+
+    <!-- What to expect -->
+    <div class="dp-section">
+      <h2><span>📋</span> What to expect</h2>
+      <ul>
+        <li><strong>Dosing:</strong> Loading dose of 30 mg/kg IV over 60 minutes on Day 1, then 15 mg/kg IV every 2 weeks starting at Week 2.</li>
+        <li><strong>Setting:</strong> Administered by a healthcare provider as an intravenous (IV) infusion — typically in a clinic or infusion center.</li>
+        <li><strong>Monitoring:</strong> IgG levels will be monitored periodically. Your doctor may adjust dosing based on your response.</li>
+        <li><strong>Duration:</strong> Treatment continues as long as your doctor determines it's beneficial. Each infusion takes approximately 60 minutes.</li>
+        <li><strong>Drug interactions:</strong> Tell your doctor about all medications, especially live or live-attenuated vaccines (should be up to date before starting).</li>
+      </ul>
+    </div>
+
+    <!-- Safety profile -->
+    <div class="dp-section">
+      <h2><span>⚠️</span> Safety profile</h2>
+      <p><strong>Most common adverse reactions (≥10% in clinical trials):</strong></p>
+      <ul>
+        <li>Headache</li>
+        <li>Upper respiratory infection</li>
+        <li>Nausea</li>
+        <li>Fatigue</li>
+        <li>Injection site reactions</li>
+      </ul>
+      <p><strong>Serious risks to discuss with your doctor:</strong></p>
+      <ul>
+        <li>Serious infections (Imaavy reduces IgG antibodies broadly — ensure vaccinations are current before starting)</li>
+        <li>Hypersensitivity reactions (including anaphylaxis)</li>
+        <li>Thromboembolic events</li>
+      </ul>
+      <p><strong>Do not use Imaavy if you:</strong></p>
+      <ul>
+        <li>Have a known serious hypersensitivity to nipocalimab-aahu or any of its excipients</li>
+        <li>Have an unresolved serious infection</li>
+      </ul>
+      <p style="font-size:0.8rem;color:#9aaa96;">This is not a complete list. See the Important Safety Information below and talk to your doctor about your specific situation.</p>
+    </div>
+
+    <!-- Sponsor CTA zone (customizable) -->
+    <div class="dp-cta-zone">
+      <div class="dp-cta-sponsor-label">From Janssen (Johnson &amp; Johnson)</div>
+      <h2>Ready to take the next step?</h2>
+      <p>Learn about financial support options and find a MG specialist near you.</p>
+      <div class="dp-cta-btns">
+        <button class="dp-cta-btn-primary" onclick="alert('In the real product, this links to the Imaavy patient support and cost assistance program.')">
+          Learn about cost support options
+        </button>
+        <button class="dp-cta-btn-secondary" onclick="alert('In the real product, this links to a MG specialist locator tool.')">
+          Find a MG specialist near you
+        </button>
+      </div>
+      <a class="dp-exit-link" href="#" onclick="alert('In the real product, this exits to imaavy.com.'); return false;">Visit Imaavy.com for full prescribing information →</a>
+    </div>
+
+    <!-- ISI — Important Safety Information -->
+    <div class="dp-isi">
+      <div class="dp-isi-label">Important Safety Information</div>
+      <h3>Imaavy® (nipocalimab-aahu)</h3>
+
+      <p><strong>SERIOUS INFECTIONS</strong><br>
+      Imaavy reduces IgG antibody levels, which may increase the risk of serious infections. Ensure patients are current on all recommended vaccinations prior to initiating Imaavy. Monitor for signs and symptoms of infection during treatment. Withhold Imaavy for serious infections and resume when the infection has resolved.</p>
+
+      <p><strong>HYPERSENSITIVITY REACTIONS</strong><br>
+      Serious hypersensitivity reactions, including anaphylaxis, have been observed with Imaavy. Discontinue the infusion immediately for severe hypersensitivity reactions and institute appropriate medical treatment. Imaavy is contraindicated in patients with known serious hypersensitivity to nipocalimab-aahu or any of its excipients.</p>
+
+      <p><strong>THROMBOEMBOLIC EVENTS</strong><br>
+      Thromboembolic events have been reported with Imaavy and other FcRn inhibitors. Monitor patients for signs and symptoms of thromboembolic events and treat appropriately.</p>
+
+      <p><strong>REDUCTION IN PROTECTIVE ANTIBODIES</strong><br>
+      Imaavy reduces total IgG levels, including protective antibodies against infections. This may increase susceptibility to infections. Consider the benefits and risks before initiating Imaavy in patients with a history of recurrent infections.</p>
+
+      <p><strong>ADVERSE REACTIONS</strong><br>
+      The most common adverse reactions (incidence ≥10% and at least 2% greater than placebo) in the ADAPT-NXT trial were: headache, upper respiratory infection, nausea, fatigue, and injection site reactions.</p>
+
+      <p><strong>USE IN SPECIFIC POPULATIONS</strong><br>
+      Pregnancy: May cause fetal harm based on its mechanism of action. Advise patients of the potential risk to the fetus and to use effective contraception.<br>
+      Lactation: Advise patients that breastfeeding is not recommended during treatment with Imaavy.</p>
+
+      <p>Please see full <a href="#" onclick="return false;">Prescribing Information</a> and <a href="#" onclick="return false;">Medication Guide</a>, including WARNINGS AND PRECAUTIONS.</p>
+    </div>
+
+    <!-- FDA note -->
+    <div class="dp-fda-note">
+      This page was prepared by Janssen Pharmaceuticals, Inc. (Johnson &amp; Johnson) and is subject to FDA promotional review. Content reflects the approved labeling (Prescribing Information) for Imaavy® as of 2024. This page is hosted by Resonata Health, Inc. as part of its sponsored treatment information program.
+      <br><br>
+      Resonata is an independent patient matching platform. Sponsored placement does not affect your match results or eligibility assessments. All match data is based solely on your medical record.
+    </div>
+
+  </div><!-- /.dp-body -->
+</div><!-- /#dpPanel -->
+</body>
+</html>
